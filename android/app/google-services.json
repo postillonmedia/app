@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "340093480707",
+    "firebase_url": "https://postillon-8a1c7.firebaseio.com",
+    "project_id": "postillon-8a1c7",
+    "storage_bucket": "postillon-8a1c7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:340093480707:android:8daf75c1e191e388",
+        "android_client_info": {
+          "package_name": "com.postillon"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "340093480707-uis1bnvuvnv8lrm78drjf2o80m5hthfi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.postillon",
+            "certificate_hash": "5eca0d5d6a010d6bd1dc450cabb7a28700f73c43"
+          }
+        },
+        {
+          "client_id": "340093480707-5dktkbo3c43b3hshiqoqkqfchce1n37c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAT3S0Cq-eWEsoLmQivzoHhmpACFGfo1Bg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "340093480707-rali6bm545avpsq7geh9ee7r4242m59v.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.postillon"
+              }
+            },
+            {
+              "client_id": "340093480707-5dktkbo3c43b3hshiqoqkqfchce1n37c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

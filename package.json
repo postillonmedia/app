@@ -1,0 +1,77 @@
+{
+  "name": "postillon",
+  "version": "2.0.3",
+  "private": true,
+  "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "test": "jest"
+  },
+  "repository": "https://github.com/postillonmedia/app",
+  "contributors": [
+    {
+      "name": "Daniel Lang",
+      "email": "daniel@lang.direct",
+      "url": "http://daniellang.name"
+    },
+    {
+      "name": "Sebastian Schuster",
+      "url": "http://zweimeta.de"
+    }
+  ],
+  "dependencies": {
+    "@okgrow/react-native-copilot": "2.3.0",
+    "@postillon/react-native-i18n": "2.0.1",
+    "@postillon/react-native-navigation": "1.1.486",
+    "@postillon/react-native-popover-menu": "0.0.13",
+    "@postillon/react-native-theme": "2.0.1",
+    "@postillon/react-native-timeago": "1.0.0",
+    "@postillon/react-native-webview": "1.0.4",
+    "buffer": "5.2.1",
+    "entities": "1.1.2",
+    "events": "3.0.0",
+    "htmlparser2": "3.10.0",
+    "prop-types": "15.6.2",
+    "qs": "6.6.0",
+    "react": "16.7.0",
+    "react-native": "0.57.8",
+    "react-native-custom-tabs": "0.1.7",
+    "react-native-device-info": "0.24.3",
+    "react-native-fetch-blob": "0.10.8",
+    "react-native-firebase": "5.1.1",
+    "react-native-flex-image": "1.2.0",
+    "react-native-gesture-handler": "1.0.12",
+    "react-native-linear-gradient": "2.5.3",
+    "react-native-modal": "7.0.2",
+    "react-native-snap-carousel": "3.7.5",
+    "react-native-svg": "8.0.10",
+    "react-native-tab-view": "1.3.1",
+    "react-native-toast-native": "1.2.1",
+    "react-native-vector-icons": "5.0.0",
+    "react-native-webview": "2.14.3",
+    "react-redux": "6.0.0",
+    "realm": "2.21.1",
+    "recompose": "0.30.0",
+    "redux": "4.0.1",
+    "redux-logger": "3.0.6",
+    "redux-persist": "5.10.0",
+    "redux-saga": "0.16.2",
+    "seedrandom": "2.4.4",
+    "stream": "0.0.2",
+    "url-parse": "1.4.4"
+  },
+  "devDependencies": {
+    "@babel/runtime": "7.2.0",
+    "babel-jest": "23.6.0",
+    "jest": "23.6.0",
+    "metro-react-native-babel-preset": "0.51.1",
+    "react-test-renderer": "16.7.0"
+  },
+  "jest": {
+    "preset": "react-native"
+  },
+  "rnpm": {
+    "assets": [
+      "./src/resources/fonts"
+    ]
+  }
+}
