@@ -1,5 +1,5 @@
 import ReactNative, { Alert, Linking } from 'react-native';
-import {all, call, put, select, take, takeEvery, takeLatest} from 'redux-saga/effects';
+import {all, call, put, putResolve, select, take, takeEvery, takeLatest} from 'redux-saga/effects';
 
 import qs from 'qs';
 
@@ -25,7 +25,7 @@ function* handleLogin(action) {
     // generate random state for unique auth request
     const state = (Math.random().toString(36)+'00000000000000000').slice(2, 18);
 
-    yield put.resolve(SteadyActions.authenticationSetState(state));
+    yield putResolve(SteadyActions.authenticationSetState(state));
 
     try {
         const query = qs.stringify({
@@ -142,7 +142,7 @@ function* handleAuthenticate(action) {
         if (expiresIn && typeof expiresIn === 'number' && expiresIn > 0) {
             const expirationTimestamp = Date.now() + expiresIn * 1000;
 
-            yield put.resolve(SteadyActions.authenticateSuccess(json.access_token, json.token_type, expirationTimestamp, json.refresh_token, json.info['id'], json.info['first-name'], json.info['last-name'], json.info['email']));
+            yield putResolve(SteadyActions.authenticateSuccess(json.access_token, json.token_type, expirationTimestamp, json.refresh_token, json.info['id'], json.info['first-name'], json.info['last-name'], json.info['email']));
 
             yield put(SteadyActions.requestSubscriptions());
         } else {

@@ -1,8 +1,8 @@
-
 import ReactNative, { Alert, Platform } from 'react-native';
 import { all, take, takeEvery, put, call, select } from 'redux-saga/effects';
 
 import Firebase from '../../utils/firebase';
+import Config from '../../constants/config';
 
 import {
     setNotification,
@@ -50,8 +50,14 @@ function* handleNotificationEnabledChanged(action) {
                 return;
             }
         }
+
+        // subscribe for topic
+        yield call([messaging, messaging.subscribeToTopic], Config.notifications.topics.automatic);
+
     } else {
         // unsubscribe
+        yield call([messaging, messaging.unsubscribeFromTopic], Config.notifications.topics.automatic);
+
         yield call([iid, iid.deleteToken]);
     }
 }

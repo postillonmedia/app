@@ -1,5 +1,5 @@
-import { delay, buffers, eventChannel } from 'redux-saga';
-import { actionChannel, all, call, flush, fork, put, race, select, spawn, take, takeEvery } from 'redux-saga/effects';
+import { buffers } from 'redux-saga';
+import { actionChannel, all, call, delay, flush, put, putResolve, race, select, spawn, take, takeEvery } from 'redux-saga/effects';
 
 import { getPageByBlogAndCategory } from '../selectors/pages';
 
@@ -129,7 +129,7 @@ function* initializePage(action) {
     }
 
     // initialize object in reducer
-    yield put.resolve(PageActions.setDbSource(articlesRealmObject, blogId, category));
+    yield putResolve(PageActions.setDbSource(articlesRealmObject, blogId, category));
 
     // trigger reload
     yield put(PageActions.reload(blogId, category));

@@ -232,7 +232,17 @@ function* handleProcessArticle(action) {
         // process rawArticle
         const processedArticle = yield call(process, blogId, rawArticle);
 
-        const article = yield call(Articles.createOrUpdateArticleById, id, processedArticle);
+        let article;
+
+        if (processedArticle) {
+            article = yield call(Articles.createOrUpdateArticleById, id, processedArticle);
+        } else {
+            article = Articles.getArticleById(id);
+        }
+
+        if (!article) {
+            throw new Error('Article with ID "' + id + '" could not be found');
+        }
 
         yield put(ArticleActions.setArticle(id, article));
 

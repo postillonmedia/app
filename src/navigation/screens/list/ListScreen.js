@@ -217,8 +217,30 @@ export class ListScreen extends Component {
                 navigator.switchToTab({
                     tabIndex: 0,
                 });
+            } else if (parts[1] === 'notification' && parts[2] === 'article') {
+                const { constants, reloadCategory, blogId, category } = this.props;
+
+                navigator.setTabBadge({
+                    tabIndex: 0,
+                    badge: ' ',
+                    badgeColor: constants.colors.brandPrimary,
+                });
+
+                // refresh this screen to pull the new article
+                reloadCategory(blogId, category);
             }
+
+        } else if (id === 'bottomTabSelected' && !category) {
+
+            // reset badge on selection of the Home screen
+            navigator.setTabBadge({
+                tabIndex: 0,
+                badge: null,
+            });
+
         } else if (id === 'bottomTabReselected' && !!category) {
+
+            // pop to root if the categories tab was reselected
             navigator.popToRoot();
         }
     };
@@ -272,9 +294,15 @@ export class ListScreen extends Component {
     };
 
     handleRefresh = () => {
-        const { reloadCategory, blogId, category } = this.props;
+        const { reloadCategory, blogId, category, navigator } = this.props;
 
         reloadCategory(blogId, category);
+
+        // reset badge of the Home screen on it's refresh
+        !category && navigator.setTabBadge({
+            tabIndex: 0,
+            badge: null,
+        });
     };
 
     handleFetchNext = () => {

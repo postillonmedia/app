@@ -69,22 +69,32 @@ export class App {
         // messaging
         const notifications = Firebase.notifications();
 
-        notifications.onNotificationDisplayed((notification: Notification) => {
-            // Process your notification as required
-            // ANDROID: Remote notifications do not contain the channel ID. You will have to specify this manually if you'd like to re-display the notification.
-            console.warn('onNotificationDisplayed');
-        });
+
         notifications.onNotification((notification: Notification) => {
             // Process your notification as required
             if (notification && notification.data &&  notification.data.url) {
+                const { title } = notification;
                 const { url } = notification.data;
+
 
                 if (url && typeof url === 'string') {
                     const parsed = parse(url);
 
-                    this.onArticleUrlMatched({
-                        url,
-                        parsedUrl: parsed,
+                    const hostname = parsed.hostname;
+                    const path = parsed.pathname;
+
+                    const blogId = getBlogByHostname(hostname || '');
+
+                    Navigation.handleDeepLink({
+                        link: 'postillon/notification/article',
+                        payload: {
+                            title,
+                            url,
+                            parsedUrl: parsed,
+                            hostname,
+                            path,
+                            blogId,
+                        },
                     });
                 }
             }

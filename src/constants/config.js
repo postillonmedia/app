@@ -24,6 +24,12 @@ export default {
         redirect_uri: 'postillon://steady-auth',
     },
 
+    notifications: {
+        topics: {
+            automatic: 'automatic-news',
+        },
+    },
+
     // Firebase RemoteConfig defaults
     cacheTime: 2592000000, // 2592000000 = 1000*60*60*24*30 = 30 days
 
