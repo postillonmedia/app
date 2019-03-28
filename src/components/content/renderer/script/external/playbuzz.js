@@ -3,7 +3,8 @@ import ReactNative, { ActivityIndicator, View } from 'react-native';
 
 import { DomUtils } from 'htmlparser2/lib';
 
-import WebView from '@postillon/react-native-webview';
+// import WebView from '@postillon/react-native-webview';
+import { WebView } from "react-native-webview";
 
 
 import Text from '../../text';

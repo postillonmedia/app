@@ -5,7 +5,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import ReactNative, { Image, ImageStore, Platform, Text, View } from 'react-native';
-import ImageSourcePropType from 'react-native/Libraries/Image/ImageSourcePropType';
+import ImageSourcePropType from 'react-native/Libraries/DeprecatedPropTypes/DeprecatedImageSourcePropType';
 import Thumbnail from './../../thumbnail';
 
 import LinearGradient from 'react-native-linear-gradient';

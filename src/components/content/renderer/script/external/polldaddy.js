@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactNative, { ActivityIndicator } from 'react-native';
 
-import WebView from '@postillon/react-native-webview';
+// import WebView from '@postillon/react-native-webview';
+import { WebView } from "react-native-webview";
 
 import { OtherMediaContainer } from '../../../../mediacontainer';
 import OtherOfflineIndicator from '../../../../offlineIndicator/other';
