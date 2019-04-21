@@ -83,7 +83,7 @@ export default {
         error: 'Error: %s',
     },
     content: {
-        webviewRendering: 'In order to fully represent the content of the article an alternative presentation method was chosen.',
+        webviewRendering: 'An alternate rendering option was chosen in order to display the article\'s content correctly.',
     },
     more: {
         title: 'More',
