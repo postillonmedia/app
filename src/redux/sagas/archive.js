@@ -1,5 +1,5 @@
-import {delay, buffers, eventChannel} from 'redux-saga';
-import { actionChannel, all, call, cancel, cancelled, flush, fork, put, race, select, spawn, take, takeEvery, takeLatest } from 'redux-saga/effects';
+import { buffers, eventChannel } from 'redux-saga';
+import { actionChannel, all, call, cancel, cancelled, delay, flush, fork, put, race, select, spawn, take, takeEvery, takeLatest } from 'redux-saga/effects';
 import {
     ARCHIVE_CONTROL_SET_MONTH,
     ARCHIVE_CONTROL_SET_YEAR,
@@ -151,7 +151,7 @@ function* request(start, end) {
             };
         } catch(error) {
             yield put(ArchiveActions.requestFailure(error));
-            yield call(delay, 2000);
+            yield delay(2000);
         }
     }
 }

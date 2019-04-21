@@ -1,4 +1,3 @@
-import { ThemeManager } from '@postillon/react-native-theme';
 import {i18n} from '@postillon/react-native-i18n';
 
 import ListScreenView from './..';
@@ -31,10 +30,6 @@ ArticleListScreen.navigatorStyle = {
 
     navBarCustomView: 'postillon.navbars.Articles',
     navBarComponentAlignment: 'fill',
-
-    // navBarTextFontSize: 26,
-    // navBarTextFontFamily: 'CloisterBlack-Light',
-    // navBarTitleTextCentered: true,
 };
 
 

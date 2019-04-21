@@ -82,6 +82,9 @@ export default {
         loading: 'Loading article...',
         error: 'Error: %s',
     },
+    content: {
+        webviewRendering: 'In order to fully represent the content of the article an alternative presentation method was chosen.',
+    },
     more: {
         title: 'More',
 
@@ -99,6 +102,7 @@ export default {
         support_with_single_gift_modal_paypal_spend: 'Donate with PayPal',
         support_with_ad: 'Ads on the Postillon',
         support_watch_ad: 'Watch Ad',
+        support_watch_ad_failed: 'Sorry, we can not show you any ads right now.',
         rate: 'Rate the App',
 
 

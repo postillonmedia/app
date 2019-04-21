@@ -55,7 +55,7 @@ function* requestArticles({ blogId, category }) {
             };
         } catch(error) {
             yield put(PageActions.requestFailure(error, blogId, category));
-            yield call(delay, 2000);
+            yield delay(2000);
         }
     }
 }

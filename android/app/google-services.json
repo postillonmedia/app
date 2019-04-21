@@ -29,33 +29,27 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAT3S0Cq-eWEsoLmQivzoHhmpACFGfo1Bg"
+          "current_key": "AIzaSyA1YkWy64QbSG78BgfyoVajLwsriCPYOZw"
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 2,
           "other_platform_oauth_client": [
+            {
+              "client_id": "340093480707-5dktkbo3c43b3hshiqoqkqfchce1n37c.apps.googleusercontent.com",
+              "client_type": 3
+            },
             {
               "client_id": "340093480707-rali6bm545avpsq7geh9ee7r4242m59v.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.postillon"
               }
-            },
-            {
-              "client_id": "340093480707-5dktkbo3c43b3hshiqoqkqfchce1n37c.apps.googleusercontent.com",
-              "client_type": 3
             }
           ]
-        },
-        "ads_service": {
-          "status": 2
         }
-      }
+      },
+      "admob_app_id": "ca-app-pub-7093365481881392~4863961535"
     }
   ],
   "configuration_version": "1"

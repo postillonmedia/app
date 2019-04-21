@@ -1,45 +1,45 @@
 /* global __DEV__ */
 
-export default {
+class ConfigContainer {
     // Build Configuration - eg. Debug or Release?
-    DEV: __DEV__ || false,
+    DEV = __DEV__ || false;
 
-    debounce: {
+    debounce = {
         navigation: 500,
-    },
+    };
 
     // API keys
-    keys: {
+    keys = {
         admob: {
             app: 'ca-app-pub-7093365481881392~4863961535',
 
             banner: 'ca-app-pub-7093365481881392/6641200015',
             interstitial: 'ca-app-pub-7093365481881392/9269989518',
         },
-    },
+    };
 
     // Steady
-    steady: {
+    steady = {
         client_id: 'c6f38cd2-fd6e-4389-97a3-84a3c7e2f172',
         redirect_uri: 'postillon://steady-auth',
-    },
+    };
 
-    notifications: {
+    notifications = {
         topics: {
             automatic: 'automatic-news',
         },
-    },
+    };
 
     // Firebase RemoteConfig defaults
-    cacheTime: 2592000000, // 2592000000 = 1000*60*60*24*30 = 30 days
+    cacheTime = 2592000000; // 2592000000 = 1000*60*60*24*30 = 30 days
 
-    itemsPerRequest: {
+    itemsPerRequest = {
         pages: 10,
         archive: 25,
         search: 25,
-    },
+    };
 
-    article: {
+    article = {
         fontsize: {
             min: 8,
             max: 50,
@@ -47,5 +47,41 @@ export default {
         },
         recommendations: 3,
         displayBackButton: true,
-    },
-};
+    };
+
+    ad = {
+        interstitial: {
+            enabled: true,
+            offset: 2,
+            repeat: 3,
+        },
+    };
+
+    setConfigByUnderscoreSeparatedKey(key, value) {
+        const path = key.split('_');
+
+        let part = this;
+        let i = 1;
+
+        while (i < path.length - 1) {
+            const partKey = path[i];
+
+            if (typeof part === 'object') {
+                part = part[partKey];
+            }
+
+            i++;
+        }
+
+        const lastKeySequence = path[path.length - 1];
+
+
+        if (i > 1 && part && lastKeySequence) {
+            part[lastKeySequence] = value;
+        }
+    }
+}
+
+export const Config = new ConfigContainer();
+
+export default Config;

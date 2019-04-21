@@ -2,10 +2,7 @@ import { all, select, takeEvery, call } from 'redux-saga/effects';
 
 import Firebase from './../../utils/firebase';
 
-import {
-    ANALYTICS_COLLECTION_ENABLED_CHANGE,
-    ANALYTICS_LOG_EVENT, ANALYTICS_LOG_SCREEN_CHANGED
-} from './../actions/analytics';
+import { ANALYTICS_LOG_EVENT, ANALYTICS_LOG_SCREEN_CHANGED } from './../actions/analytics';
 
 import {getAppAnalytics} from '../selectors/settings';
 

@@ -11,6 +11,7 @@ export const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
 
+        borderRadius: 5,
         backgroundColor: DefaultTheme.colors.monochrome.light3,
 
         padding: 35,

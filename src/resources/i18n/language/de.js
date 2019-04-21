@@ -83,6 +83,9 @@ export default {
         loading: 'Artikel wird geladen',
         error: 'Fehler: %s',
     },
+    content: {
+        webviewRendering: 'Um den Inhalt des Artikels vollständig darzustellen wurde eine alternative Darstellungsmethode gewählt.',
+    },
     more: {
         title: 'Mehr',
 
@@ -101,6 +104,7 @@ export default {
         support_with_single_gift_modal_paypal_spend: 'Spenden mit PayPal',
         support_with_ad: 'Werbung im Postillon schalten',
         support_watch_ad: 'Werbung schauen',
+        support_watch_ad_failed: 'Sorry, zur Zeit können wir dir leider keine Werbung zeigen.',
         rate: 'Bewerte die App',
 
 

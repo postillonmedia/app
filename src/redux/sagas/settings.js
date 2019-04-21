@@ -11,6 +11,8 @@ import {
     SETTINGS_APP_NOTIFICATIONS,
 } from '../actions/settings/app';
 
+import { getAppNotifications } from '../selectors/settings';
+
 
 function* handleAnalyticsEnabledChanged(action) {
     const { enabled } = action;
@@ -69,6 +71,13 @@ function* initialize() {
 
     if (!hasPermissions) {
         yield put(setNotification(false));
+    } else {
+        const receiveNotifications = yield select(getAppNotifications);
+
+        if (receiveNotifications) {
+            // subscribe for topic
+            yield call([messaging, messaging.subscribeToTopic], Config.notifications.topics.automatic);
+        }
     }
 }
 
@@ -82,7 +91,7 @@ function* watchOnNotificationEnabledChanged() {
 }
 
 
-export default function* environmentSaga() {
+export default function* settingsSaga() {
     yield all([
         watchOnAnalyticsEnabledChanged(),
 

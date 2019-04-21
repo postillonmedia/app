@@ -1,5 +1,4 @@
-import {delay} from 'redux-saga';
-import {all, call, put, select, take, takeEvery, takeLatest} from 'redux-saga/effects';
+import {all, call, delay, put, select, take, takeEvery, takeLatest} from 'redux-saga/effects';
 
 import parse from 'url-parse';
 
@@ -97,7 +96,7 @@ function* request(searchString) {
 
         } catch (error) {
             yield put(SearchActions.requestFailure(error));
-            yield call(delay, 2000);
+            yield delay(2000);
         }
     }
 }

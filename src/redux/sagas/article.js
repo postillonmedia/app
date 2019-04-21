@@ -1,5 +1,4 @@
-import { all, call, fork, take, takeEvery, takeLatest, put, race } from 'redux-saga/effects';
-import { delay } from 'redux-saga';
+import { all, call, delay, fork, take, takeEvery, takeLatest, put, race } from 'redux-saga/effects';
 
 import { Parser, DomHandler, DomUtils } from 'htmlparser2';
 import entities from 'entities';
@@ -200,7 +199,7 @@ function* handleArticleRequest(action) {
                     return rawArticle;
                 } catch (e) {
                     if (i < 2) {
-                        yield call(delay, 1000);
+                        yield delay(1000);
                     }
                 }
             }

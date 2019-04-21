@@ -1,5 +1,5 @@
 import ReactNative, { Alert, Linking } from 'react-native';
-import {all, call, put, putResolve, select, take, takeEvery, takeLatest} from 'redux-saga/effects';
+import {all, call, delay, put, putResolve, select, take, takeEvery, takeLatest} from 'redux-saga/effects';
 
 import qs from 'qs';
 
@@ -234,7 +234,7 @@ function* checkLogin() {
                     success = yield call(handleAuthenticate);
 
                     if (!success) {
-                        yield call(delay, 30000);
+                        yield delay(30000);
                     }
                 }
 

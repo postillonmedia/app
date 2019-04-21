@@ -1,4 +1,4 @@
-import { Platform } from 'react-native';
+import { Alert, Platform } from 'react-native';
 
 // i18n
 import { getString } from '@postillon/react-native-i18n/src/helpers';
@@ -64,6 +64,10 @@ export class App {
         // notification manager
         this.deepLinkManager = new DeepLinkManager();
         this.registerDeepLinkSchemas();
+
+
+        // fetch remote config
+        this.fetchRemoteConfiguration();
 
 
         // messaging
@@ -197,6 +201,33 @@ export class App {
             .then(() => this._resolveStarted && this._resolveStarted(true))
     }
 
+    fetchRemoteConfiguration() {
+        if (Config.DEV) {
+            Firebase.config().enableDeveloperMode();
+        }
+
+        return Firebase.config().fetch()
+            .then(() => {
+                return Firebase.config().activateFetched();
+            })
+            .then(() => Firebase.config().getKeysByPrefix('app_'))
+            .then((arr) => Firebase.config().getValues(arr))
+            .then((entries) => {
+                for (let key in entries) {
+                    if (!entries.hasOwnProperty(key)) {
+                        continue;
+                    }
+
+                    const value = entries[key].val();
+
+                    Config.setConfigByUnderscoreSeparatedKey(key, value);
+                }
+
+                console.log('Updated Application-Config by firebase');
+            })
+            .catch(console.error);
+    }
+
     registerDeepLinkSchemas() {
         this.deepLinkManager.registerSchema('steady',
             {
@@ -218,7 +249,7 @@ export class App {
                 const { parsedUrl } = event;
 
                 const url = parsedUrl && parsedUrl.pathname && typeof parsedUrl.pathname === 'string' && parsedUrl.pathname.substring(1);
-                const parsed = parse(url);
+
 
                 url && this.onArticleUrlMatched({
                     ...event,
@@ -282,7 +313,7 @@ export class App {
                 }
             })
         }
-    };
+    }
 }
 
 

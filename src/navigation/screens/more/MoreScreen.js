@@ -119,7 +119,7 @@ export class MoreScreen extends Component {
     };
 
     handleSupportWatchAdPress = () => {
-        const { constants } = this.props;
+        const { constants, t } = this.props;
         const { interstitialIsLoading } = this.state;
 
         if (interstitialIsLoading) {
@@ -142,7 +142,7 @@ export class MoreScreen extends Component {
                 });
 
                 advert.on('onAdFailedToLoad', (e) => {
-                    Toast.show('Sorry, zur Zeit können wir dir leider keine Werbung zeigen.', Toast.SHORT, Toast.BOTTOM, constants.styles.toast);
+                    Toast.show(t('support_watch_ad_failed'), Toast.SHORT, Toast.BOTTOM, constants.styles.toast);
 
                     this.setState({
                         interstitialIsLoading: false,
