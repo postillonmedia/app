@@ -1,11 +1,13 @@
 import React, { PureComponent } from 'react';
-import ReactNative, { Alert, ScrollView, View, Text, TouchableOpacity, Picker, Slider, Switch } from 'react-native';
+import ReactNative, { ScrollView, View, Text, TouchableOpacity, Switch } from 'react-native';
 
+import Slider from '@react-native-community/slider';
 import RNPopover from '@postillon/react-native-popover-menu';
 
 import { Themes } from '../../../../constants/themes/index';
 import { LANGUAGE_DE, LANGUAGE_EN } from '../../../../constants/languages';
 import FeatherIcon from 'react-native-vector-icons/Feather';
+import {Config} from "../../../../constants/config";
 
 
 export class SettingsScreen extends PureComponent {
@@ -128,7 +130,7 @@ export class SettingsScreen extends PureComponent {
                                 hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
                                 thumbTintColor={constants.colors.switches.thumbTintColor}
                                 minimumTrackTintColor={constants.colors.switches.onTintColor} maximumTrackTintColor={constants.colors.switches.tintColor}
-                                minimumValue={14} maximumValue={26}
+                                minimumValue={Config.article.fontsize.min} maximumValue={Config.article.fontsize.max}
                                 value={fontSize} step={3} onSlidingComplete={this.handleUpdateFontSize} />
 
                         <Text style={[styles.lineText, styles.fontSizeSliderBig]}>A</Text>

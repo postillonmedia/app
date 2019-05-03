@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import ReactNative, { ScrollView, View, Text, TouchableOpacity, Picker, Slider, Switch } from 'react-native';
+import ReactNative, { ScrollView, View, Text } from 'react-native';
 
 
 export class ImprintScreen extends PureComponent {

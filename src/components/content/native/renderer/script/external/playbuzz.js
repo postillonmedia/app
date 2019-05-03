@@ -1,14 +1,9 @@
 import React from 'react';
-import ReactNative, { ActivityIndicator, View } from 'react-native';
+import ReactNative, { ActivityIndicator } from 'react-native';
 
 import { DomUtils } from 'htmlparser2';
 
-// import WebView from '@postillon/react-native-webview';
-// import { WebView } from "react-native-webview";
 import AutoHeightWebView from 'react-native-autoheight-webview/autoHeightWebView';
-
-
-import Text from '../../text';
 
 import { OtherMediaContainer } from '../../../../../mediacontainer';
 import OtherOfflineIndicator from '../../../../../offlineIndicator/other';

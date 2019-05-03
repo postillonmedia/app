@@ -1,7 +1,9 @@
 import React, { PureComponent } from 'react';
-import ReactNative, { Slider, StyleSheet, Text, Switch, TouchableOpacity, View } from 'react-native';
+import ReactNative, { StyleSheet, Text, Switch, TouchableOpacity, View } from 'react-native';
 
+import Slider from '@react-native-community/slider';
 import FeatherIcon from 'react-native-vector-icons/Feather';
+
 import { Themes } from '../../../../constants/themes';
 import { Config } from '../../../../constants/config';
 
@@ -44,7 +46,7 @@ export class SettingsView extends PureComponent {
                     <View style={styles.option}>
                         <Text style={styles.settingsFontSizeSliderSmall}>A</Text>
                         <Slider style={styles.settingsFontSizeSlider}
-                              hitSlop={{top: 40, bottom: 40, left: 40, right: 40}}
+                                hitSlop={{top: 40, bottom: 40, left: 40, right: 40}}
                                 thumbTintColor={constants.colors.switches.thumbTintColor}
                                 minimumTrackTintColor={constants.colors.switches.onTintColor} maximumTrackTintColor={constants.colors.switches.tintColor}
                                 minimumValue={Config.article.fontsize.min} maximumValue={Config.article.fontsize.max}

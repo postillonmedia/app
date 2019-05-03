@@ -911,10 +911,10 @@
     hoist-non-react-statics "^3.2.1"
     sprintf-js "^1.1.2"
 
-"@postillon/react-native-navigation@1.1.486":
-  version "1.1.486"
-  resolved "https://registry.yarnpkg.com/@postillon/react-native-navigation/-/react-native-navigation-1.1.486.tgz#eb38e6920e22ccae56e7965a6f1eda928486fe7a"
-  integrity sha512-dntcXik1WCY7LMqVSq0PxmqKHUQ1PdHtHbQw7FgAsyPFcZbBJbxi4sftXqna3aLAjtSHhQZsY767jlmYx6LoMQ==
+"@postillon/react-native-navigation@1.1.501":
+  version "1.1.501"
+  resolved "https://registry.yarnpkg.com/@postillon/react-native-navigation/-/react-native-navigation-1.1.501.tgz#5fb735546097d4f8ee5cef52cf817adf998a58f8"
+  integrity sha512-dSjO9UrU6lzeHMMy802pidOSk41vpr4BLazyFuMHjKQAIDPN6OBRZRelqiP4jbKiBd1FSDn1INIAcdp7k65hAg==
   dependencies:
     lodash "4.x.x"
 
@@ -940,14 +940,6 @@
     moment "^2.18.1"
     react-mixin "^3.0.5"
     react-timer-mixin "^0.13.3"
-
-"@postillon/react-native-webview@1.0.4":
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/@postillon/react-native-webview/-/react-native-webview-1.0.4.tgz#1a8e8560fe59d18e7d09e5a958eabbc757181523"
-  integrity sha512-UOh8AyypPxcdBaeiSRFa+iEcCl0bPr+QW7f3YjvHD8qWMaxRKMWflSuyXYRumNOHWS8K4DF/TpCZxGYNTPJugg==
-  dependencies:
-    prop-types "^15.6.1"
-    react-native-webview "^2.13.0"
 
 "@react-native-community/cli@^1.2.1":
   version "1.5.1"
@@ -988,6 +980,16 @@
     ws "^1.1.0"
     xcode "^2.0.0"
     xmldoc "^0.4.0"
+
+"@react-native-community/netinfo@^2.0.8":
+  version "2.0.8"
+  resolved "https://registry.yarnpkg.com/@react-native-community/netinfo/-/netinfo-2.0.8.tgz#258d1cb4968a11ab0fae200ab778f410d427e34d"
+  integrity sha512-dyhSEu5sjsKNMwUlj2PhBpRkzJtjGTgPwJe27HdXa3nBRuZEcNMlAnUwvLJYx0oNHKJXFoi0IJkO97LHGNGpVg==
+
+"@react-native-community/slider@1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@react-native-community/slider/-/slider-1.0.4.tgz#3ef928c87c686d673ae829e492c7aad4d061d666"
+  integrity sha512-L02BSwDTHGc5BPrtllMTOKSKg9QyJbz001pIkD2FGmUFA9Nfvs0cne36N4nnrR5jQhSzwnmnQpzXkQ/yzQxwMg==
 
 "@redux-saga/core@^1.0.2":
   version "1.0.2"
@@ -2642,7 +2644,7 @@ fbjs-scripts@^1.0.0:
     semver "^5.1.0"
     through2 "^2.0.0"
 
-fbjs@^0.8.1, fbjs@^0.8.17, fbjs@^0.8.4, fbjs@^0.8.9:
+fbjs@^0.8.1, fbjs@^0.8.4, fbjs@^0.8.9:
   version "0.8.17"
   resolved "https://registry.yarnpkg.com/fbjs/-/fbjs-0.8.17.tgz#c4d598ead6949112653d6588b01a5cdcd9f90fdd"
   integrity sha1-xNWY6taUkRJlPWWIsBpc3Nn5D90=
@@ -5750,14 +5752,6 @@ react-native-webview@5.8.1:
   dependencies:
     escape-string-regexp "1.0.5"
     invariant "2.2.4"
-
-react-native-webview@^2.13.0:
-  version "2.13.0"
-  resolved "https://registry.yarnpkg.com/react-native-webview/-/react-native-webview-2.13.0.tgz#06eb1f7a21be079e4eac693a0682034540c1084d"
-  integrity sha512-gaUZWRvXL8g/kEqi/EITOYJlHh5Ah2VgZl8Ye5p7tfP/hCNUT2Hh+SXur5dpSyAvXG6V1ef9hISI3qzi6sZYuQ==
-  dependencies:
-    escape-string-regexp "^1.0.5"
-    fbjs "^0.8.17"
 
 react-native@0.59.5:
   version "0.59.5"

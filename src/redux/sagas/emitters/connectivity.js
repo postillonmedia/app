@@ -1,6 +1,6 @@
 import { eventChannel } from 'redux-saga';
 
-import { NetInfo } from 'react-native';
+import NetInfo from "@react-native-community/netinfo";
 
 
 export const connectivityChangeEmitter = () => {

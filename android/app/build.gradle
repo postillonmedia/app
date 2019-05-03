@@ -225,6 +225,9 @@ dependencies {
     implementation project(":react-native-popover-menu")
     implementation project(":react-native-custom-tabs")
     implementation project(":react-native-webview")
+    implementation project(":react-native-community-slider")
+    implementation project(":react-native-community-netinfo")
+
 }
 
 // Run this once to be able to run the application with BUCK

@@ -20,6 +20,8 @@ import com.reactnativenavigation.NavigationApplication;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.github.droibit.android.reactnative.customtabs.CustomTabsPackage;
 import com.reactnativecommunity.webview.RNCWebViewPackage;
+import com.reactnativecommunity.slider.ReactSliderPackage;
+import com.reactnativecommunity.netinfo.NetInfoPackage;
 
 import io.invertase.firebase.RNFirebasePackage;
 import io.invertase.firebase.instanceid.RNFirebaseInstanceIdPackage;
@@ -62,6 +64,8 @@ public class MainApplication extends NavigationApplication {
             new RNPopoverMenuPackage(),
             new RNDeviceInfo(),
             new RNCWebViewPackage(),
+            new ReactSliderPackage(),
+            new NetInfoPackage(),
             new RNFirebasePackage(),
             new RNFirebaseInstanceIdPackage(),
             new RNFirebaseAdMobPackage(),

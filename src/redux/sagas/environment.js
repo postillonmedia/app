@@ -1,4 +1,4 @@
-import { NetInfo } from 'react-native';
+import NetInfo from "@react-native-community/netinfo";
 
 
 import { all, take, put, call, select } from 'redux-saga/effects';

@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import ReactNative, { CheckBox, ScrollView, View, Text, TouchableOpacity, Picker, Slider, Switch } from 'react-native';
+import ReactNative, { CheckBox, ScrollView, View, Text } from 'react-native';
 
 
 export class PrivacyPolicyScreen extends PureComponent {

@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import ReactNative, { Linking, ScrollView, View, Text, TouchableOpacity, Picker, Slider, Switch } from 'react-native';
+import ReactNative, { Linking, ScrollView, View, Text } from 'react-native';
 
 import { CustomTabs } from 'react-native-custom-tabs';
 
