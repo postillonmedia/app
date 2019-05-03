@@ -59,7 +59,7 @@ export class ContentView extends PureComponent {
 
     render() {
         const { error } = this.state;
-        const { html, baseUrl, baseFontSize, emSize, width, imagesToExclude, renderAd, t, styles, constants } = this.props;
+        const { html, baseUrl, baseFontSize, emSize, width, imagesToExclude, renderAd, t, theme, styles, constants } = this.props;
 
         let Renderer = null;
 
@@ -82,6 +82,8 @@ export class ContentView extends PureComponent {
                 renderAd={renderAd}
 
                 t={t}
+
+                theme={theme}
                 styles={styles}
                 constants={constants}
             />

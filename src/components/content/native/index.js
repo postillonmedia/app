@@ -46,6 +46,8 @@ export class ContentView extends PureComponent {
         renderAd: PropTypes.func,
 
         t: PropTypes.object.isRequired,
+
+        theme: PropTypes.string.isRequired,
         styles: PropTypes.object.isRequired,
         constants: PropTypes.object.isRequired,
     };
