@@ -911,10 +911,10 @@
     hoist-non-react-statics "^3.2.1"
     sprintf-js "^1.1.2"
 
-"@postillon/react-native-navigation@1.1.501":
-  version "1.1.501"
-  resolved "https://registry.yarnpkg.com/@postillon/react-native-navigation/-/react-native-navigation-1.1.501.tgz#5fb735546097d4f8ee5cef52cf817adf998a58f8"
-  integrity sha512-dSjO9UrU6lzeHMMy802pidOSk41vpr4BLazyFuMHjKQAIDPN6OBRZRelqiP4jbKiBd1FSDn1INIAcdp7k65hAg==
+"@postillon/react-native-navigation@1.1.503":
+  version "1.1.503"
+  resolved "https://registry.yarnpkg.com/@postillon/react-native-navigation/-/react-native-navigation-1.1.503.tgz#a4af5659bf61986a181c3d8a1feeb47a80076987"
+  integrity sha512-MClupY/4wnFkwMWelIaP2BJySferdUXT1pfpDaJxQqTOdGCfwXyhfGW7+qOUKw/Chnj+oL8cezKOXBUPuwyr9w==
   dependencies:
     lodash "4.x.x"
 
@@ -981,7 +981,7 @@
     xcode "^2.0.0"
     xmldoc "^0.4.0"
 
-"@react-native-community/netinfo@^2.0.8":
+"@react-native-community/netinfo@2.0.8":
   version "2.0.8"
   resolved "https://registry.yarnpkg.com/@react-native-community/netinfo/-/netinfo-2.0.8.tgz#258d1cb4968a11ab0fae200ab778f410d427e34d"
   integrity sha512-dyhSEu5sjsKNMwUlj2PhBpRkzJtjGTgPwJe27HdXa3nBRuZEcNMlAnUwvLJYx0oNHKJXFoi0IJkO97LHGNGpVg==

@@ -5,8 +5,9 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import ReactNative, {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 
-import { Navigation } from "@postillon/react-native-navigation";
+import { Navigation } from '@postillon/react-native-navigation';
 
 import { CustomTabs } from 'react-native-custom-tabs';
 
@@ -14,8 +15,6 @@ import AutoHeightWebView from 'react-native-autoheight-webview';
 import parse from 'url-parse';
 
 import { getBlogByHostname } from '../../../constants/blogs';
-import Feather from "react-native-vector-icons/Feather";
-import LinearGradient from "react-native-linear-gradient";
 
 
 export class ContentView extends PureComponent {
@@ -36,7 +35,9 @@ export class ContentView extends PureComponent {
         imagesToExclude: PropTypes.arrayOf(PropTypes.string),
         renderAd: PropTypes.func,
 
-        t: PropTypes.object.isRequired,
+        t: PropTypes.func.isRequired,
+
+        theme: PropTypes.string.isRequired,
         styles: PropTypes.object.isRequired,
         constants: PropTypes.object.isRequired,
     };

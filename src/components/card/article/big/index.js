@@ -12,6 +12,7 @@ import { Themes } from '../../../../constants/themes/index';
 import styles from './styles';
 
 import { getArticleById } from '../../../../redux/selectors/article';
+import { getListingDisplayArticleIntroduction } from '../../../../redux/selectors/settings';
 
 import ArticleCardView from './ArticleCardView';
 
@@ -22,6 +23,7 @@ ThemeManager.addStyleSheet(styles.defaultStyles, 'card.article.big', Themes.DEFA
 
 const mapStateToProps = (state, ownProps) => ({
     articleState: getArticleById(state, ownProps.article.id),
+    displayArticleIntroduction: getListingDisplayArticleIntroduction(state),
 });
 
 

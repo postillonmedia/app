@@ -4,6 +4,7 @@ import { persistCombineReducers } from 'redux-persist';
 // reducers
 import app from './app';
 import article from './article';
+import listing from './listing';
 
 
 const settingsPersistorConfig = {
@@ -14,4 +15,5 @@ const settingsPersistorConfig = {
 export default persistCombineReducers(settingsPersistorConfig, {
     app,
     article,
+    listing,
 });
