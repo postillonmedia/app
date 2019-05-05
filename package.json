@@ -1,6 +1,6 @@
 {
   "name": "postillon",
-  "version": "2.0.8",
+  "version": "2.0.9",
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
@@ -21,11 +21,11 @@
   "dependencies": {
     "@okgrow/react-native-copilot": "2.3.0",
     "@postillon/react-native-i18n": "2.0.1",
-    "@postillon/react-native-navigation": "1.1.501",
+    "@postillon/react-native-navigation": "1.1.503",
     "@postillon/react-native-popover-menu": "0.0.13",
     "@postillon/react-native-theme": "2.0.1",
     "@postillon/react-native-timeago": "1.0.0",
-    "@react-native-community/netinfo": "^2.0.8",
+    "@react-native-community/netinfo": "2.0.8",
     "@react-native-community/slider": "1.0.4",
     "buffer": "5.2.1",
     "entities": "1.1.2",
