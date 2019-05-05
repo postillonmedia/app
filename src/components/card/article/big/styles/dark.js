@@ -77,6 +77,14 @@ export const styles = StyleSheet.create({
         ...DefaultTheme.styles.text.date,
 
         marginTop: 12,
+        marginBottom: 2,
+    },
+
+    introduction: {
+        ...DarkTheme.styles.text.article,
+
+        marginTop: 5,
+        color: DarkTheme.colors.text.secondary,
     },
 
     button: {

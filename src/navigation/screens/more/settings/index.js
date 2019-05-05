@@ -8,11 +8,13 @@ import styles from './styles';
 
 import { setLocale, setTheme, displayBackButton, setNotification } from '../../../../redux/actions/settings/app';
 import { setFontSize, setDisplayBackButton, setTutorial } from '../../../../redux/actions/settings/article';
+import { setDisplayArticleIntroduction } from '../../../../redux/actions/settings/listing';
 import {
     getAppNotifications,
     getArticleFontSize,
     getArticleDisplayBackButton,
     getArticleTutorial,
+    getListingDisplayArticleIntroduction,
 } from '../../../../redux/selectors/settings';
 
 import SettingsScreenView from './SettingsScreen';
@@ -27,6 +29,8 @@ const mapStateToProps = state => ({
     tutorial: getArticleTutorial(state),
     displayBackButton: getArticleDisplayBackButton(state),
 
+    displayArticleIntroduction: getListingDisplayArticleIntroduction(state),
+
     notifications: getAppNotifications(state),
 });
 
@@ -37,6 +41,8 @@ const mapDispatchToProps = dispatch => ({
     setFontSize: fontSize => dispatch(setFontSize(fontSize)),
     setTutorial: tutorial => dispatch(setTutorial(tutorial)),
     setDisplayBackButton: displayBackButton => dispatch(setDisplayBackButton(displayBackButton)),
+
+    setDisplayArticleIntroduction: displayArticleIntroduction => dispatch(setDisplayArticleIntroduction(displayArticleIntroduction)),
 
     setNotification: enabled => dispatch(setNotification(enabled)),
 });

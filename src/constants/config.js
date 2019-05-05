@@ -49,6 +49,10 @@ class ConfigContainer {
         displayBackButton: true,
     };
 
+    listing = {
+        displayArticleIntroduction: false,
+    };
+
     ad = {
         interstitial: {
             enabled: true,

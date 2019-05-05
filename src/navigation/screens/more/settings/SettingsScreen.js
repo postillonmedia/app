@@ -77,6 +77,12 @@ export class SettingsScreen extends PureComponent {
         setTutorial(tutorial);
     };
 
+    handleSetDisplayArticleIntroduction = displayArticleIntroduction => {
+        const { setDisplayArticleIntroduction } = this.props;
+
+        setDisplayArticleIntroduction(displayArticleIntroduction);
+    };
+
     handleNotificationEnable = (enabled) => {
         const { setNotification } = this.props;
 
@@ -88,7 +94,7 @@ export class SettingsScreen extends PureComponent {
     };
 
     render() {
-        const { styles, constants, theme, t, fontSize, tutorial, displayBackButton, notifications } = this.props;
+        const { styles, constants, theme, t, fontSize, tutorial, displayBackButton, displayArticleIntroduction, notifications } = this.props;
 
         return (
             <ScrollView style={styles.container}>
@@ -157,6 +163,25 @@ export class SettingsScreen extends PureComponent {
                             value={tutorial}
                             onValueChange={this.handleSetTutorial}
                             thumbColor={tutorial ? constants.colors.switches.thumbTintColor : constants.colors.switches.offThumbTintColor}
+                            trackColor={{
+                                true: constants.colors.switches.onTintColor,
+                                false: constants.colors.switches.tintColor,
+                            }}
+                        />
+                    </View>
+                </View>
+
+
+                <Text style={styles.heading}>{t('listingSection').toUpperCase()}</Text>
+
+                <View style={styles.group}>
+                    <View style={styles.line}>
+                        <Text style={styles.lineText}>{t('displayArticleIntroduction')}</Text>
+
+                        <Switch
+                            value={displayArticleIntroduction}
+                            onValueChange={this.handleSetDisplayArticleIntroduction}
+                            thumbColor={displayArticleIntroduction ? constants.colors.switches.thumbTintColor : constants.colors.switches.offThumbTintColor}
                             trackColor={{
                                 true: constants.colors.switches.onTintColor,
                                 false: constants.colors.switches.tintColor,

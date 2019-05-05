@@ -1,5 +1,6 @@
 import Realm from 'realm';
 
+import {Parser, DomUtils, DomHandler} from 'htmlparser2';
 
 class Article {
 
@@ -33,6 +34,30 @@ class Article {
 
     static isArchivated(article) {
         return !!(article.archived && article.archived instanceof Date);
+    }
+
+    static getIntroduction(article) {
+        let introduction = '';
+
+        const parser = new Parser({
+            onopentag: function(name, attribs){
+                if (name === 'a' && attribs.name === 'more') {
+                    parser.done();
+                    parser.reset();
+                }
+            },
+            ontext: function(text){
+                introduction += text;
+            }
+        }, {
+            decodeEntities: true,
+            lowerCaseAttributeNames: true,
+        });
+
+        parser.write(article.html);
+        parser.done();
+
+        return introduction.trim();
     }
 }
 

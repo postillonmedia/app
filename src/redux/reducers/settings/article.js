@@ -13,8 +13,8 @@ import {
 
 // initial state
 const initialState = {
-    displayBackButton: true, // TODO: Config.article.displayBackButton,
-    fontSize: 14, // TODO: Config.article.fontSize,
+    displayBackButton: Config.article.displayBackButton,
+    fontSize: Config.article.fontsize.default,
     tutorial: true,
 };
 

@@ -138,15 +138,14 @@ export default {
         themeDark: 'Dunkel',
 
         articleSection: 'Artikel',
-
         displayBackButton: 'Zurück-Button anzeigen',
         displayTutorial: 'Tutorial anzeigen',
 
-        notificationSection: 'Benachrichtigungen',
+        listingSection: 'Artikel Liste',
+        displayArticleIntroduction: 'Einleitung anzeigen',
 
+        notificationSection: 'Benachrichtigungen',
         notificationEnable: 'Benachrichtigungen erhalten',
-        notificationSound: 'Benachrichtigungston',
-        notificationVibrate: 'Vibration',
     },
     privacyPolicy: {
         title: 'Datenschutzerklärung',

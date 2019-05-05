@@ -136,16 +136,14 @@ export default {
         themeDark: 'Dark',
 
         articleSection: 'Article',
-
         displayBackButton: 'Display back button',
         displayTutorial: 'Show tutorial',
 
-        notificationSection: 'Notifications',
+        listingSection: 'Article Listing',
+        displayArticleIntroduction: 'Display article introduction',
 
-        notificationTitle: 'Notifications',
+        notificationSection: 'Notifications',
         notificationEnable: 'Enable notifications',
-        notificationSound: 'Sound',
-        notificationVibrate: 'Vibration',
     },
     privacyPolicy: {
         title: 'Privacy Policy',
