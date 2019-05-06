@@ -71,6 +71,12 @@ export class SettingsScreen extends PureComponent {
         setDisplayBackButton(displayBackButton);
     };
 
+    handleSetDisplayCommentsAlways = displayCommentsAlways => {
+        const { setDisplayCommentsAlways} = this.props;
+
+        setDisplayCommentsAlways(displayCommentsAlways);
+    };
+
     handleSetTutorial = tutorial => {
         const { setTutorial } = this.props;
 
@@ -94,7 +100,7 @@ export class SettingsScreen extends PureComponent {
     };
 
     render() {
-        const { styles, constants, theme, t, fontSize, tutorial, displayBackButton, displayArticleIntroduction, notifications } = this.props;
+        const { styles, constants, theme, t, fontSize, tutorial, displayBackButton, displayCommentsAlways, displayArticleIntroduction, notifications } = this.props;
 
         return (
             <ScrollView style={styles.container}>
@@ -149,6 +155,20 @@ export class SettingsScreen extends PureComponent {
                             value={displayBackButton}
                             onValueChange={this.handleSetDisplayBackButton}
                             thumbColor={displayBackButton ? constants.colors.switches.thumbTintColor : constants.colors.switches.offThumbTintColor}
+                            trackColor={{
+                                true: constants.colors.switches.onTintColor,
+                                false: constants.colors.switches.tintColor,
+                            }}
+                        />
+                    </View>
+
+                    <View style={styles.line}>
+                        <Text style={styles.lineText}>{t('displayCommentsAlways')}</Text>
+
+                        <Switch
+                            value={displayCommentsAlways}
+                            onValueChange={this.handleSetDisplayCommentsAlways}
+                            thumbColor={displayCommentsAlways ? constants.colors.switches.thumbTintColor : constants.colors.switches.offThumbTintColor}
                             trackColor={{
                                 true: constants.colors.switches.onTintColor,
                                 false: constants.colors.switches.tintColor,

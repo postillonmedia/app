@@ -73,6 +73,8 @@ export default {
         settings: 'Article settings',
         loading: 'Article is loading',
         more: 'More articles',
+        comments: 'Comments',
+        commentsLoad: 'Display comments',
 
         'copilot.image': 'You can zoom every image with a two-finger pitch gesture.',
         'copilot.back': 'Press and hold to go back to the articles listing',
@@ -137,6 +139,7 @@ export default {
 
         articleSection: 'Article',
         displayBackButton: 'Display back button',
+        displayCommentsAlways: 'Load comments always',
         displayTutorial: 'Show tutorial',
 
         listingSection: 'Article Listing',

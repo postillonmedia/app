@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactNative, { ActivityIndicator } from 'react-native';
 
-import AutoHeightWebView from 'react-native-autoheight-webview/autoHeightWebView';
+import AutoHeightWebView from 'react-native-autoheight-webview';
 
 import OtherMediaContainer from '../../../../mediacontainer/other';
 import OtherOfflineIndicator from '../../../../offlineIndicator/other';
@@ -25,11 +25,11 @@ export default function (props = {}) {
     };
 
     return (
-        <OtherMediaContainer
+        <OtherMediaContainer key={keyProperty}
             renderOfflineComponent={() => <OtherOfflineIndicator />}
         >
             <AutoHeightWebView
-                key={keyProperty}
+                key={keyProperty + '-webview'}
                 style={[styles.iframe, { width: width - 32, height: 200}]}
                 mediaPlaybackRequiresUserAction={false}
                 baseUrl={uri}

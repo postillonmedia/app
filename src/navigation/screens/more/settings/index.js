@@ -6,13 +6,14 @@ import { i18n } from '@postillon/react-native-i18n';
 import { Themes } from '../../../../constants/themes';
 import styles from './styles';
 
-import { setLocale, setTheme, displayBackButton, setNotification } from '../../../../redux/actions/settings/app';
-import { setFontSize, setDisplayBackButton, setTutorial } from '../../../../redux/actions/settings/article';
+import { setLocale, setTheme, setNotification } from '../../../../redux/actions/settings/app';
+import { setFontSize, setDisplayBackButton, setDisplayCommentsAlways, setTutorial } from '../../../../redux/actions/settings/article';
 import { setDisplayArticleIntroduction } from '../../../../redux/actions/settings/listing';
 import {
     getAppNotifications,
     getArticleFontSize,
     getArticleDisplayBackButton,
+    getArticleDisplayCommentsAlways,
     getArticleTutorial,
     getListingDisplayArticleIntroduction,
 } from '../../../../redux/selectors/settings';
@@ -28,6 +29,7 @@ const mapStateToProps = state => ({
     fontSize: getArticleFontSize(state),
     tutorial: getArticleTutorial(state),
     displayBackButton: getArticleDisplayBackButton(state),
+    displayCommentsAlways: getArticleDisplayCommentsAlways(state),
 
     displayArticleIntroduction: getListingDisplayArticleIntroduction(state),
 
@@ -41,6 +43,7 @@ const mapDispatchToProps = dispatch => ({
     setFontSize: fontSize => dispatch(setFontSize(fontSize)),
     setTutorial: tutorial => dispatch(setTutorial(tutorial)),
     setDisplayBackButton: displayBackButton => dispatch(setDisplayBackButton(displayBackButton)),
+    setDisplayCommentsAlways: displayCommentsAlways => dispatch(setDisplayCommentsAlways(displayCommentsAlways)),
 
     setDisplayArticleIntroduction: displayArticleIntroduction => dispatch(setDisplayArticleIntroduction(displayArticleIntroduction)),
 

@@ -97,10 +97,10 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
     },
 
+    // recommendations
     recommendationsContainer: {
         marginTop: 32,
     },
-
 
     // settings
     settingsModal: {
@@ -116,6 +116,40 @@ export const styles = StyleSheet.create({
     loadingText: {
         ...DefaultTheme.styles.text.ui,
         fontSize: 20,
+    },
+
+    // comments
+    commentsContainer: {
+        marginTop: 32,
+    },
+
+    commentsLoadButton: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+
+        marginHorizontal: 16,
+        marginVertical: 8,
+
+        paddingHorizontal: 16,
+        paddingVertical: 8,
+    },
+
+    commentsLoadButtonText: {
+        ...DefaultTheme.styles.text.ui,
+
+        color: DefaultTheme.colors.text.secondary,
+        fontSize: 20,
+
+        marginHorizontal: 5,
+    },
+
+    commentsWebView: {
+        flex: 1,
+        marginHorizontal: 0, // important for rendering
+        left: 16,
+        right: 16,
     }
 });
 

@@ -82,7 +82,7 @@ export const styles = StyleSheet.create({
     },
 
     introduction: {
-        ...DefaultTheme.styles.text.article,
+        ...DefaultTheme.styles.text.ui,
 
         marginTop: 5,
         color: DefaultTheme.colors.text.secondary,

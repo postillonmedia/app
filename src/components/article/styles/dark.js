@@ -4,7 +4,7 @@
 
 import { StyleSheet } from 'react-native';
 
-import { DefaultTheme, DarkTheme } from '../../../constants/themes';
+import {DarkTheme, DefaultTheme} from '../../../constants/themes';
 
 
 const controls = {
@@ -106,8 +106,45 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
     },
     loadingText: {
-        ...DefaultTheme.styles.text.ui,
+        ...DarkTheme.styles.text.ui,
         fontSize: 20,
+    },
+
+    // comments
+    commentsContainer: {
+        marginTop: 32,
+    },
+
+    commentsLoadButton: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+
+        marginHorizontal: 16,
+        marginVertical: 8,
+
+        paddingHorizontal: 16,
+        paddingVertical: 8,
+    },
+
+    commentsLoadButtonText: {
+        ...DarkTheme.styles.text.ui,
+
+        color: DarkTheme.colors.text.secondary,
+        fontSize: 20,
+
+        marginHorizontal: 5,
+    },
+
+    commentsWebView: {
+        flex: 1,
+
+        marginHorizontal: 0, // important for rendering
+        left: 16,
+        right: 16,
+
+        backgroundColor: DarkTheme.colors.monochrome.white4,
     }
 });
 

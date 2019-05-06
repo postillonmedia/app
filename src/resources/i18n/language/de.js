@@ -74,6 +74,8 @@ export default {
         settings: 'Artikeldarstellung',
         loading: 'Artikel wird geladen',
         more: 'Weitere Artikel',
+        comments: 'Kommentare',
+        commentsLoad: 'Kommentare anzeigen',
 
         'copilot.image': 'Bilder lassen sich durch die 2-Finger-Zoomgeste vergrößern.',
         'copilot.back': 'Gedrückt halten, um sofort zur Übersicht zurückzukommen.',
@@ -139,6 +141,7 @@ export default {
 
         articleSection: 'Artikel',
         displayBackButton: 'Zurück-Button anzeigen',
+        displayCommentsAlways: 'Kommentare immer laden',
         displayTutorial: 'Tutorial anzeigen',
 
         listingSection: 'Artikel Liste',
