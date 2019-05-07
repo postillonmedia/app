@@ -4,7 +4,7 @@
 
 import { StyleSheet } from 'react-native';
 
-import {DarkTheme, DefaultTheme} from '../../../constants/themes';
+import { DarkTheme } from '../../../constants/themes';
 
 
 const controls = {
@@ -65,6 +65,10 @@ export const styles = StyleSheet.create({
         marginVertical: 5,
     },
 
+    section: {
+        marginTop: 32,
+    },
+
     line: {
         height: 3,
         width: '20%',
@@ -112,10 +116,18 @@ export const styles = StyleSheet.create({
 
     // comments
     commentsContainer: {
-        marginTop: 32,
+        backgroundColor: DarkTheme.colors.bg.lighter,
+
+        marginHorizontal: 16,
+        marginVertical: 16,
+
+        padding: 32,
     },
 
     commentsLoadButton: {
+        borderRadius: 5,
+        backgroundColor: DarkTheme.colors.monochrome.dark3,
+
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'center',
@@ -127,14 +139,34 @@ export const styles = StyleSheet.create({
         paddingHorizontal: 16,
         paddingVertical: 8,
     },
-
     commentsLoadButtonText: {
         ...DarkTheme.styles.text.ui,
 
-        color: DarkTheme.colors.text.secondary,
-        fontSize: 20,
+        color: DarkTheme.colors.text.negative,
+        fontSize: 16,
+        fontFamily: 'FiraSans-SemiBold',
 
         marginHorizontal: 5,
+    },
+
+    commentsLoadAlwaysButton: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+
+        marginHorizontal: 32,
+        marginTop: 8,
+
+        paddingHorizontal: 16,
+        paddingTop: 8,
+    },
+    commentsLoadAlwaysButtonText: {
+        ...DarkTheme.styles.text.ui,
+
+        color: DarkTheme.colors.text.secondary,
+        fontSize: 14,
+        textDecorationLine: 'underline',
     },
 
     commentsWebView: {

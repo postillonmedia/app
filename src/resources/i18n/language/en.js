@@ -74,7 +74,8 @@ export default {
         loading: 'Article is loading',
         more: 'More articles',
         comments: 'Comments',
-        commentsLoad: 'Display comments',
+        commentsLoad: 'Load comments',
+        commentsLoadAlways: 'Always load automatically',
 
         'copilot.image': 'You can zoom every image with a two-finger pitch gesture.',
         'copilot.back': 'Press and hold to go back to the articles listing',

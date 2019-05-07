@@ -21,11 +21,13 @@ export class CommentsView extends PureComponent {
         articleState: PropTypes.object.isRequired,
         width: PropTypes.number,
         displayCommentsAlways: PropTypes.bool,
+        setDisplayCommentsAlways: PropTypes.func,
     };
 
     static defaultProps = {
         width: 0,
         displayCommentsAlways: false,
+        setDisplayCommentsAlways: () => null,
     };
 
     constructor(props) {
@@ -42,6 +44,16 @@ export class CommentsView extends PureComponent {
         this.setState({
             displayComments: true,
         });
+    };
+
+    handleLoadCommentsAlwaysPressed = event => {
+        const { setDisplayCommentsAlways } = this.props;
+
+        // set setting
+        setDisplayCommentsAlways(true);
+
+        // show comments
+        this.handleLoadCommentsPressed(event);
     };
 
     handleShouldStartLoadWithRequest = request => {
@@ -106,11 +118,16 @@ export class CommentsView extends PureComponent {
 
         if (!displayComments) {
             content = (
-                <TouchableOpacity style={styles.commentsLoadButton} onPress={this.handleLoadCommentsPressed}>
-                    <FeatherIcon name={'message-square'} size={26} color={constants.colors.monochrome.dark3} style={styles.commentsLoadButtonText} />
-                    <Text style={styles.commentsLoadButtonText}>{t('commentsLoad')}</Text>
-                    <FeatherIcon name={'message-square'} size={26} color={constants.colors.monochrome.dark3} style={[styles.commentsLoadButtonText, {transform: [{rotateY: '180deg'}]}]} />
-                </TouchableOpacity>
+                <View style={styles.commentsContainer}>
+                    <TouchableOpacity style={styles.commentsLoadButton} onPress={this.handleLoadCommentsPressed}>
+                        <Text style={styles.commentsLoadButtonText}>{t('commentsLoad')}</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={styles.commentsLoadAlwaysButton} onPress={this.handleLoadCommentsAlwaysPressed}>
+                        <Text style={styles.commentsLoadAlwaysButtonText}>{t('commentsLoadAlways')}</Text>
+                    </TouchableOpacity>
+                </View>
+
             );
         } else {
             const html = `
@@ -168,7 +185,7 @@ export class CommentsView extends PureComponent {
         }
 
         return (
-            <View style={[styles.container, styles.commentsContainer]}>
+            <View style={[styles.container, styles.section]}>
                 <Text style={styles.heading}>{t('comments')}</Text>
                 <View style={styles.line} />
 

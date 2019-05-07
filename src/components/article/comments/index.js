@@ -8,11 +8,16 @@ import { getArticleDisplayCommentsAlways } from '../../../redux/selectors/settin
 
 
 import CommentsView from './CommentsView';
+import {setDisplayCommentsAlways} from "../../../redux/actions/settings/article";
 
 
 const mapStateToProps = (state, ownProps) => ({
     width: getWindowWidth(state),
     displayCommentsAlways: getArticleDisplayCommentsAlways(state),
+});
+
+const mapDispatchToProps = dispatch => ({
+    setDisplayCommentsAlways: displayCommentsAlways => dispatch(setDisplayCommentsAlways(displayCommentsAlways)),
 });
 
 
@@ -22,6 +27,6 @@ export default compose(
 
     connectStyle('article'),
 
-    connect(mapStateToProps, null),
+    connect(mapStateToProps, mapDispatchToProps),
 
 )(CommentsView);

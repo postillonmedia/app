@@ -75,7 +75,8 @@ export default {
         loading: 'Artikel wird geladen',
         more: 'Weitere Artikel',
         comments: 'Kommentare',
-        commentsLoad: 'Kommentare anzeigen',
+        commentsLoad: 'Kommentare laden',
+        commentsLoadAlways: 'Immer automatisch laden',
 
         'copilot.image': 'Bilder lassen sich durch die 2-Finger-Zoomgeste vergrößern.',
         'copilot.back': 'Gedrückt halten, um sofort zur Übersicht zurückzukommen.',
