@@ -3,6 +3,8 @@ import ReactNative, { Linking, ScrollView, View, Text } from 'react-native';
 
 import { CustomTabs } from 'react-native-custom-tabs';
 
+import Firebase from '../../../../utils/firebase';
+
 import Package from '../../../../../package.json';
 
 
@@ -10,6 +12,18 @@ export class AboutScreen extends PureComponent {
 
     constructor(props, context) {
         super(props, context);
+
+        this.state = {
+            token: null,
+        };
+
+        const iid = Firebase.iid();
+
+        iid.getToken().then(token => {
+            this.setState({
+                token,
+            });
+        })
     }
 
     handleRepositoryPress = () => {
@@ -45,7 +59,7 @@ export class AboutScreen extends PureComponent {
         const { styles, t } = this.props;
 
         return (
-            <View style={styles.content}>
+            <View style={styles.content} key={'app'}>
                 <Text style={styles.heading}>{t('app').toUpperCase()}</Text>
 
                 <Text style={styles.text}>{t('name')}: {Package.name}</Text>
@@ -77,7 +91,7 @@ export class AboutScreen extends PureComponent {
         }
 
         return (
-            <View style={styles.content}>
+            <View style={styles.content} key={'developers'}>
                 <Text style={styles.heading}>{t('developers').toUpperCase()}</Text>
 
                 {content}
@@ -96,16 +110,33 @@ export class AboutScreen extends PureComponent {
 
             const version = Package.dependencies[dependency];
 
-            content[content.length] = <Text style={styles.text} onPress={this.handleDependencyPressed(dependency)}>{dependency}: {version}</Text>
+            content[content.length] = <Text style={styles.text} key={'dependency-' + dependency} onPress={this.handleDependencyPressed(dependency)}>{dependency}: {version}</Text>
         }
 
         return (
-            <View style={styles.content}>
+            <View style={styles.content} key={'dependencies'}>
                 <Text style={styles.heading}>{t('dependencies').toUpperCase()}</Text>
 
                 {content}
             </View>
         );
+    };
+
+    renderToken = () => {
+        const { styles, t } = this.props;
+        const { token } = this.state;
+
+        if (token) {
+            return (
+                <View style={styles.content} key={'token'}>
+                    <Text style={styles.heading}>Token</Text>
+
+                    <Text style={styles.text} selectable={true}>{token}</Text>
+                </View>
+            );
+        }
+
+        return null;
     };
 
     render() {
@@ -119,6 +150,8 @@ export class AboutScreen extends PureComponent {
                 {this.renderContributors()}
 
                 {this.renderDependencies()}
+
+                {this.renderToken()}
 
             </ScrollView>
         );

@@ -4,6 +4,8 @@ import { all, take, takeEvery, put, call, select } from 'redux-saga/effects';
 import Firebase from '../../utils/firebase';
 import Config from '../../constants/config';
 
+import NotificationManager from '../../utils/notifications/NotificationManager';
+
 import {
     setNotification,
 
@@ -53,14 +55,12 @@ function* handleNotificationEnabledChanged(action) {
             }
         }
 
-        // subscribe for topic
-        yield call([messaging, messaging.subscribeToTopic], Config.notifications.topics.automatic);
+        yield call(setNotificationsEnabled, true);
 
     } else {
-        // unsubscribe
-        yield call([messaging, messaging.unsubscribeFromTopic], Config.notifications.topics.automatic);
 
-        yield call([iid, iid.deleteToken]);
+        yield call(setNotificationsEnabled, false);
+
     }
 }
 
@@ -75,11 +75,42 @@ function* initialize() {
         const receiveNotifications = yield select(getAppNotifications);
 
         if (receiveNotifications) {
-            // subscribe for topic
-            yield call([messaging, messaging.subscribeToTopic], Config.notifications.topics.automatic);
+
+            yield call(setNotificationsEnabled, true);
+
+        } else {
+
+            yield call(setNotificationsEnabled, false);
+
         }
     }
 }
+
+function* setNotificationsEnabled(enabled) {
+    // const messaging = Firebase.messaging();
+    // const iid = Firebase.iid();
+
+    if (enabled) {
+        // yield call([iid, iid.get]);
+        // yield call([iid, iid.getToken]);
+        //
+        // // subscribe for topic
+        // yield call([messaging, messaging.subscribeToTopic], Config.notifications.topics.automatic);
+
+        // enable receiving of notifications
+        yield call([NotificationManager, NotificationManager.setEnabled], true);
+    } else {
+        // disable receiving of notifications
+        yield call([NotificationManager, NotificationManager.setEnabled], false);
+
+        // // unsubscribe
+        // yield call([messaging, messaging.unsubscribeFromTopic], Config.notifications.topics.automatic);
+        //
+        // yield call([iid, iid.deleteToken]);
+        // yield call([iid, iid.delete]);
+    }
+}
+
 
 
 function* watchOnAnalyticsEnabledChanged() {
