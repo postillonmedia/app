@@ -160,27 +160,29 @@ export class CommentsView extends PureComponent {
             `;
 
             content = (
-                <OtherMediaContainer
-                    renderOfflineComponent={() => <OtherOfflineIndicator />}
-                >
-                    <AutoHeightWebView
-                        style={[styles.commentsWebView, { width: width - 32 }]}
-                        mediaPlaybackRequiresUserAction={false}
-                        baseUrl={article.url}
-                        source={{ html, baseUrl: article.url }}
-                        useWebKit={true}
-                        javaScriptEnabled={true}
-                        domStorageEnabled={true}
-                        originWhitelist={['*']}
-                        mixedContentMode={'always'}
-                        thirdPartyCookiesEnabled={true}
-                        allowsInlineMediaPlayback={true}
-                        sharedCookiesEnabled={true}
-                        startInLoadingState={true}
-                        renderLoading={() => (<ActivityIndicator color={constants.colors.activityIndicator} size={'large'} animating={true} />)}
-                        onShouldStartLoadWithRequest={this.handleShouldStartLoadWithRequest}
-                    />
-                </OtherMediaContainer>
+                <View style={styles.commentsWebViewContainer}>
+                    <OtherMediaContainer
+                        renderOfflineComponent={() => <OtherOfflineIndicator />}
+                    >
+                        <AutoHeightWebView
+                            style={[styles.commentsWebView, { width: width - 32 }]}
+                            mediaPlaybackRequiresUserAction={false}
+                            baseUrl={article.url}
+                            source={{ html, baseUrl: article.url }}
+                            useWebKit={true}
+                            javaScriptEnabled={true}
+                            domStorageEnabled={true}
+                            originWhitelist={['*']}
+                            mixedContentMode={'always'}
+                            thirdPartyCookiesEnabled={true}
+                            allowsInlineMediaPlayback={true}
+                            sharedCookiesEnabled={true}
+                            startInLoadingState={true}
+                            renderLoading={() => (<ActivityIndicator color={constants.colors.activityIndicator} size={'large'} animating={true} />)}
+                            onShouldStartLoadWithRequest={this.handleShouldStartLoadWithRequest}
+                        />
+                    </OtherMediaContainer>
+                </View>
             );
         }
 

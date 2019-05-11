@@ -215,6 +215,10 @@ export class SettingsScreen extends PureComponent {
 
                 <View style={styles.group}>
                     <View style={styles.line}>
+                        <Text style={[constants.styles.text.ui, { color: constants.colors.brandPrimary, textAlign: 'center' }]}>{t('maintenance')}</Text>
+                    </View>
+
+                    <View style={[styles.line, { backgroundColor: constants.colors.bg.light }]}>
                         <Text style={styles.lineText}>{t('notificationEnable')}</Text>
 
                         <Switch
@@ -230,6 +234,30 @@ export class SettingsScreen extends PureComponent {
                 </View>
             </ScrollView>
         );
+
+        /*
+        <Switch
+                            disabled={true}
+
+                            value={false}
+                            thumbColor={constants.colors.switches.offThumbTintColor}
+                            trackColor={{
+                                true: constants.colors.switches.onTintColor,
+                                false: constants.colors.switches.tintColor,
+                            }}
+                        />
+
+        <Switch
+            disabled={true}
+
+            value={notifications}
+            onValueChange={this.handleNotificationEnable}
+            thumbColor={notifications ? constants.colors.switches.thumbTintColor : constants.colors.switches.offThumbTintColor}
+            trackColor={{
+                true: constants.colors.switches.onTintColor,
+                false: constants.colors.switches.tintColor,
+            }}
+        />*/
     }
 
 }

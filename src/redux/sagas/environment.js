@@ -16,13 +16,21 @@ import { getScreenEnvironment, getWindowEnvironment } from '../selectors/environ
 /******************************************************************************/
 
 function* initializeConnectivity() {
-    const { type,  effectiveType } = yield call(NetInfo.getConnectionInfo);
-    yield put(networkConnectivityChange(type, effectiveType));
+    try {
+        const { type,  effectiveType } = yield call([NetInfo, NetInfo.getConnectionInfo]);
+        yield put(networkConnectivityChange(type, effectiveType));
+    } catch (e) {
+        console.error(e);
+    }
 }
 
 function* initializeConnected() {
-    const isConnected = yield call(NetInfo.isConnected.fetch);
-    yield put(networkConnectedChange(isConnected));
+    try {
+        const isConnected = yield call([NetInfo.isConnected, NetInfo.isConnected.fetch]);
+        yield put(networkConnectedChange(isConnected));
+    } catch (e) {
+        console.error(e);
+    }
 }
 
 

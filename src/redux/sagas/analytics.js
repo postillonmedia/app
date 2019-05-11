@@ -28,9 +28,13 @@ function* onScreenChanged(action) {
 }
 
 function* initialize() {
-    const enabled = yield select(getAppAnalytics);
+    try {
+        const enabled = yield select(getAppAnalytics);
 
-    Firebase.analytics().setAnalyticsCollectionEnabled(enabled);
+        Firebase.analytics().setAnalyticsCollectionEnabled(enabled);
+    } catch (e) {
+        console.error(e);
+    }
 }
 
 

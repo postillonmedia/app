@@ -1,5 +1,8 @@
 import ReactNative, { Alert, Platform } from 'react-native';
-import { all, take, takeEvery, put, call, select } from 'redux-saga/effects';
+import { all, call, delay, take, takeEvery, put, select } from 'redux-saga/effects';
+import { REHYDRATE } from 'redux-persist';
+
+import { isPersistorBootstrapped } from '../store'
 
 import Firebase from '../../utils/firebase';
 import Config from '../../constants/config';
@@ -65,20 +68,41 @@ function* handleNotificationEnabledChanged(action) {
 }
 
 function* initialize() {
-    const messaging = Firebase.messaging();
+    // try {
+    //     const messaging = Firebase.messaging();
+    //     const iid = Firebase.iid();
+    //
+    //     // unsubscribe
+    //     yield call([messaging, messaging.unsubscribeFromTopic], Config.notifications.topics.automatic);
+    //
+    //     // delete token
+    //     yield call([iid, iid.deleteToken]);
+    // } catch (e) {
+    //     console.error(e);
+    // }
 
-    const hasPermissions = yield call([messaging, messaging.hasPermission]);
+    try {
+        // wait for redux-persist to restore the persisted state
+        yield isPersistorBootstrapped;
 
-    if (!hasPermissions) {
-        yield put(setNotification(false));
-    } else {
-        const receiveNotifications = yield select(getAppNotifications);
+        const messaging = Firebase.messaging();
 
-        if (receiveNotifications) {
-            // subscribe for topic
-            yield call([messaging, messaging.subscribeToTopic], Config.notifications.topics.automatic);
+        const hasPermissions = yield call([messaging, messaging.hasPermission]);
+
+        if (!hasPermissions) {
+            yield put(setNotification(false));
+        } else {
+            const receiveNotifications = yield select(getAppNotifications);
+
+            if (receiveNotifications) {
+                // subscribe for topic
+                yield call([messaging, messaging.subscribeToTopic], Config.notifications.topics.automatic);
+            }
         }
+    } catch (e) {
+        console.error(e);
     }
+
 }
 
 

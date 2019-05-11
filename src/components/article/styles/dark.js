@@ -169,12 +169,13 @@ export const styles = StyleSheet.create({
         textDecorationLine: 'underline',
     },
 
+    commentsWebViewContainer: {
+        marginHorizontal: 16,
+    },
     commentsWebView: {
         flex: 1,
 
         marginHorizontal: 0, // important for rendering
-        left: 16,
-        right: 16,
 
         backgroundColor: DarkTheme.colors.monochrome.white4,
     }

@@ -50,7 +50,7 @@ class ConfigContainer {
     };
 
     listing = {
-        displayArticleIntroduction: false,
+        displayArticleIntroduction: true,
     };
 
     ad = {

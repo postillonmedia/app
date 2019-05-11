@@ -148,6 +148,8 @@ export default {
 
         notificationSection: 'Notifications',
         notificationEnable: 'Enable notifications',
+
+        maintenance: 'We currently working on this feature',
     },
     privacyPolicy: {
         title: 'Privacy Policy',
