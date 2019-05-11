@@ -1,5 +1,8 @@
 import ReactNative, { Alert, Platform } from 'react-native';
-import { all, take, takeEvery, put, call, select } from 'redux-saga/effects';
+import { all, call, delay, take, takeEvery, put, select } from 'redux-saga/effects';
+import { REHYDRATE } from 'redux-persist';
+
+import { isPersistorBootstrapped } from '../store'
 
 import Firebase from '../../utils/firebase';
 import Config from '../../constants/config';
@@ -55,59 +58,58 @@ function* handleNotificationEnabledChanged(action) {
             }
         }
 
+        // subscribe for topic
         yield call(setNotificationsEnabled, true);
 
     } else {
-
+        // unsubscribe
         yield call(setNotificationsEnabled, false);
-
     }
 }
 
 function* initialize() {
-    const messaging = Firebase.messaging();
+    try {
+        // wait for redux-persist to restore the persisted state
+        yield isPersistorBootstrapped;
 
-    const hasPermissions = yield call([messaging, messaging.hasPermission]);
+        const messaging = Firebase.messaging();
 
-    if (!hasPermissions) {
-        yield put(setNotification(false));
-    } else {
-        const receiveNotifications = yield select(getAppNotifications);
+        const hasPermissions = yield call([messaging, messaging.hasPermission]);
 
-        if (receiveNotifications) {
-
-            yield call(setNotificationsEnabled, true);
-
+        if (!hasPermissions) {
+            yield put(setNotification(false));
         } else {
+            const receiveNotifications = yield select(getAppNotifications);
 
-            yield call(setNotificationsEnabled, false);
-
+            yield call(setNotificationsEnabled, receiveNotifications);
         }
+    } catch (e) {
+        console.error(e);
     }
 }
 
 function* setNotificationsEnabled(enabled) {
-    // const messaging = Firebase.messaging();
-    // const iid = Firebase.iid();
+    const messaging = Firebase.messaging();
+    const iid = Firebase.iid();
 
     if (enabled) {
-        // yield call([iid, iid.get]);
-        // yield call([iid, iid.getToken]);
-        //
-        // // subscribe for topic
-        // yield call([messaging, messaging.subscribeToTopic], Config.notifications.topics.automatic);
+        yield call([iid, iid.get]);
+        yield call([iid, iid.getToken]);
+
+        // subscribe for topic
+        yield call([messaging, messaging.subscribeToTopic], Config.notifications.topics.automatic);
 
         // enable receiving of notifications
-        yield call([NotificationManager, NotificationManager.setEnabled], true);
+        // yield call([NotificationManager, NotificationManager.setEnabled], true);
     } else {
         // disable receiving of notifications
-        yield call([NotificationManager, NotificationManager.setEnabled], false);
+        // yield call([NotificationManager, NotificationManager.setEnabled], false);
 
-        // // unsubscribe
-        // yield call([messaging, messaging.unsubscribeFromTopic], Config.notifications.topics.automatic);
-        //
-        // yield call([iid, iid.deleteToken]);
-        // yield call([iid, iid.delete]);
+        // unsubscribe
+        yield call([messaging, messaging.unsubscribeFromTopic], Config.notifications.topics.automatic);
+
+        yield call([iid, iid.deleteToken]);
+        yield call([iid, iid.delete]);
     }
 }
 

@@ -150,6 +150,8 @@ export default {
 
         notificationSection: 'Benachrichtigungen',
         notificationEnable: 'Benachrichtigungen erhalten',
+
+        maintenance: 'Zurzeit wird dieses Feature überarbeitet.\n\nDa diese Funktion auf vielen Geräten nicht korrekt funktionierte, wird nun nachgearbeitet.',
     },
     privacyPolicy: {
         title: 'Datenschutzerklärung',

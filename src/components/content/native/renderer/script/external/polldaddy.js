@@ -30,6 +30,7 @@ export default function (props = {}) {
                 style={[styles.iframe, { width: width - 32, backgroundColor: constants.colors.monochrome.white4}]}
                 baseUrl={baseUrl}
                 source={{ html, baseUrl }}
+                useWebKit={true}
                 javaScriptEnabled={true}
                 domStorageEnabled={true}
                 originWhitelist={['*']}

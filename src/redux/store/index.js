@@ -63,14 +63,16 @@ export const store = createStore(
 );
 
 
-// launch sagas
-sagaMiddleware.run(combinedSagas);
-
 // export promise which resolves when the persistor has bootstrapped the config
 let _isPersistorBootstrappedResolve;
 export const isPersistorBootstrapped = new Promise((resolve, reject) => {
     _isPersistorBootstrappedResolve = resolve;
 });
+
+
+// launch sagas
+sagaMiddleware.run(combinedSagas);
+
 
 // initialize redux-persist
 export const persistor = persistStore(store, {
