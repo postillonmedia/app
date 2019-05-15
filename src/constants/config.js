@@ -26,7 +26,7 @@ class ConfigContainer {
 
     notifications = {
         topics: {
-            automatic: 'automatic-news',
+            automatic: 'automatic-news-de',
         },
     };
 
@@ -59,6 +59,10 @@ class ConfigContainer {
             offset: 2,
             repeat: 3,
         },
+    };
+
+    webview = {
+        hardwareAccelerated: false,
     };
 
     setConfigByUnderscoreSeparatedKey(key, value) {

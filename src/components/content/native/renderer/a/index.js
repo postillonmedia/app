@@ -2,7 +2,7 @@ import React from 'react';
 import ReactNative from 'react-native';
 
 import { Navigation } from '@postillon/react-native-navigation';
-import { CustomTabs } from 'react-native-custom-tabs';
+import { InAppBrowser } from '@matt-block/react-native-in-app-browser';
 
 import parse from 'url-parse';
 
@@ -40,7 +40,7 @@ export default function (props = {}) {
             });
 
         } else {
-            CustomTabs.openURL(htmlAttribs.href, constants.styles.customTabs);
+            InAppBrowser.open(htmlAttribs.href, constants.styles.customTabs);
         }
     };
 

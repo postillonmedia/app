@@ -61,21 +61,21 @@ class PostillonNotificationManager {
         if (Build.VERSION.SDK_INT >= 26) {
             NotificationChannel newsChannel = notificationManager.getNotificationChannel(CHANNEL_ID);
 
-            if (newsChannel == null) {
-                Resources resources = context.getResources();
-
-                CharSequence name = resources.getString(R.string.notification_channel_name);
-                String description = resources.getString(R.string.notification_channel_description);
-
-                newsChannel = new NotificationChannel(CHANNEL_ID, name, NotificationManager.IMPORTANCE_LOW);
-
-                newsChannel.setDescription(description);
-                newsChannel.setVibrationPattern(new long [] { 500, 500, 500 });
-
-                newsChannel.enableVibration(true);
-
-                notificationManager.createNotificationChannel(newsChannel);
-            }
+//            if (newsChannel == null) {
+//                Resources resources = context.getResources();
+//
+//                CharSequence name = resources.getString(R.string.notification_channel_name);
+//                String description = resources.getString(R.string.notification_channel_description);
+//
+//                newsChannel = new NotificationChannel(CHANNEL_ID, name, NotificationManager.IMPORTANCE_LOW);
+//
+//                newsChannel.setDescription(description);
+//                newsChannel.setVibrationPattern(new long [] { 500, 500, 500 });
+//
+//                newsChannel.enableVibration(true);
+//
+//                notificationManager.createNotificationChannel(newsChannel);
+//            }
         }
 
     }

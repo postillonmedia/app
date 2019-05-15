@@ -2,8 +2,12 @@ import colors from './../colors';
 
 
 export default {
-    toolbarColor: colors.tabs.background,
-    enableUrlBarHiding: true,
-    showPageTitle: true,
-    enableDefaultShare: true,
+    android: {
+        toolbarColor: colors.tabs.background,
+        showTitle: true,
+        addDefaultShareMenu: true,
+    },
+    ios: {
+        preferredBarTintColor: colors.tabs.background,
+    }
 }

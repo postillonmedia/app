@@ -10,9 +10,10 @@ import parse from 'url-parse';
 import OtherMediaContainer from '../../mediacontainer/other';
 import OtherOfflineIndicator from '../../offlineIndicator/other';
 import { getBlogByHostname } from '../../../constants/blogs';
+import { Config } from '../../../constants';
 
 import AutoHeightWebView from 'react-native-autoheight-webview';
-import { CustomTabs } from 'react-native-custom-tabs';
+import { InAppBrowser } from '@matt-block/react-native-in-app-browser';
 
 
 export class CommentsView extends PureComponent {
@@ -82,13 +83,13 @@ export class CommentsView extends PureComponent {
                 });
 
             } else {
-                CustomTabs.openURL(request.url, constants.styles.customTabs);
+                InAppBrowser.open(request.url, constants.styles.customTabs);
             }
 
             return false;
         } else if (hostname === 'disqus.com') {
             if (path.startsWith('/by/') || path.startsWith('/home/')) {
-                CustomTabs.openURL(request.url, constants.styles.customTabs);
+                InAppBrowser.open(request.url, constants.styles.customTabs);
 
                 return false;
             } else {
@@ -103,7 +104,7 @@ export class CommentsView extends PureComponent {
         } else {
             const { constants } = this.props;
 
-            CustomTabs.openURL(request.url, constants.styles.customTabs);
+            InAppBrowser.open(request.url, constants.styles.customTabs);
 
             return false;
         }
@@ -166,6 +167,7 @@ export class CommentsView extends PureComponent {
                     >
                         <AutoHeightWebView
                             style={[styles.commentsWebView, { width: width - 32 }]}
+                            androidHardwareAccelerationDisabled={!Config.webview.hardwareAccelerated}
                             mediaPlaybackRequiresUserAction={false}
                             baseUrl={article.url}
                             source={{ html, baseUrl: article.url }}

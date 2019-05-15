@@ -4,7 +4,7 @@ import { Parser, DomHandler, DomUtils } from 'htmlparser2';
 import entities from 'entities';
 import parse from 'url-parse';
 
-import RNFetchBlob from 'react-native-fetch-blob';
+import RNFetchBlob from 'rn-fetch-blob';
 
 import {
     ARTICLE_OPEN, ARTICLE_PROCESS,

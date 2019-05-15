@@ -22,6 +22,10 @@
             android:name="android.webkit.WebView.EnableSafeBrowsing"
             android:value="false" />
 
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/notification" />
+
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
@@ -78,21 +82,21 @@
 
         <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
 
-        <service android:name="com.postillon.notifications.PostillonNotificationService">
+        <!--<service android:name="com.postillon.notifications.PostillonNotificationService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
-        <receiver android:name="com.postillon.notifications.PostillonNotificationReceiver" />
+        <receiver android:name="com.postillon.notifications.PostillonNotificationReceiver" />-->
 
-        <!--<service android:name="io.invertase.firebase.messaging.RNFirebaseMessagingService">
+        <service android:name="io.invertase.firebase.messaging.RNFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
-        <receiver android:name="io.invertase.firebase.notifications.RNFirebaseNotificationReceiver" />-->
+        <receiver android:name="io.invertase.firebase.notifications.RNFirebaseNotificationReceiver" />
 
         <receiver android:enabled="true" android:exported="true"  android:name="io.invertase.firebase.notifications.RNFirebaseNotificationsRebootReceiver">
             <intent-filter>

@@ -1,8 +1,10 @@
 import React from 'react';
 import ReactNative, { ActivityIndicator } from 'react-native';
 
-import AutoHeightWebView from 'react-native-autoheight-webview/autoHeightWebView';
-import { CustomTabs } from 'react-native-custom-tabs';
+import AutoHeightWebView from 'react-native-autoheight-webview';
+import { InAppBrowser } from '@matt-block/react-native-in-app-browser';
+
+import { Config } from '../../../../../../constants';
 
 import { OtherMediaContainer } from '../../../../../mediacontainer';
 import OtherOfflineIndicator from '../../../../../offlineIndicator/other';
@@ -16,7 +18,7 @@ export default function (props = {}) {
     const html = '<!DOCTYPE html><html lang="de"><head><title>Polldady-Wrapper</title></head><body><script type="application/javascript" src="' + src + '"></script></body></html>';
 
     const handleShouldStartLoadWithRequest = request => {
-        CustomTabs.openURL(request.url, constants.styles.customTabs);
+        InAppBrowser.open(request.url, constants.styles.customTabs);
 
         return false;
     };
@@ -28,6 +30,7 @@ export default function (props = {}) {
             <AutoHeightWebView
                 key={keyProperty}
                 style={[styles.iframe, { width: width - 32, backgroundColor: constants.colors.monochrome.white4}]}
+                androidHardwareAccelerationDisabled={!Config.webview.hardwareAccelerated}
                 baseUrl={baseUrl}
                 source={{ html, baseUrl }}
                 useWebKit={true}

@@ -13,8 +13,6 @@ import tableRenderer from './table';
 import wrapperRenderer from './wrapper';
 import textwrapperRenderer from './textwrapper';
 
-import adRenderer from './ad';
-
 
 export const a = aRenderer;
 
@@ -43,8 +41,6 @@ export const script = scriptRenderer;
 
 export const table = tableRenderer;
 
-export const ad = adRenderer;
-
 
 export default {
     a,
@@ -71,8 +67,6 @@ export default {
 
     wrapper,
     textwrapper,
-
-    ad,
 
     script,
 }

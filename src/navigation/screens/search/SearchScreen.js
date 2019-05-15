@@ -2,16 +2,16 @@ import React, { PureComponent } from 'react';
 import ReactNative, { ActivityIndicator, FlatList, Text, TouchableOpacity, View } from 'react-native';
 
 import FeatherIcon from 'react-native-vector-icons/Feather';
-import RNPopover from '@postillon/react-native-popover-menu';
+import RNPopover from 'react-native-popover-menu';
 
 import { iconsMap, isIconsMapLoaded } from './../../../app-icons';
 import { getCategoriesByLocale } from '../../../constants/categories';
 import { Periods, NoFilter } from '../../../constants/periods';
 
 import { SmallArticleCard } from './../../../components/card'
-import {ThemeManager} from "@postillon/react-native-theme";
-import {Config} from "../../../constants";
-import {debounce} from "../../../utils/util";
+import { ThemeManager } from "@postillon/react-native-theme";
+import { Config } from "../../../constants";
+import { debounce } from "../../../utils/util";
 
 
 export class SearchScreen extends PureComponent {

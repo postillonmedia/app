@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import ReactNative, { Linking, ScrollView, View, Text } from 'react-native';
 
-import { CustomTabs } from 'react-native-custom-tabs';
+import { InAppBrowser } from '@matt-block/react-native-in-app-browser';
 
 import Firebase from '../../../../utils/firebase';
 
@@ -52,7 +52,7 @@ export class AboutScreen extends PureComponent {
     openCustomTab = (url) => {
         const { constants } = this.props;
 
-        CustomTabs.openURL(url, constants.styles.customTabs);
+        InAppBrowser.open(url, constants.styles.customTabs);
     };
 
     renderAppInfo = () => {

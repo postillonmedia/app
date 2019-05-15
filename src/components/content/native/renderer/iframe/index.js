@@ -2,10 +2,12 @@ import React from 'react';
 import ReactNative, { ActivityIndicator } from 'react-native';
 
 import AutoHeightWebView from 'react-native-autoheight-webview';
+import { InAppBrowser } from '@matt-block/react-native-in-app-browser';
+
+import { Config } from '../../../../../constants';
 
 import OtherMediaContainer from '../../../../mediacontainer/other';
 import OtherOfflineIndicator from '../../../../offlineIndicator/other';
-import {CustomTabs} from "react-native-custom-tabs";
 
 
 export default function (props = {}) {
@@ -19,7 +21,7 @@ export default function (props = {}) {
 
 
     const handleShouldStartLoadWithRequest = request => {
-        CustomTabs.openURL(request.url, constants.styles.customTabs);
+        InAppBrowser.open(request.url, constants.styles.customTabs);
 
         return false;
     };
@@ -30,7 +32,8 @@ export default function (props = {}) {
         >
             <AutoHeightWebView
                 key={keyProperty + '-webview'}
-                style={[styles.iframe, { width: width - 32, height: 200}]}
+                style={[styles.iframe, { width: width - 32, height: 200 }]}
+                androidHardwareAccelerationDisabled={!Config.webview.hardwareAccelerated}
                 mediaPlaybackRequiresUserAction={false}
                 baseUrl={uri}
                 source={{ uri, baseUrl: uri }}

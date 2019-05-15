@@ -9,8 +9,8 @@ project(':react-native-firebase').projectDir = new File(rootProject.projectDir, 
 include ':realm'
 project(':realm').projectDir = new File(rootProject.projectDir, '../node_modules/realm/android')
 
-include ':react-native-fetch-blob'
-project(':react-native-fetch-blob').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-fetch-blob/android')
+include ':rn-fetch-blob'
+project(':rn-fetch-blob').projectDir = new File(rootProject.projectDir, '../node_modules/rn-fetch-blob/android')
 
 include ':react-native-gesture-handler'
 project(':react-native-gesture-handler').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-gesture-handler/android')
@@ -31,10 +31,10 @@ include ':react-native-toast-native'
 project(':react-native-toast-native').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-toast-native/android')
 
 include ':react-native-popover-menu'
-project(':react-native-popover-menu').projectDir = new File(rootProject.projectDir, '../node_modules/@postillon/react-native-popover-menu/android')
+project(':react-native-popover-menu').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-popover-menu/android')
 
-include ':react-native-custom-tabs'
-project(':react-native-custom-tabs').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-custom-tabs/android')
+include ':@matt-block_react-native-in-app-browser'
+project(':@matt-block_react-native-in-app-browser').projectDir = new File(rootProject.projectDir, '../node_modules/@matt-block/react-native-in-app-browser/android')
 
 include ':react-native-webview'
 project(':react-native-webview').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-webview/android')

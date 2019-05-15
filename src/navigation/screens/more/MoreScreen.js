@@ -17,7 +17,7 @@ import Toast from 'react-native-toast-native';
 import Firebase from '../../../utils/firebase';
 
 import { ThemeManager } from '@postillon/react-native-theme';
-import { CustomTabs } from 'react-native-custom-tabs';
+import { InAppBrowser } from '@matt-block/react-native-in-app-browser';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 
 import { onPressHandler } from './../../../utils/util';
@@ -123,7 +123,7 @@ export class MoreScreen extends Component {
         const { interstitialIsLoading } = this.state;
 
         if (interstitialIsLoading) {
-            return;
+
         } else {
             this.setState({
                 interstitialIsLoading: true,
@@ -217,7 +217,7 @@ export class MoreScreen extends Component {
     openCustomTab = (url) => {
         const { constants } = this.props;
 
-        CustomTabs.openURL(url, constants.styles.customTabs);
+        InAppBrowser.open(url, constants.styles.customTabs);
     };
 
     render() {

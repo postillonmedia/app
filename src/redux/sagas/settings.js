@@ -37,11 +37,9 @@ function* handleNotificationEnabledChanged(action) {
     const { enabled } = action;
 
     const messaging = Firebase.messaging();
-    const iid = Firebase.iid();
 
     if (enabled) {
         // register for messages
-
         const hasPermissions = yield call([messaging, messaging.hasPermission]);
 
         if (!hasPermissions) {
@@ -78,6 +76,7 @@ function* initialize() {
 
         if (!hasPermissions) {
             yield put(setNotification(false));
+            yield call(setNotificationsEnabled, false);
         } else {
             const receiveNotifications = yield select(getAppNotifications);
 

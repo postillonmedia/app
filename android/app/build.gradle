@@ -145,6 +145,10 @@ android {
             }
         }
     }
+    packagingOptions {
+        pickFirst '**/libjsc.so'
+        pickFirst '**/libc++_shared.so'
+    }
 }
 
 configurations.all {
@@ -157,6 +161,9 @@ configurations.all {
 }
 
 dependencies {
+    // Make sure to put android-jsc at the the first
+    implementation "org.webkit:android-jsc:r241213"
+
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.android.support:design:25.4.0"
     implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
@@ -194,7 +201,7 @@ dependencies {
 
     // Cloud Messaging / FCM
     // implementation "com.google.firebase:firebase-messaging:17.5.0"
-    compile "com.google.firebase:firebase-messaging:17.5.0"
+    api "com.google.firebase:firebase-messaging:17.5.0"
 
     // Crashlytics
     implementation('com.crashlytics.sdk.android:crashlytics:2.9.5@aar') {
@@ -216,7 +223,7 @@ dependencies {
 
     // other NPM packages
     implementation project(":realm")
-    implementation project(":react-native-fetch-blob")
+    implementation project(":rn-fetch-blob")
     implementation project(":react-native-device-info")
     implementation project(":react-native-svg")
     implementation project(":react-native-linear-gradient")
@@ -224,8 +231,8 @@ dependencies {
     implementation project(":react-native-vector-icons")
     implementation project(":react-native-toast-native")
     implementation project(":react-native-popover-menu")
-    implementation project(":react-native-custom-tabs")
     implementation project(":react-native-webview")
+    implementation project(":@matt-block_react-native-in-app-browser")
     implementation project(":react-native-community-slider")
     implementation project(":react-native-community-netinfo")
 

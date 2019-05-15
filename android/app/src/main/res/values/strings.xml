@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Der Postillon</string>
 
-    <string name="notification_channel_name">Artikel-Benachrichtigungen</string>
-    <string name="notification_channel_description">Sie erhalten eine Benachrichtigung, wenn ein neuer Artikel veröffentlicht wurde.</string>
+    <!--<string name="notification_channel_name">Artikel-Benachrichtigungen</string>-->
+    <!--<string name="notification_channel_description">Sie erhalten eine Benachrichtigung, wenn ein neuer Artikel veröffentlicht wurde.</string>-->
 </resources>

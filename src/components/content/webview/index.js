@@ -9,11 +9,12 @@ import LinearGradient from 'react-native-linear-gradient';
 
 import { Navigation } from '@postillon/react-native-navigation';
 
-import { CustomTabs } from 'react-native-custom-tabs';
+import { InAppBrowser } from '@matt-block/react-native-in-app-browser';
 
 import AutoHeightWebView from 'react-native-autoheight-webview';
 import parse from 'url-parse';
 
+import { Config } from '../../../constants';
 import { getBlogByHostname } from '../../../constants/blogs';
 
 
@@ -90,14 +91,14 @@ export class ContentView extends PureComponent {
             } else {
                 const { constants } = this.props;
 
-                CustomTabs.openURL(request.url, constants.styles.customTabs);
+                InAppBrowser.open(request.url, constants.styles.customTabs);
             }
 
             return false;
         } else {
             const { constants } = this.props;
 
-            CustomTabs.openURL(request.url, constants.styles.customTabs);
+            InAppBrowser.open(request.url, constants.styles.customTabs);
 
             return false;
         }
@@ -113,10 +114,11 @@ export class ContentView extends PureComponent {
         return (
             <View style={styles.container} key={'contentcontainer-webview'}>
                 <AutoHeightWebView
+                    androidHardwareAccelerationDisabled={!Config.webview.hardwareAccelerated}
                     originWhitelist={['*']}
                     mixedContentMode={'always'}
                     baseUrl={baseUrl}
-                    style={[styles.iframe, { width: width - 32}]}
+                    style={[styles.iframe, { width: width - 32 }]}
                     source={{ html }}
                     renderLoading={() => (<ActivityIndicator color={constants.colors.activityIndicator} size={'large'} animating={true} />)}
                     useWebKit={true}

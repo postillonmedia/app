@@ -1,6 +1,5 @@
 package com.postillon;
 
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -9,6 +8,7 @@ import com.facebook.react.ReactPackage;
 
 import com.postillon.notifications.PostillonNotificationPackage;
 import com.postillon.zoomy.ZoomyPackage;
+
 import com.toast.RCTToastPackage;
 import com.horcrux.svg.SvgPackage;
 import io.realm.react.RealmReactPackage;
@@ -16,10 +16,10 @@ import com.RNFetchBlob.RNFetchBlobPackage;
 import ui.popovermenu.RNPopoverMenuPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.oblador.vectoricons.VectorIconsPackage;
+import com.mattblock.reactnative.inappbrowser.RNInAppBrowserPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
 import com.reactnativenavigation.NavigationApplication;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
-import com.github.droibit.android.reactnative.customtabs.CustomTabsPackage;
 import com.reactnativecommunity.webview.RNCWebViewPackage;
 import com.reactnativecommunity.slider.ReactSliderPackage;
 import com.reactnativecommunity.netinfo.NetInfoPackage;
@@ -58,10 +58,10 @@ public class MainApplication extends NavigationApplication {
             new SvgPackage(),
             new RNFetchBlobPackage(),
             new VectorIconsPackage(),
+            new RNInAppBrowserPackage(),
             new RCTToastPackage(),
             new LinearGradientPackage(),
             new RNGestureHandlerPackage(),
-            new CustomTabsPackage(),
             new RNPopoverMenuPackage(),
             new RNDeviceInfo(),
             new RNCWebViewPackage(),

@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import ReactNative, { ScrollView, View, Text, TouchableOpacity, Switch } from 'react-native';
 
 import Slider from '@react-native-community/slider';
-import RNPopover from '@postillon/react-native-popover-menu';
+import RNPopover from 'react-native-popover-menu';
 
 import { Themes } from '../../../../constants/themes/index';
 import { LANGUAGE_DE, LANGUAGE_EN } from '../../../../constants/languages';
@@ -218,7 +218,7 @@ export class SettingsScreen extends PureComponent {
                         <Text style={[constants.styles.text.ui, { color: constants.colors.brandPrimary, textAlign: 'center' }]}>{t('maintenance')}</Text>
                     </View>
 
-                    <View style={[styles.line, { backgroundColor: constants.colors.bg.light }]}>
+                    <View style={styles.line}>
                         <Text style={styles.lineText}>{t('notificationEnable')}</Text>
 
                         <Switch

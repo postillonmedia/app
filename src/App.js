@@ -20,7 +20,7 @@ import { iconsMap, isIconsMapLoaded } from './app-icons';
 import { registerNavigationComponents } from './navigation';
 
 // deeplinks
-import { CustomTabs } from 'react-native-custom-tabs';
+import { InAppBrowser } from '@matt-block/react-native-in-app-browser';
 import { DeepLinkManager } from './utils/notifications';
 import { getBlogByHostname } from './constants/blogs';
 import parse from 'url-parse';
@@ -188,7 +188,7 @@ export class App {
                         title: getLocalizedString('more'),
                     },
                 ],
-                portraitOnlyMode: true,
+                portraitOnlyMode: false,
                 animationType: Platform.OS === 'ios' ? 'slide-down' : 'fade',
                 tabsStyle: {
                     ...style,
@@ -297,7 +297,7 @@ export class App {
 
                     const constants = ThemeManager.getConstantsForTheme(theme);
 
-                    CustomTabs.openURL(url, constants.styles.customTabs);
+                    InAppBrowser.open(url, constants.styles.customTabs);
                 } else {
                     // app was started with a link to an article
                     Navigation.handleDeepLink({
