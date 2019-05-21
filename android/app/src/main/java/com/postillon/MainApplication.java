@@ -6,7 +6,6 @@ import java.util.List;
 import com.facebook.soloader.SoLoader;
 import com.facebook.react.ReactPackage;
 
-import com.postillon.notifications.PostillonNotificationPackage;
 import com.postillon.zoomy.ZoomyPackage;
 
 import com.toast.RCTToastPackage;
@@ -76,8 +75,7 @@ public class MainApplication extends NavigationApplication {
             new RNFirebaseCrashlyticsPackage(),
             new RNFirebaseRemoteConfigPackage(),
 
-            new ZoomyPackage(),
-            new PostillonNotificationPackage()
+            new ZoomyPackage()
     );
   }
 
