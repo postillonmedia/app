@@ -174,8 +174,9 @@ export const styles = StyleSheet.create({
     },
     commentsWebView: {
         flex: 1,
-
         marginHorizontal: 0, // important for rendering
+
+        minHeight: 100,
 
         backgroundColor: DarkTheme.colors.monochrome.white4,
     }
