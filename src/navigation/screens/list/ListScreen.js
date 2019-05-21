@@ -261,13 +261,15 @@ export class ListScreen extends Component {
     };
 
     handleArticlePressed = (article) => {
-        const { navigator, t, theme } = this.props;
+        const { navigator, category, blogId, t, theme } = this.props;
         const { article: style } = ThemeManager.getStyleSheetForComponent('screens', theme);
 
         navigator.push({
             screen: 'postillon.Article',
             navigatorStyle: style,
             passProps: {
+                blogId,
+                category: category || null,
                 articleId: article.id,
             },
         });

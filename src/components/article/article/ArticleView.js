@@ -12,6 +12,7 @@ import { LocalizedDate } from '@postillon/react-native-timeago';
 import { Config } from '../../../constants';
 
 import Content from './../../../components/content';
+import Navigation from './../navigation';
 import Recommendations from './../recommendations';
 import Comments from './../comments';
 
@@ -28,16 +29,22 @@ const AdRequest = firebase.admob.AdRequest;
 const CopilotView = walkthroughable(View);
 
 
-export class ControlsView extends Component {
+export class ArticleView extends Component {
 
     static propTypes = {
+        blogId: PropTypes.string.isRequired,
+        category: PropTypes.string,
+
+        page: PropTypes.object,
         articleState: PropTypes.object,
+
         fontSize: PropTypes.number,
         isSubscribedToSteady: PropTypes.bool,
         initialControlVisibility: PropTypes.bool,
 
         onControlsVisibilityChange: PropTypes.func,
         onRecommendationPress: PropTypes.func,
+        onAdjacentArticlePress: PropTypes.func,
     };
 
     static defaultProps = {
@@ -49,6 +56,7 @@ export class ControlsView extends Component {
 
     shouldComponentUpdate(nextProps, nextState) {
         const {
+            page: nextPage,
             articleState: nextArticleState,
             fontSize: nextFontSize,
             isSubscribedToSteady: nextIsSubscribedToSteady,
@@ -57,6 +65,7 @@ export class ControlsView extends Component {
         } = nextProps;
 
         const {
+            page: currentPage,
             articleState: currentArticleState,
             fontSize: currentFontSize,
             isSubscribedToSteady: currentIsSubscribedToSteady,
@@ -65,6 +74,7 @@ export class ControlsView extends Component {
         } = this.props;
 
         return !(
+            nextPage === currentPage &&
             nextArticleState === currentArticleState &&
             nextFontSize === currentFontSize &&
             nextIsSubscribedToSteady === currentIsSubscribedToSteady &&
@@ -77,6 +87,12 @@ export class ControlsView extends Component {
         const { onRecommendationPress } = this.props;
 
         onRecommendationPress && onRecommendationPress(article);
+    };
+
+    handleNavigateToAdjacentArticlePress = (article) => {
+        const { onAdjacentArticlePress } = this.props;
+
+        onAdjacentArticlePress && onAdjacentArticlePress(article);
     };
 
     renderNotOnline = (props) => {
@@ -153,7 +169,7 @@ export class ControlsView extends Component {
     };
 
     render() {
-        const { articleState, fontSize, isSubscribedToSteady, initialControlVisibility, onControlsVisibilityChange, styles, locale, t } = this.props;
+        const { articleState, page, category, fontSize, isSubscribedToSteady, initialControlVisibility, onControlsVisibilityChange, styles, locale, t } = this.props;
 
         const article = articleState.article;
 
@@ -176,6 +192,8 @@ export class ControlsView extends Component {
 
                     {this.renderAd(article, 'MEDIUM_RECTANGLE')}
 
+                    <Navigation key={'navigation'} page={page} articleState={articleState} category={category} onArticlePress={this.handleNavigateToAdjacentArticlePress} />
+
                     <Recommendations key={'recommendations'} articleState={articleState} count={Config.article.recommendations} onArticlePress={this.handleRecommendationPress} renderAd={this.renderAd} />
 
                     <Comments key={'comments'} articleState={articleState} />
@@ -190,4 +208,4 @@ export class ControlsView extends Component {
 }
 
 
-export default ControlsView;
+export default ArticleView;

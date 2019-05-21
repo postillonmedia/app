@@ -4,34 +4,47 @@ import { ThemeManager, connectStyle } from '@postillon/react-native-theme';
 import { i18n } from '@postillon/react-native-i18n';
 import { copilot } from '@okgrow/react-native-copilot';
 
-import { Themes } from './../../../constants/themes';
+import { Themes } from '../../../constants/themes';
+import { getBlogByLanguage } from '../../../constants/blogs';
+
 import styles from './styles';
 
 import { getArticleFontSize, getArticleTutorial, getArticleDisplayBackButton } from '../../../redux/selectors/settings';
 import { isSubscribedToSteady } from '../../../redux/selectors/steady';
 import { getArticleById } from '../../../redux/selectors/article';
 
-import { openArticle } from './../../../redux/actions/article';
-import { setTutorial } from './../../../redux/actions/settings/article';
+import { openArticle } from '../../../redux/actions/article';
+import { setTutorial } from '../../../redux/actions/settings/article';
 
 import Tooltip from '../../../components/copilot/tooltip';
 import StepNumber from '../../../components/copilot/stepnumber';
+
 import ArticleScreenView from './ArticleScreen';
+import {getPageByBlogAndCategory} from "../../../redux/selectors/pages";
 
 
 ThemeManager.addStyleSheet(styles.darkStyles, 'screen.article', Themes.DARK);
 ThemeManager.addStyleSheet(styles.defaultStyles, 'screen.article', Themes.DEFAULT);
 
 
-const mapStateToProps = (state, ownProps) => ({
-    fontSize: getArticleFontSize(state),
-    tutorial: getArticleTutorial(state),
-    displayBackButton: getArticleDisplayBackButton(state),
+const mapStateToProps = (state, ownProps) => {
+    const { category, locale } = ownProps;
 
-    articleState: getArticleById(state, ownProps.articleId),
+    const blogId = getBlogByLanguage(locale);
 
-    isSubscribedToSteady: isSubscribedToSteady(state),
-});
+    return {
+        blogId,
+
+        fontSize: getArticleFontSize(state),
+        tutorial: getArticleTutorial(state),
+        displayBackButton: getArticleDisplayBackButton(state),
+
+        page: getPageByBlogAndCategory(state, blogId, category),
+        articleState: getArticleById(state, ownProps.articleId),
+
+        isSubscribedToSteady: isSubscribedToSteady(state),
+    };
+};
 
 const mapDispatchToProps = dispatch => ({
     openArticle: articleId => dispatch(openArticle(articleId)),

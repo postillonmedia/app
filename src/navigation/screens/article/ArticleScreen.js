@@ -20,7 +20,12 @@ export class ArticleScreen extends PureComponent {
     static componentName = 'Article';
 
     static propTypes = {
+        blogId: PropTypes.string.isRequired,
+        category: PropTypes.string.isRequired,
         articleId: PropTypes.string.isRequired,
+
+        page: PropTypes.object,
+        articleState: PropTypes.object,
 
         fontSize: PropTypes.number,
         tutorial: PropTypes.bool,
@@ -124,6 +129,21 @@ export class ArticleScreen extends PureComponent {
         });
     };
 
+    handleAdjacentArticlePress = (article) => {
+        const { navigator, blogId, category, t, theme } = this.props;
+        const { article: style } = ThemeManager.getStyleSheetForComponent('screens', theme);
+
+        navigator.push({
+            screen: 'postillon.Article',
+            navigatorStyle: style,
+            passProps: {
+                blogId,
+                category,
+                articleId: article.id,
+            },
+        });
+    };
+
 
     renderControls = () => {
         const { articleState, displayBackButton } = this.props;
@@ -149,17 +169,22 @@ export class ArticleScreen extends PureComponent {
 
     renderArticle = () => {
         const { controlsVisible } = this.state;
-        const { articleState, isSubscribedToSteady, fontSize } = this.props;
+        const { articleState, page, category, isSubscribedToSteady, fontSize } = this.props;
 
         return (
             <Article
+                category={category}
+
+                page={page}
                 articleState={articleState}
+
                 fontSize={fontSize}
                 isSubscribedToSteady={isSubscribedToSteady}
                 initialControlVisibility={controlsVisible}
 
                 onControlsVisibilityChange={this.handleControlsVisibilityChanged}
                 onRecommendationPress={this.handleRecommendationPress}
+                onAdjacentArticlePress={this.handleAdjacentArticlePress}
             />
         );
     };
