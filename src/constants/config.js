@@ -62,7 +62,7 @@ class ConfigContainer {
     };
 
     webview = {
-        hardwareAccelerated: false,
+        hardwareAccelerated: true,
     };
 
     setConfigByUnderscoreSeparatedKey(key, value) {
