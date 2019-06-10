@@ -70,6 +70,10 @@ export const styles = StyleSheet.create({
         marginVertical: 5,
     },
 
+    section: {
+        marginTop: 32,
+    },
+
     line: {
         height: 3,
         width: '20%',
@@ -97,10 +101,8 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
     },
 
-    recommendationsContainer: {
-        marginTop: 32,
-    },
-
+    // recommendations
+    // no styles
 
     // settings
     settingsModal: {
@@ -116,6 +118,71 @@ export const styles = StyleSheet.create({
     loadingText: {
         ...DefaultTheme.styles.text.ui,
         fontSize: 20,
+    },
+
+    // comments
+    commentsContainer: {
+        backgroundColor: DefaultTheme.colors.bg.lighter,
+
+        marginHorizontal: 16,
+        marginVertical: 16,
+
+        padding: 32,
+    },
+
+    commentsLoadButton: {
+        borderRadius: 5,
+        backgroundColor: DefaultTheme.colors.brandPrimary,
+
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+
+        marginHorizontal: 16,
+        marginVertical: 8,
+
+        paddingHorizontal: 16,
+        paddingVertical: 8,
+    },
+    commentsLoadButtonText: {
+        ...DefaultTheme.styles.text.ui,
+
+        color: DefaultTheme.colors.text.negative,
+        fontSize: 16,
+        fontFamily: 'FiraSans-SemiBold',
+
+        marginHorizontal: 5,
+    },
+
+    commentsLoadAlwaysButton: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+
+        marginHorizontal: 32,
+        marginTop: 8,
+
+        paddingHorizontal: 16,
+        paddingTop: 8,
+    },
+    commentsLoadAlwaysButtonText: {
+        ...DefaultTheme.styles.text.ui,
+
+        color: DefaultTheme.colors.text.secondary,
+        fontSize: 14,
+        textDecorationLine: 'underline',
+    },
+
+    commentsWebViewContainer: {
+        marginHorizontal: 16,
+    },
+    commentsWebView: {
+        flex: 1,
+        marginHorizontal: 0, // important for rendering
+
+        minHeight: 100,
     }
 });
 

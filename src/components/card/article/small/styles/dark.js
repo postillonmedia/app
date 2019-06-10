@@ -9,6 +9,7 @@ import { DarkTheme } from "../../../../../constants/themes/index";
 export const styles = StyleSheet.create({
     touchable: {
         flex: 1,
+        height: 90,
         marginTop: 16,
         marginHorizontal: 16,
         padding: 0,
@@ -20,7 +21,7 @@ export const styles = StyleSheet.create({
     },
 
     content: {
-        flex: .75,
+        width: '75%',
         flexDirection: 'row',
         alignItems: 'center',
 
@@ -43,16 +44,16 @@ export const styles = StyleSheet.create({
     },
 
     fill: {
-        flex: 1,
+        width: '100%',
 
         borderTopLeftRadius: 5,
         borderBottomLeftRadius: 5,
     },
 
     image: {
-        flex: .25,
+        width: '25%',
+        height: 90,
 
-        aspectRatio: 1,
         borderRadius: 5,
     },
 

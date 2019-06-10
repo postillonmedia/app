@@ -7,14 +7,16 @@ import { Config } from '../../../constants';
 // import action constants
 import {
     SETTINGS_ARTICLE_DISPLAY_BACKBUTTON,
+    SETTINGS_ARTICLE_DISPLAY_COMMENTS_ALWAYS,
     SETTINGS_ARTICLE_FONTSIZE,
     SETTINGS_ARTICLE_TUTORIAL
 } from '../../actions/settings/article';
 
 // initial state
 const initialState = {
-    displayBackButton: true, // TODO: Config.article.displayBackButton,
-    fontSize: 14, // TODO: Config.article.fontSize,
+    displayCommentsAlways: false,
+    displayBackButton: Config.article.displayBackButton,
+    fontSize: Config.article.fontsize.default,
     tutorial: true,
 };
 
@@ -25,6 +27,12 @@ export default function (state = initialState, action) {
         case SETTINGS_ARTICLE_FONTSIZE: {
             return Object.assign({}, state, {
                 fontSize: action.fontSize,
+            });
+        }
+
+        case SETTINGS_ARTICLE_DISPLAY_COMMENTS_ALWAYS: {
+            return Object.assign({}, state, {
+                displayCommentsAlways: action.displayCommentsAlways,
             });
         }
 

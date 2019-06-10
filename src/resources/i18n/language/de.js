@@ -74,6 +74,9 @@ export default {
         settings: 'Artikeldarstellung',
         loading: 'Artikel wird geladen',
         more: 'Weitere Artikel',
+        comments: 'Kommentare',
+        commentsLoad: 'Kommentare laden',
+        commentsLoadAlways: 'Immer automatisch laden',
 
         'copilot.image': 'Bilder lassen sich durch die 2-Finger-Zoomgeste vergrößern.',
         'copilot.back': 'Gedrückt halten, um sofort zur Übersicht zurückzukommen.',
@@ -138,15 +141,17 @@ export default {
         themeDark: 'Dunkel',
 
         articleSection: 'Artikel',
-
         displayBackButton: 'Zurück-Button anzeigen',
+        displayCommentsAlways: 'Kommentare immer laden',
         displayTutorial: 'Tutorial anzeigen',
 
-        notificationSection: 'Benachrichtigungen',
+        listingSection: 'Artikel Liste',
+        displayArticleIntroduction: 'Einleitung anzeigen',
 
+        notificationSection: 'Benachrichtigungen',
         notificationEnable: 'Benachrichtigungen erhalten',
-        notificationSound: 'Benachrichtigungston',
-        notificationVibrate: 'Vibration',
+
+        maintenance: 'Zurzeit wird dieses Feature überarbeitet.\n\nDa diese Funktion auf vielen Geräten nicht korrekt funktionierte, wird nun nachgearbeitet.',
     },
     privacyPolicy: {
         title: 'Datenschutzerklärung',

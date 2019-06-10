@@ -3,11 +3,13 @@ import ReactNative, { ActivityIndicator } from 'react-native';
 
 import { DomUtils } from 'htmlparser2';
 
-import AutoHeightWebView from 'react-native-autoheight-webview/autoHeightWebView';
+import AutoHeightWebView from 'react-native-autoheight-webview';
+import { InAppBrowser } from '@matt-block/react-native-in-app-browser';
+
+import { Config } from '../../../../../../constants';
 
 import { OtherMediaContainer } from '../../../../../mediacontainer';
 import OtherOfflineIndicator from '../../../../../offlineIndicator/other';
-import {CustomTabs} from "react-native-custom-tabs";
 
 
 export default function (props = {}, context) {
@@ -26,21 +28,23 @@ export default function (props = {}, context) {
         const html = '<!DOCTYPE html><html lang="de"><head><title>PlayBuzz-Wrapper</title></head><body>' + divHtml + '<script type="text/javascript" src="' + src + '"></script></body></html>';
 
         const handleShouldStartLoadWithRequest = request => {
-            CustomTabs.openURL(request.url, constants.styles.customTabs);
+            InAppBrowser.open(request.url, constants.styles.customTabs);
 
             return false;
         };
 
         return (
             <OtherMediaContainer
+                key={keyProperty}
                 renderOfflineComponent={() => <OtherOfflineIndicator />}
             >
                 <AutoHeightWebView
-                    key={keyProperty}
                     style={[styles.iframe, { width: width - 32, backgroundColor: constants.colors.monochrome.white4 }]}
+                    androidHardwareAccelerationDisabled={!Config.webview.hardwareAccelerated}
                     baseUrl={baseUrl}
                     source={{ html, baseUrl }}
                     useWebKit={true}
+                    allowsFullscreenVideo={true}
                     javaScriptEnabled={true}
                     domStorageEnabled={true}
                     originWhitelist={['*']}

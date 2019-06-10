@@ -173,7 +173,6 @@ function* cleanCache() {
     } catch (e) {
         console.warn('Error in Cache cleaning:', e);
     }
-
 }
 
 

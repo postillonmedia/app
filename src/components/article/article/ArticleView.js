@@ -13,6 +13,7 @@ import { Config } from '../../../constants';
 
 import Content from './../../../components/content';
 import Recommendations from './../recommendations';
+import Comments from './../comments';
 
 import ControlsScrollView from '../../../components/controlsscrollview';
 import OfflineIndicator from '../../../components/offlineIndicator/image';
@@ -175,7 +176,9 @@ export class ControlsView extends Component {
 
                     {this.renderAd(article, 'MEDIUM_RECTANGLE')}
 
-                    <Recommendations articleState={articleState} count={Config.article.recommendations} onArticlePress={this.handleRecommendationPress} renderAd={this.renderAd} />
+                    <Recommendations key={'recommendations'} articleState={articleState} count={Config.article.recommendations} onArticlePress={this.handleRecommendationPress} renderAd={this.renderAd} />
+
+                    <Comments key={'comments'} articleState={articleState} />
 
                     <View key={'spacer'} style={styles.spacer} />
 

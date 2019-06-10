@@ -4,7 +4,7 @@ import ReactNative, { Alert, FlatList, Text, View } from 'react-native';
 
 import { Svg, Polygon, Path, Rect } from 'react-native-svg';
 
-import { ThemeManager } from '@postillon/react-native-theme';
+import { Stacks } from '../../../../../App';
 
 import Articles from './../../../../../realm/db/articles';
 
@@ -15,12 +15,13 @@ import { SmallArticleCard } from './../../../../../components/card';
 
 import ModalArchiveRemove from '../../../../modals/archive/remove';
 import ModalStateContainer from '../../../../../components/modalstatecontainer';
+import {Navigation} from "react-native-navigation";
 
 
 export class OfflineArchiveView extends PureComponent {
 
     static propTypes = {
-        navigator: PropTypes.object.isRequired,
+        componentId: PropTypes.string.isRequired,
     };
 
     modalArchiveRemove = null;
@@ -52,15 +53,18 @@ export class OfflineArchiveView extends PureComponent {
     };
 
     handleArticlePress = (article) => {
-        const { navigator, t, theme } = this.props;
-        const { article: style } = ThemeManager.getStyleSheetForComponent('screens', theme);
+        const { componentId, theme, locale } = this.props;
 
-        navigator.push({
-            screen: 'postillon.Article',
-            navigatorStyle: style,
-            passProps: {
-                articleId: article.id,
-            },
+        Navigation.push(componentId, {
+            component: {
+                name: 'postillon.article.Single',
+                passProps: {
+                    stackId: Stacks.archive,
+                    articleId: article.id,
+                    theme,
+                    locale,
+                },
+            }
         });
     };
 

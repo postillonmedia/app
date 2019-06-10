@@ -1,5 +1,5 @@
 import NetInfo from "@react-native-community/netinfo";
-
+import { Navigation } from 'react-native-navigation';
 
 import { all, take, put, call, select } from 'redux-saga/effects';
 
@@ -7,7 +7,7 @@ import { connectedChangeEmitter } from './emitters/connected';
 import { connectivityChangeEmitter } from './emitters/connectivity';
 import { dimensionChangeEmitter } from './emitters/dimensions';
 
-import { dimensionChange, networkConnectedChange, networkConnectivityChange } from './../actions/environment';
+import { dimensionChange, networkConnectedChange, networkConnectivityChange, navigationConstantsChange } from './../actions/environment';
 import { getScreenEnvironment, getWindowEnvironment } from '../selectors/environment';
 
 
@@ -16,13 +16,30 @@ import { getScreenEnvironment, getWindowEnvironment } from '../selectors/environ
 /******************************************************************************/
 
 function* initializeConnectivity() {
-    const { type,  effectiveType } = yield call(NetInfo.getConnectionInfo);
-    yield put(networkConnectivityChange(type, effectiveType));
+    try {
+        const { type,  effectiveType } = yield call([NetInfo, NetInfo.getConnectionInfo]);
+        yield put(networkConnectivityChange(type, effectiveType));
+    } catch (e) {
+        console.error(e);
+    }
 }
 
 function* initializeConnected() {
-    const isConnected = yield call(NetInfo.isConnected.fetch);
-    yield put(networkConnectedChange(isConnected));
+    try {
+        const isConnected = yield call([NetInfo.isConnected, NetInfo.isConnected.fetch]);
+        yield put(networkConnectedChange(isConnected));
+    } catch (e) {
+        console.error(e);
+    }
+}
+
+function* initializeNavigationConstants() {
+    try {
+        const constants = yield call([Navigation, Navigation.constants]);
+        yield put(navigationConstantsChange(constants));
+    } catch (e) {
+        console.error(e);
+    }
 }
 
 
@@ -82,5 +99,6 @@ export default function* environmentSaga() {
         // execute once
         initializeConnected(),
         initializeConnectivity(),
+        initializeNavigationConstants(),
     ]);
 }

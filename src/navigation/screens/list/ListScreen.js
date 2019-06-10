@@ -1,14 +1,21 @@
-import React, { PureComponent, Component } from 'react';
 import PropTypes from 'prop-types';
-import ReactNative, { ActivityIndicator, Alert, Animated, Easing, FlatList, RefreshControl, Share, TouchableOpacity, View } from 'react-native';
+import React, { Component } from 'react';
+import ReactNative, {
+    ActivityIndicator,
+    FlatList,
+    RefreshControl,
+    Share,
+    View
+} from 'react-native';
+
+import { Navigation } from 'react-native-navigation';
 
 import Feather from 'react-native-vector-icons/Feather';
 import LinearGradient from 'react-native-linear-gradient';
 
-import { ThemeManager } from '@postillon/react-native-theme';
-import { iconsMap, isIconsMapLoaded } from '../../../app-icons';
 import { debounce } from '../../../utils/util';
 import { Config } from '../../../constants';
+import { Stacks } from "../../../App";
 
 import Article from '../../../realm/schemas/article';
 
@@ -29,6 +36,8 @@ export class ListScreen extends Component {
         category: PropTypes.string,
         page: PropTypes.object,
 
+        width: PropTypes.number,
+        topBarHeight: PropTypes.number,
         isConnected: PropTypes.bool,
 
         initializeCategory: PropTypes.func.isRequired,
@@ -41,6 +50,8 @@ export class ListScreen extends Component {
         styles: PropTypes.object.isRequired,
     };
 
+
+
     modalArchiveAdd = null;
     modalArchiveRemove = null;
 
@@ -51,26 +62,10 @@ export class ListScreen extends Component {
         this.handleSearchPressed = debounce(this.handleSearchPressed, Config.debounce.navigation, this);
         this.handleArticlePressed = debounce(this.handleArticlePressed, Config.debounce.navigation, this);
 
-        const { constants, navigator, width } = props;
+        const { width } = props;
 
-        navigator.setOnNavigatorEvent(this.handleNavigatorEvent);
-
-        isIconsMapLoaded.then(() => {
-            navigator.setButtons({
-                rightButtons: [
-                    {
-                        icon: iconsMap['search'],
-                        id: 'search', // id for this button, given in onNavigatorEvent(event) to help understand which button was clicked
-                        testID: 'e2e_rules', // optional, used to locate this view in end-to-end tests
-                        showAsAction: 'always', // optional, Android only. Control how the button is displayed in the Toolbar. Accepted valued: 'ifRoom' (default) - Show this item as a button in an Action Bar if the system decides there is room for it. 'always' - Always show this item as a button in an Action Bar. 'withText' - When this item is in the action bar, always show it with a text label even if it also has an icon specified. 'never' - Never show this item as a button in an Action Bar.
-                        buttonColor: constants.colors.text.primary, // Optional, iOS only. Set color for the button (can also be used in setButtons function to set different button style programatically)
-                        buttonFontSize: 14, // Set font size for the button (can also be used in setButtons function to set different button style programatically)
-                        buttonFontWeight: '600', // Set font weight for the button (can also be used in setButtons function to set different button style programatically)
-                    }
-                ],
-                animated: false,
-            });
-        });
+        Navigation.events().bindComponent(this);
+        Navigation.events().registerBottomTabSelectedListener(this.bottomTabSelected.bind(this));
 
         this.state = {
             numColumns: this.getNumColumns(width),
@@ -178,6 +173,23 @@ export class ListScreen extends Component {
 
     }
 
+    navigationButtonPressed({ buttonId }) {
+        if (buttonId === 'search') {
+            this.handleSearchPressed();
+        } else if (buttonId === 'postillon') {
+            this.handleRefresh();
+        }
+    }
+
+    bottomTabSelected({ selectedTabIndex, unselectedTabIndex }) {
+        const { componentId, category } = this.props;
+
+        if (selectedTabIndex === 1 && !!category) {
+            // pop to root if the categories tab was reselected
+            Navigation.popToRoot(componentId);
+        }
+    }
+
     getNumColumns = (width) => ~~(width / 275) || 1;
 
     getArticleSource = () => {
@@ -186,90 +198,38 @@ export class ListScreen extends Component {
         return page && page.articles || [];
     };
 
-
-
-    handleNavigatorEvent = (event) => {
-        const { id, type } = event;
-        const { navigator, category } = this.props;
-
-        if (type === 'NavBarButtonPress') {
-            if (id === 'search') {
-                this.handleSearchPressed();
-            }
-        } else if (type === 'DeepLink' && !category) {
-            const { link, payload } = event;
-
-            const parts = link.split('/');
-
-            if (parts[1] === 'article') {
-                const { blogId, path } = payload;
-                const { theme } = this.props;
-                const { article: style } = ThemeManager.getStyleSheetForComponent('screens', theme);
-
-                navigator.push({
-                    screen: 'postillon.Article',
-                    navigatorStyle: style,
-                    passProps: {
-                        articleId: blogId + path,
-                    },
-                });
-
-                navigator.switchToTab({
-                    tabIndex: 0,
-                });
-            } else if (parts[1] === 'notification' && parts[2] === 'article') {
-                const { constants, reloadCategory, blogId, category } = this.props;
-
-                navigator.setTabBadge({
-                    tabIndex: 0,
-                    badge: ' ',
-                    badgeColor: constants.colors.brandPrimary,
-                });
-
-                // refresh this screen to pull the new article
-                reloadCategory(blogId, category);
-            }
-
-        } else if (id === 'bottomTabSelected' && !category) {
-
-            // reset badge on selection of the Home screen
-            navigator.setTabBadge({
-                tabIndex: 0,
-                badge: null,
-            });
-
-        } else if (id === 'bottomTabReselected' && !!category) {
-
-            // pop to root if the categories tab was reselected
-            navigator.popToRoot();
-        }
-    };
-
     handleSearchPressed = () => {
-        const { navigator, theme, category, blogId } = this.props;
-        const { search: style } = ThemeManager.getStyleSheetForComponent('screens', theme);
+        const { componentId, theme, locale, category, blogId } = this.props;
 
-        navigator.push({
-            screen: 'postillon.Search',
-            backButtonHidden: true,
-            navigatorStyle: style,
-            passProps: {
-                initialCategory: category,
-                blogId,
+        Navigation.push(componentId, {
+            component: {
+                id: 'postillon.Search',
+                name: 'postillon.Search',
+                passProps: {
+                    initialCategory: category,
+                    blogId,
+                    theme,
+                    locale,
+                }
             }
         });
     };
 
     handleArticlePressed = (article) => {
-        const { navigator, t, theme } = this.props;
-        const { article: style } = ThemeManager.getStyleSheetForComponent('screens', theme);
+        const { componentId, theme, locale, category, blogId } = this.props;
 
-        navigator.push({
-            screen: 'postillon.Article',
-            navigatorStyle: style,
-            passProps: {
-                articleId: article.id,
-            },
+        Navigation.push(componentId, {
+            component: {
+                name: 'postillon.article.Single',
+                passProps: {
+                    blogId,
+                    category,
+                    stackId: Stacks.articles,
+                    articleId: article.id,
+                    theme,
+                    locale,
+                },
+            }
         });
     };
 
@@ -298,11 +258,11 @@ export class ListScreen extends Component {
 
         reloadCategory(blogId, category);
 
-        // reset badge of the Home screen on it's refresh
-        !category && navigator.setTabBadge({
-            tabIndex: 0,
-            badge: null,
-        });
+        // TODO: reset badge of the Home screen on it's refresh
+        // !category && navigator.setTabBadge({
+        //     tabIndex: 0,
+        //     badge: null,
+        // });
     };
 
     handleFetchNext = () => {
@@ -316,6 +276,8 @@ export class ListScreen extends Component {
     /******************************************************************************/
     /******************************* LIST  - Rendering ****************************/
     /******************************************************************************/
+
+    refList = (ref) => this.list = ref;
 
     keyExtractor = (items, index) => items.id || index;
 
@@ -372,10 +334,11 @@ export class ListScreen extends Component {
     };
 
     renderRefreshControl = () => {
-        const { page, constants } = this.props;
+        const { page, constants, topBarHeight } = this.props;
 
         return (
             <RefreshControl
+                progressViewOffset={topBarHeight}
                 refreshing={page.isReloading || false}
                 onRefresh={this.handleRefresh}
                 tintColor={constants.colors.refreshControl.tintColor}
@@ -392,7 +355,7 @@ export class ListScreen extends Component {
     /******************************************************************************/
 
     render() {
-        const { page, blogId, category, styles } = this.props;
+        const { page, blogId, category, styles, topBarHeight } = this.props;
         const { articles, numColumns } = this.state;
 
         if (page) {
@@ -415,6 +378,9 @@ export class ListScreen extends Component {
 
                         ListEmptyComponent={this.renderEmptyListComponent}
                         ListFooterComponent={this.renderListFooter}
+
+                        ListHeaderComponent={<View />}
+                        ListHeaderComponentStyle={{ height: topBarHeight }}
                         onEndReached={this.handleFetchNext}
                     />
 

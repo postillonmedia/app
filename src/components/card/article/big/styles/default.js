@@ -5,6 +5,7 @@
 import { StyleSheet } from 'react-native';
 
 import { DefaultTheme } from '../../../../../constants/themes/index';
+import colors from "../../../../../constants/themes/default/colors";
 
 
 export const styles = StyleSheet.create({
@@ -77,6 +78,14 @@ export const styles = StyleSheet.create({
         ...DefaultTheme.styles.text.date,
 
         marginTop: 12,
+        marginBottom: 2,
+    },
+
+    introduction: {
+        ...DefaultTheme.styles.text.ui,
+
+        marginTop: 5,
+        color: DefaultTheme.colors.text.secondary,
     },
 
     button: {

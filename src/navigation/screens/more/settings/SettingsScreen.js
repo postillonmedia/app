@@ -1,16 +1,36 @@
 import React, { PureComponent } from 'react';
 import ReactNative, { ScrollView, View, Text, TouchableOpacity, Switch } from 'react-native';
+import { Navigation } from 'react-native-navigation';
+
+import merge from 'deepmerge';
 
 import Slider from '@react-native-community/slider';
-import RNPopover from '@postillon/react-native-popover-menu';
-
-import { Themes } from '../../../../constants/themes/index';
-import { LANGUAGE_DE, LANGUAGE_EN } from '../../../../constants/languages';
+import RNPopover from 'react-native-popover-menu';
 import FeatherIcon from 'react-native-vector-icons/Feather';
-import {Config} from "../../../../constants/config";
+
+import { ThemeManager } from '@postillon/react-native-theme';
+
+import { Themes } from '../../../../constants/themes';
+import { Config } from '../../../../constants/config';
+import { LANGUAGE_DE, LANGUAGE_EN } from '../../../../constants/languages';
+
+import { Stacks } from '../../../../App';
 
 
 export class SettingsScreen extends PureComponent {
+
+    static options(passProps) {
+        const { theme = Themes.DEFAULT } = passProps;
+        const { defaults: screenStyle } = ThemeManager.getStyleSheetForComponent('screens', theme);
+
+        return merge(screenStyle, {
+            topBar: {
+                visible: true,
+                drawBehind: false,
+                hideOnScroll: false,
+            },
+        });
+    }
 
     handleLocalePress = () => {
         const { t, constants } = this.props;
@@ -49,6 +69,11 @@ export class SettingsScreen extends PureComponent {
         } else if (menuIndex === 1 || (!menuIndex && index === 1)) {
             setLocale(LANGUAGE_EN);
         }
+
+        // pop the stacks
+        Navigation.popToRoot(Stacks.articles);
+        Navigation.popToRoot(Stacks.categories);
+        Navigation.popToRoot(Stacks.archive);
     };
 
     handleThemeChange = (enabled) => {
@@ -71,10 +96,22 @@ export class SettingsScreen extends PureComponent {
         setDisplayBackButton(displayBackButton);
     };
 
+    handleSetDisplayCommentsAlways = displayCommentsAlways => {
+        const { setDisplayCommentsAlways} = this.props;
+
+        setDisplayCommentsAlways(displayCommentsAlways);
+    };
+
     handleSetTutorial = tutorial => {
         const { setTutorial } = this.props;
 
         setTutorial(tutorial);
+    };
+
+    handleSetDisplayArticleIntroduction = displayArticleIntroduction => {
+        const { setDisplayArticleIntroduction } = this.props;
+
+        setDisplayArticleIntroduction(displayArticleIntroduction);
     };
 
     handleNotificationEnable = (enabled) => {
@@ -88,7 +125,7 @@ export class SettingsScreen extends PureComponent {
     };
 
     render() {
-        const { styles, constants, theme, t, fontSize, tutorial, displayBackButton, notifications } = this.props;
+        const { styles, constants, theme, t, fontSize, tutorial, displayBackButton, displayCommentsAlways, displayArticleIntroduction, notifications } = this.props;
 
         return (
             <ScrollView style={styles.container}>
@@ -151,12 +188,45 @@ export class SettingsScreen extends PureComponent {
                     </View>
 
                     <View style={styles.line}>
+                        <Text style={styles.lineText}>{t('displayCommentsAlways')}</Text>
+
+                        <Switch
+                            value={displayCommentsAlways}
+                            onValueChange={this.handleSetDisplayCommentsAlways}
+                            thumbColor={displayCommentsAlways ? constants.colors.switches.thumbTintColor : constants.colors.switches.offThumbTintColor}
+                            trackColor={{
+                                true: constants.colors.switches.onTintColor,
+                                false: constants.colors.switches.tintColor,
+                            }}
+                        />
+                    </View>
+
+                    <View style={styles.line}>
                         <Text style={styles.lineText}>{t('displayTutorial')}</Text>
 
                         <Switch
                             value={tutorial}
                             onValueChange={this.handleSetTutorial}
                             thumbColor={tutorial ? constants.colors.switches.thumbTintColor : constants.colors.switches.offThumbTintColor}
+                            trackColor={{
+                                true: constants.colors.switches.onTintColor,
+                                false: constants.colors.switches.tintColor,
+                            }}
+                        />
+                    </View>
+                </View>
+
+
+                <Text style={styles.heading}>{t('listingSection').toUpperCase()}</Text>
+
+                <View style={styles.group}>
+                    <View style={styles.line}>
+                        <Text style={styles.lineText}>{t('displayArticleIntroduction')}</Text>
+
+                        <Switch
+                            value={displayArticleIntroduction}
+                            onValueChange={this.handleSetDisplayArticleIntroduction}
+                            thumbColor={displayArticleIntroduction ? constants.colors.switches.thumbTintColor : constants.colors.switches.offThumbTintColor}
                             trackColor={{
                                 true: constants.colors.switches.onTintColor,
                                 false: constants.colors.switches.tintColor,

@@ -15,12 +15,11 @@ import { getAppSettings } from './redux/selectors/settings';
 import { authenticationReceived } from './redux/actions/steady';
 
 // navigation
-import { Navigation } from '@postillon/react-native-navigation';
-import { iconsMap, isIconsMapLoaded } from './app-icons';
+import { Navigation } from 'react-native-navigation';
 import { registerNavigationComponents } from './navigation';
 
 // deeplinks
-import { CustomTabs } from 'react-native-custom-tabs';
+import { InAppBrowser } from '@matt-block/react-native-in-app-browser';
 import { DeepLinkManager } from './utils/notifications';
 import { getBlogByHostname } from './constants/blogs';
 import parse from 'url-parse';
@@ -30,8 +29,41 @@ import Config from './constants/config';
 import Firebase from './utils/firebase';
 
 
+import HomeArticleListScreen from "./navigation/screens/list/article/HomeArticleListScreen";
+
+
+export const Icons = {
+    home: require('./resources/images/feather/home.png'),
+    grid: require('./resources/images/feather/grid.png'),
+    bookmark: require('./resources/images/feather/bookmark.png'),
+    more: require('./resources/images/feather/more-horizontal.png'),
+
+    postillon: require('./resources/images/postillon.png'),
+    search: require('./resources/images/feather/search.png'),
+    close: require('./resources/images/feather/x.png'),
+};
+
+export const getLocalizedString = (locale, screen, option = 'title') => getString(dictionary)(locale)(screen)(option);
+
+export const Stacks = {
+    articles: 'postillon.stack.articles',
+    categories: 'postillon.stack.categories',
+    archive: 'postillon.stack.archive',
+    more: 'postillon.stack.more',
+};
 
 export class App {
+    static _instance = null;
+
+    static getInstance() {
+        if (App._instance === null) {
+            App._instance = new App();
+        }
+
+        return App._instance;
+    }
+
+
 
     initialized: Promise<boolean>;
     started: Promise<boolean>;
@@ -42,14 +74,19 @@ export class App {
 
     constructor() {
         // create promises
-        this.initialized = Promise.all([
-            isPersistorBootstrapped,
-            isIconsMapLoaded,
-        ]);
-
         this.started = new Promise((resolve, reject) => {
             this._resolveStarted = resolve;
         });
+
+        let _resolveIsAppLaunched;
+        const isAppLaunched = new Promise((resolve, reject) => {
+            _resolveIsAppLaunched = resolve;
+        });
+
+        this.initialized = Promise.all([
+            isPersistorBootstrapped,
+            isAppLaunched,
+        ]);
 
 
         // add Theme-Constants
@@ -64,6 +101,15 @@ export class App {
         // notification manager
         this.deepLinkManager = new DeepLinkManager();
         this.registerDeepLinkSchemas();
+
+        // check for initial deep link
+        this.deepLinkManager.checkForInitialDeepLink();
+
+        
+        // add launched listener to app
+        Navigation.events().registerAppLaunchedListener(() => {
+            _resolveIsAppLaunched(true);
+        });
 
 
         // fetch remote config
@@ -89,17 +135,18 @@ export class App {
 
                     const blogId = getBlogByHostname(hostname || '');
 
-                    Navigation.handleDeepLink({
-                        link: 'postillon/notification/article',
-                        payload: {
-                            title,
-                            url,
-                            parsedUrl: parsed,
-                            hostname,
-                            path,
-                            blogId,
-                        },
-                    });
+                    // TODO
+                    // Navigation.handleDeepLink({
+                    //     link: 'postillon/notification/article',
+                    //     payload: {
+                    //         title,
+                    //         url,
+                    //         parsedUrl: parsed,
+                    //         hostname,
+                    //         path,
+                    //         blogId,
+                    //     },
+                    // });
                 }
             }
         });
@@ -157,47 +204,155 @@ export class App {
                 const getLocalizedString = (screen, option = 'title') => getString(dictionary)(locale)(screen)(option);
 
                 return {
+                    locale,
+                    theme,
                     style,
                     getLocalizedString,
                 };
             })
-            .then(({style, getLocalizedString}) => ({
-                tabs: [
-                    {
-                        label: getLocalizedString('articlesList'),
-                        screen: 'postillon.Articles',
-                        icon: iconsMap['home'],
-                        title: getLocalizedString('articlesList', 'appTitle'),
+            .then(({locale, theme, style, getLocalizedString}) => {
+                Navigation.setDefaultOptions({
+                    animations: {
+                        pop: {
+                            enabled: false,
+                        },
+                        push: {
+                            enabled: false,
+                        },
+                        setRoot: {
+                            enabled: false,
+                        },
+                        showModal: {
+                            enabled: false,
+                        },
+                        dismissModal: {
+                            enabled: false,
+                        }
                     },
-                    {
-                        label: getLocalizedString('categoriesList'),
-                        screen: 'postillon.Categories',
-                        icon: iconsMap['grid'],
-                        title: getLocalizedString('categoriesList'),
-                    },
-                    {
-                        label: getLocalizedString('archive'),
-                        screen: 'postillon.Archive',
-                        icon: iconsMap['bookmark'],
-                        title: getLocalizedString('archive'),
-                    },
-                    {
-                        label: getLocalizedString('more'),
-                        screen: 'postillon.More',
-                        icon: iconsMap['more-horizontal'],
-                        title: getLocalizedString('more'),
-                    },
-                ],
-                portraitOnlyMode: true,
-                animationType: Platform.OS === 'ios' ? 'slide-down' : 'fade',
-                tabsStyle: {
-                    ...style,
-                },
-                appStyle: {
-                    ...style,
-                },
-            }))
-            .then((config) => Navigation.startTabBasedApp(config))
+
+                    bottomTabs: style.bottomTabs,
+                });
+
+                return Navigation.setRoot({
+                    root: {
+                        bottomTabs: {
+                            id: 'postillon.BottomTabs',
+                            children: [
+                                {
+                                    stack: {
+                                        id: Stacks.articles,
+                                        children: [
+                                            {
+                                                component: {
+                                                    name: 'postillon.Articles',
+                                                    passProps: {
+                                                        theme,
+                                                        locale,
+                                                    },
+                                                    options: HomeArticleListScreen.options({theme, locale}),
+                                                }
+                                            }
+                                        ],
+                                        options: {
+                                            bottomTabs: style.bottomTabs,
+
+                                            bottomTab: {
+                                                ...style.bottomTab,
+
+                                                text: getLocalizedString('articlesList'),
+                                                icon: Icons.home,
+                                                testID: 'TAB_ARTICLES'
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    stack: {
+                                        id: Stacks.categories,
+                                        children: [
+                                            {
+                                                component: {
+                                                    name: 'postillon.Categories',
+                                                    passProps: {
+                                                        theme,
+                                                        locale,
+                                                    },
+                                                }
+                                            }
+                                        ],
+                                        options: {
+                                            bottomTabs: style.bottomTabs,
+
+                                            bottomTab: {
+                                                ...style.bottomTab,
+
+                                                text: getLocalizedString('categoriesList'),
+                                                icon: Icons.grid,
+                                                testID: 'TAB_CATEGORIES'
+                                            }
+                                        }
+                                    },
+                                },
+                                {
+                                    stack: {
+                                        id: Stacks.archive,
+                                        children: [
+                                            {
+                                                component: {
+                                                    name: 'postillon.Archive',
+                                                    passProps: {
+                                                        theme,
+                                                        locale,
+                                                    },
+                                                }
+                                            }
+                                        ],
+                                        options: {
+                                            bottomTabs: style.bottomTabs,
+
+                                            bottomTab: {
+                                                ...style.bottomTab,
+
+                                                text: getLocalizedString('archive'),
+                                                icon: Icons.bookmark,
+                                                testID: 'TAB_ARCHIVE'
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    stack: {
+                                        id: Stacks.more,
+                                        children: [
+                                            {
+                                                component: {
+                                                    name: 'postillon.More',
+                                                    passProps: {
+                                                        theme,
+                                                        locale,
+                                                    },
+                                                }
+                                            }
+                                        ],
+                                        options: {
+                                            bottomTabs: style.bottomTabs,
+
+                                            bottomTab: {
+                                                ...style.bottomTab,
+
+                                                text: getLocalizedString('more'),
+                                                icon: Icons.more,
+                                                testID: 'TAB_MORE'
+                                            }
+                                        }
+                                    }
+
+                                },
+                            ],
+                        }
+                    }
+                });
+            })
             .then(() => this._resolveStarted && this._resolveStarted(true))
     }
 
@@ -235,7 +390,6 @@ export class App {
             },
             (event) => {
                 // match steady auth request
-
                 store.dispatch(authenticationReceived(event.parsedUrl));
             }
         );
@@ -288,30 +442,37 @@ export class App {
 
         if (hostname && path && blogId) {
             this.started.then((started) => {
+                const { theme, locale } = getAppSettings(store.getState());
+
                 if (path === '/') {
                     // currently nothing to do.
                     // But we can use the hostname to determinate the startup language of the app.
                 } else if (path[0] === '/' && path[1] === 'p' && path[2] === '/') {
                     // app was started with a link to a static page of blogger
-                    const { theme } = getAppSettings(store.getState());
-
                     const constants = ThemeManager.getConstantsForTheme(theme);
 
-                    CustomTabs.openURL(url, constants.styles.customTabs);
+                    InAppBrowser.open(url, constants.styles.customTabs);
                 } else {
+                    Navigation.mergeOptions('postillon.BottomTabs', {
+                        bottomTabs: {
+                            currentTabIndex: 0,
+                        }
+                    });
+
                     // app was started with a link to an article
-                    Navigation.handleDeepLink({
-                        link: 'postillon/article',
-                        payload: {
-                            url,
-                            parsedUrl,
-                            hostname,
-                            path,
-                            blogId,
-                        },
+                    Navigation.push(Stacks.articles, {
+                        component: {
+                            name: 'postillon.article.Single',
+                            passProps: {
+                                theme,
+                                locale,
+                                stackId: Stacks.articles,
+                                articleId: blogId + path,
+                            },
+                        }
                     });
                 }
-            })
+            });
         }
     }
 }

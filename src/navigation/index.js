@@ -1,4 +1,6 @@
-import { Navigation } from '@postillon/react-native-navigation';
+import React from 'react';
+
+import { Navigation } from 'react-native-navigation';
 import { ThemeManager } from '@postillon/react-native-theme';
 
 import { Themes } from './../constants/themes';
@@ -13,10 +15,10 @@ import SettingsScreen from './screens/more/settings';
 import AboutScreen from './screens/more/about';
 import ImprintScreen from './screens/more/imprint';
 import PrivacyPolicyScreen from './screens/more/privacypolicy';
-import ArticleScreen from './screens/article';
+import SingleArticleScreen from './screens/article/single';
+// import SeriesArticleScreen from './screens/article/series';
 import SearchScreen from './screens/search';
 
-import ArticlesNavbar from './navbars/articles';
 import SearchNavbar from './navbars/search';
 
 
@@ -24,21 +26,31 @@ ThemeManager.addStyleSheet(styles.darkStyles, 'screens', Themes.DARK);
 ThemeManager.addStyleSheet(styles.defaultStyles, 'screens', Themes.DEFAULT);
 
 
+
+
+
 export function registerNavigationComponents(store, Provider) {
+    // component provider function
+    const componentProvider = (Component) => () => (props) => (
+        <Provider store={store}>
+            <Component {...props} />
+        </Provider>
+    );
+
     // screens
-    Navigation.registerComponent('postillon.Articles', () => ArticleListScreen, store, Provider);
-    Navigation.registerComponent('postillon.Categories', () => CategoriesScreen, store, Provider);
-    Navigation.registerComponent('postillon.categories.List', () => CategoryListScreen, store, Provider);
-    Navigation.registerComponent('postillon.Archive', () => ArchiveScreen, store, Provider);
-    Navigation.registerComponent('postillon.More', () => MoreScreen, store, Provider);
-    Navigation.registerComponent('postillon.more.Settings', () => SettingsScreen, store, Provider);
-    Navigation.registerComponent('postillon.more.About', () => AboutScreen, store, Provider);
-    Navigation.registerComponent('postillon.more.Imprint', () => ImprintScreen, store, Provider);
-    Navigation.registerComponent('postillon.more.PrivacyPolicy', () => PrivacyPolicyScreen, store, Provider);
-    Navigation.registerComponent('postillon.Article', () => ArticleScreen, store, Provider);
-    Navigation.registerComponent('postillon.Search', () => SearchScreen, store, Provider);
+    Navigation.registerComponent('postillon.Articles', componentProvider(ArticleListScreen), () => ArticleListScreen);
+    Navigation.registerComponent('postillon.Categories', componentProvider(CategoriesScreen), () => CategoriesScreen);
+    Navigation.registerComponent('postillon.categories.List', componentProvider(CategoryListScreen), () => CategoryListScreen);
+    Navigation.registerComponent('postillon.Archive', componentProvider(ArchiveScreen), () => ArchiveScreen);
+    Navigation.registerComponent('postillon.More', componentProvider(MoreScreen), () => MoreScreen);
+    Navigation.registerComponent('postillon.more.Settings', componentProvider(SettingsScreen), () => SettingsScreen);
+    Navigation.registerComponent('postillon.more.About', componentProvider(AboutScreen), () => AboutScreen);
+    Navigation.registerComponent('postillon.more.Imprint', componentProvider(ImprintScreen), () => ImprintScreen);
+    Navigation.registerComponent('postillon.more.PrivacyPolicy', componentProvider(PrivacyPolicyScreen), () => PrivacyPolicyScreen);
+    Navigation.registerComponent('postillon.article.Single', componentProvider(SingleArticleScreen), () => SingleArticleScreen);
+    // Navigation.registerComponent('postillon.article.Series', componentProvider(SeriesArticleScreen), () => SeriesArticleScreen);
+    Navigation.registerComponent('postillon.Search', componentProvider(SearchScreen), () => SearchScreen);
 
     // register navbars
-    Navigation.registerComponent('postillon.navbars.Articles', () => ArticlesNavbar, store, Provider);
-    Navigation.registerComponent('postillon.navbars.Search', () => SearchNavbar, store, Provider);
+    Navigation.registerComponent('postillon.navbars.Search', componentProvider(SearchNavbar), () => SearchNavbar);
 }

@@ -18,6 +18,8 @@ import Article from '../../../../realm/schemas/article';
 import Thumbnail from '../../../thumbnail';
 
 import { getImageUrl } from '../../../../utils/blogger'
+import * as HTMLRenderer from "../../../content/native/renderer";
+import {IGNORED_TAGS} from "../../../content/native/HTMLUtils";
 
 
 export class ArticleCardView extends PureComponent {
@@ -27,12 +29,19 @@ export class ArticleCardView extends PureComponent {
 
     static propTypes = {
         article: PropTypes.object.isRequired,
+        displayArticleIntroduction: PropTypes.bool,
+
         locale: PropTypes.string.isRequired,
         styles: PropTypes.object.isRequired,
         t: PropTypes.func.isRequired,
+
         onPress: PropTypes.func,
         onLongPress: PropTypes.func,
         onArchivePress: PropTypes.func,
+    };
+
+    static defaultProps = {
+        displayArticleIntroduction: true,
     };
 
     constructor(props, context) {
@@ -84,7 +93,6 @@ export class ArticleCardView extends PureComponent {
     };
 
     renderImageComponent = ({source, ...props}) => {
-
         if (typeof source === 'object' && typeof source.uri === 'string' && source.uri.startsWith('http')) {
             source.uri = getImageUrl(source.uri, 400);
         }
@@ -114,6 +122,24 @@ export class ArticleCardView extends PureComponent {
         }
     };
 
+    renderArticleIntroduction = () => {
+        const { article, displayArticleIntroduction, styles } = this.props;
+
+        if (!displayArticleIntroduction) {
+            return null;
+        }
+
+        const introduction = Article.getIntroduction(article);
+
+        if (introduction.length > 0) {
+            return (
+                <Text numberOfLines={4} ellipsizeMode={'tail'} style={styles.introduction}>{introduction}</Text>
+            );
+        } else {
+            return null;
+        }
+    };
+
     renderNotOnline = (props) => {
         return (
             <OfflineIndicator {...props} />
@@ -121,11 +147,10 @@ export class ArticleCardView extends PureComponent {
     };
 
     render() {
-        const { article, styles, constants, locale, t } = this.props;
+        const { article, styles, locale, t } = this.props;
 
         const image = this.renderArticleImage();
-
-        const textContainerStyle = [styles.textContainer, image && styles.textContainerWithImage];
+        const introduction = this.renderArticleIntroduction();
 
         return (
             <TouchableOpacity
@@ -135,10 +160,12 @@ export class ArticleCardView extends PureComponent {
             >
                 <View style={styles.cardContainer}>
 
-                    <View style={textContainerStyle}>
+                    <View style={[styles.textContainer, image && styles.textContainerWithImage]}>
                         <TimeAgo style={styles.date} locale={locale} hideAgo={false} time={article.published} />
 
                         <Text style={styles.title}>{article.title}</Text>
+
+                        {introduction}
                     </View>
 
                     {image}

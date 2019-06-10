@@ -45,7 +45,7 @@ export class ContentView extends PureComponent {
         imagesToExclude: PropTypes.arrayOf(PropTypes.string),
         renderAd: PropTypes.func,
 
-        t: PropTypes.object.isRequired,
+        t: PropTypes.func.isRequired,
 
         theme: PropTypes.string.isRequired,
         styles: PropTypes.object.isRequired,

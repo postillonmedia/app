@@ -2,8 +2,10 @@ import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 import ReactNative, { RefreshControl, SectionList, Text, View } from 'react-native';
 
-import { ThemeManager } from "@postillon/react-native-theme";
+import { Navigation } from 'react-native-navigation';
 import { LocalizedDate } from '@postillon/react-native-timeago';
+
+import { Stacks } from '../../../../../App';
 
 import { SmallArticleCard } from '../../../../../components/card';
 
@@ -13,7 +15,7 @@ import InfoBar from '../../../../../components/infobar';
 export class OnlineArchiveView extends PureComponent {
 
     static propTypes = {
-        navigator: PropTypes.object.isRequired,
+        componentId: PropTypes.string.isRequired,
     };
 
     constructor(props, context) {
@@ -42,15 +44,18 @@ export class OnlineArchiveView extends PureComponent {
     };
 
     handleArticlePressed = (article) => {
-        const { navigator, t, theme } = this.props;
-        const { article: style } = ThemeManager.getStyleSheetForComponent('screens', theme);
+        const { componentId, theme, locale } = this.props;
 
-        navigator.push({
-            screen: 'postillon.Article',
-            navigatorStyle: style,
-            passProps: {
-                articleId: article.id,
-            },
+        Navigation.push(componentId, {
+            component: {
+                name: 'postillon.article.Single',
+                passProps: {
+                    stackId: Stacks.archive,
+                    articleId: article.id,
+                    theme,
+                    locale,
+                },
+            }
         });
     };
 

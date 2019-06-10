@@ -87,8 +87,8 @@ export class RecommendationsView extends PureComponent {
         }
 
         return (
-            <View style={[styles.container, styles.recommendationsContainer]}>
-                <Text style={styles.heading}>{t('more')}:</Text>
+            <View style={[styles.container, styles.section]}>
+                <Text style={styles.heading}>{t('more')}</Text>
                 <View style={styles.line} />
 
                 {content}

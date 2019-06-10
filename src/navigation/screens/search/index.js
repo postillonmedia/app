@@ -2,11 +2,12 @@ import { compose } from 'recompose';
 import { connect } from 'react-redux';
 import { ThemeManager, connectStyle } from '@postillon/react-native-theme';
 import { i18n } from '@postillon/react-native-i18n';
+import { Navigation } from 'react-native-navigation';
 
 import { Themes } from '../../../constants/themes';
 import styles from './styles';
 
-import { iconsMap } from './../../../app-icons';
+
 
 import { getIsSearching, getSearchCategory, getSearchPeriod, getSearchResults } from '../../../redux/selectors/search';
 import * as SearchActions from '../../../redux/actions/search';
@@ -40,26 +41,24 @@ const SearchScreen = compose(
 
     connectStyle('screen.search', {
         callback: (theme, props) => {
-            const { search: style } = ThemeManager.getStyleSheetForComponent('screens', theme);
-            const constants = ThemeManager.getConstantsForTheme(theme);
-            const { navigator } = props;
+            const { componentId } = props;
 
-            navigator.setStyle(style);
+            Navigation.mergeOptions(componentId, SearchScreenView.options(props));
 
-            navigator.setButtons({
-                rightButtons: [
-                    {
-                        icon: iconsMap['x'],
-                        id: 'search-close', // id for this button, given in onNavigatorEvent(event) to help understand which button was clicked
-                        testID: 'e2e_rules', // optional, used to locate this view in end-to-end tests
-                        showAsAction: 'always', // optional, Android only. Control how the button is displayed in the Toolbar. Accepted valued: 'ifRoom' (default) - Show this item as a button in an Action Bar if the system decides there is room for it. 'always' - Always show this item as a button in an Action Bar. 'withText' - When this item is in the action bar, always show it with a text label even if it also has an icon specified. 'never' - Never show this item as a button in an Action Bar.
-                        buttonColor: constants.colors.text.primary, // Optional, iOS only. Set color for the button (can also be used in setButtons function to set different button style programatically)
-                        buttonFontSize: 14, // Set font size for the button (can also be used in setButtons function to set different button style programatically)
-                        buttonFontWeight: '600', // Set font weight for the button (can also be used in setButtons function to set different button style programatically)
-                    }
-                ],
-                animated: false // does the change have transition animation or does it happen immediately (optional)
-            });
+            // navigator.setButtons({
+            //     rightButtons: [
+            //         {
+            //             icon: iconsMap['x'],
+            //             id: 'search-close', // id for this button, given in onNavigatorEvent(event) to help understand which button was clicked
+            //             testID: 'e2e_rules', // optional, used to locate this view in end-to-end tests
+            //             showAsAction: 'always', // optional, Android only. Control how the button is displayed in the Toolbar. Accepted valued: 'ifRoom' (default) - Show this item as a button in an Action Bar if the system decides there is room for it. 'always' - Always show this item as a button in an Action Bar. 'withText' - When this item is in the action bar, always show it with a text label even if it also has an icon specified. 'never' - Never show this item as a button in an Action Bar.
+            //             buttonColor: constants.colors.text.primary, // Optional, iOS only. Set color for the button (can also be used in setButtons function to set different button style programatically)
+            //             buttonFontSize: 14, // Set font size for the button (can also be used in setButtons function to set different button style programatically)
+            //             buttonFontWeight: '600', // Set font weight for the button (can also be used in setButtons function to set different button style programatically)
+            //         }
+            //     ],
+            //     animated: false // does the change have transition animation or does it happen immediately (optional)
+            // });
         }
     }),
 

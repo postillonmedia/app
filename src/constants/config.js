@@ -26,7 +26,7 @@ class ConfigContainer {
 
     notifications = {
         topics: {
-            automatic: 'automatic-news',
+            automatic: 'automatic-news-de',
         },
     };
 
@@ -49,12 +49,20 @@ class ConfigContainer {
         displayBackButton: true,
     };
 
+    listing = {
+        displayArticleIntroduction: true,
+    };
+
     ad = {
         interstitial: {
             enabled: true,
             offset: 2,
             repeat: 3,
         },
+    };
+
+    webview = {
+        hardwareAccelerated: true,
     };
 
     setConfigByUnderscoreSeparatedKey(key, value) {

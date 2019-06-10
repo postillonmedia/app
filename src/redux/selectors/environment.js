@@ -4,6 +4,9 @@ export const getWindowHeight = state => state.environment.window.height;
 export const getScreenEnvironment = state => state.environment.screen;
 export const getNetworkEnvironment = state => state.environment.network;
 export const getIsConnected = state => state.environment.network.isConnected;
+export const getStatusBarHeight = state => state.environment.navigation.statusBarHeight;
+export const getTopBarHeight = state => state.environment.navigation.topBarHeight;
+export const getBottomTabsHeight = state => state.environment.navigation.bottomTabsHeight;
 
 
 export default {
@@ -13,4 +16,7 @@ export default {
     getScreenEnvironment,
     getNetworkEnvironment,
     getIsConnected,
+    getStatusBarHeight,
+    getTopBarHeight,
+    getBottomTabsHeight,
 }

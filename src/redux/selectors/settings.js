@@ -9,6 +9,9 @@ export const getArticleSettings = state => state.settings.article;
 export const getArticleFontSize = state => state.settings.article.fontSize;
 export const getArticleTutorial = state => state.settings.article.tutorial;
 export const getArticleDisplayBackButton = state => state.settings.article.displayBackButton;
+export const getArticleDisplayCommentsAlways = state => state.settings.article.displayCommentsAlways;
+
+export const getListingDisplayArticleIntroduction = state => state.settings.listing.displayArticleIntroduction;
 
 
 export default {
@@ -23,4 +26,7 @@ export default {
     getArticleFontSize,
     getArticleTutorial,
     getArticleDisplayBackButton,
+    getArticleDisplayCommentsAlways,
+
+    getListingDisplayArticleIntroduction,
 }

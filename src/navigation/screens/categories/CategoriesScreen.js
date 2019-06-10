@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import ReactNative, {BackHandler, FlatList, StatusBar, Text, View} from 'react-native';
+import { Navigation } from 'react-native-navigation';
 
 import { ThemeManager } from '@postillon/react-native-theme';
 
@@ -9,9 +10,35 @@ import { Config } from '../../../constants';
 import { debounce } from '../../../utils/util';
 
 import { CategoryCard } from './../../../components/card';
+import {Themes} from "../../../constants/themes";
+import merge from "deepmerge";
+import {getLocalizedString, Icons} from "../../../App";
 
 
 export class CategoriesScreen extends PureComponent {
+
+    static options(passProps) {
+        const { theme = Themes.DEFAULT, locale } = passProps;
+        const { defaults: screenStyle } = ThemeManager.getStyleSheetForComponent('screens', theme);
+
+        return merge(screenStyle, {
+            topBar: {
+                visible: false,
+                animate: true,
+                hideOnScroll: false,
+                drawBehind: true,
+
+                leftButtons: [],
+                rightButtons: [],
+            },
+
+            bottomTab: {
+                text: getLocalizedString(locale,'categoriesList'),
+                icon: Icons.grid,
+                testID: 'TAB_CATEGORIES'
+            }
+        });
+    };
 
     constructor(props, context) {
         super(props, context);
@@ -25,7 +52,7 @@ export class CategoriesScreen extends PureComponent {
             numColumns: this.getNumColumns(width),
         };
 
-        navigator.setOnNavigatorEvent(this.handleNavigatorEvent);
+        Navigation.events().bindComponent(this);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -39,37 +66,45 @@ export class CategoriesScreen extends PureComponent {
         }
     }
 
-    onBackPressed = () => {
-        const { navigator } = this.props;
+    componentDidAppear() {
+        BackHandler.addEventListener('hardwareBackPress', this.onBackPressed);
+    }
 
-        navigator.switchToTab({
-            tabIndex: 0,
+    componentDidDisappear() {
+        BackHandler.removeEventListener('hardwareBackPress', this.onBackPressed);
+    }
+
+    onBackPressed = () => {
+        const { componentId } = this.props;
+
+        Navigation.mergeOptions(componentId, {
+            bottomTabs: {
+                currentTabIndex: 0,
+            }
         });
 
         return true;
     };
 
-    handleNavigatorEvent = (event) => {
-        const { id } = event;
-
-        if (id === 'willAppear') {
-            BackHandler.addEventListener('hardwareBackPress', this.onBackPressed);
-        } else if (id === 'willDisappear') {
-            BackHandler.removeEventListener('hardwareBackPress', this.onBackPressed);
-        }
-    };
-
     handleCardPressed = (category) => {
-        const { navigator, t, theme } = this.props;
-        const { defaults: style } = ThemeManager.getStyleSheetForComponent('screens', theme);
+        const { componentId, theme, locale, t } = this.props;
 
-        navigator.push({
-            screen: 'postillon.categories.List',
-            title: t(category),
-            navigatorStyle: style,
-            passProps: {
-                category
-            },
+        Navigation.push(componentId, {
+            component: {
+                name: 'postillon.categories.List',
+                passProps: {
+                    category,
+                    theme,
+                    locale
+                },
+                options: {
+                    topBar: {
+                        title: {
+                            text: t(category),
+                        }
+                    }
+                }
+            }
         });
     };
 

@@ -6,41 +6,80 @@ import { DefaultTheme, DarkTheme } from './../../../constants/themes';
 
 
 export const defaults = {
-    tabBarButtonColor: DarkTheme.colors.tabs.button,
-    tabBarSelectedButtonColor: DarkTheme.colors.tabs.selectedButton,
-    tabBarBackgroundColor: DarkTheme.colors.tabs.background,
-    tabFontFamily: 'FiraSans-Regular',
-    forceTitlesDisplay: true,
+    statusBar: {
+        visible: true,
+        style: 'light',
 
-    navBarTextColor: DarkTheme.colors.text.secondary,
-    navBarButtonColor: DarkTheme.colors.text.secondary,
-    navBarBackgroundColor: DarkTheme.colors.tabs.background,
-    navBarNoBorder: true,
-    topBarElevationShadowEnabled: true,
+        // android
+        backgroundColor: DarkTheme.colors.tabs.background,
+    },
 
-    statusBarTextColorScheme: 'light',
+    layout: {
+        backgroundColor: DarkTheme.colors.bg.lightest,
 
-    screenBackgroundColor: DarkTheme.colors.bg.lightest,
+        // android
+        componentBackgroundColor: DarkTheme.colors.bg.lightest,
+    },
 
-    // android only
-    statusBarColor:  DarkTheme.colors.tabs.background, //'#000',
-    navigationBarColor: '#000', // DarkTheme.colors.tabs.background,
+    topBar: {
+        leftButtonColor: DarkTheme.colors.tabs.button,
+        rightButtonColor: DarkTheme.colors.tabs.button,
+        backButton: {
+            // android
+            color: DarkTheme.colors.tabs.button,
+        },
 
-    // iOS only
-    keepStyleAcrossPush: true,
-    statusBarHideWithNavBar: true,
+        title: {
+            color: DarkTheme.colors.text.secondary,
+            fontFamily: 'FiraSans-Regular',
+        },
+        subtitle: {
+            color: DarkTheme.colors.text.secondary,
+            fontFamily: 'FiraSans-Regular',
+        },
+        background: {
+            color: DarkTheme.colors.tabs.background,
+        }
+    },
+
+    bottomTabs: {
+        visible: true,
+        animate: true,
+        drawBehind: false,
+        backgroundColor: DarkTheme.colors.tabs.background,
+
+        // android
+        titleDisplayMode: 'alwaysShow',
+    },
+
+    bottomTab: {
+        badgeColor: DarkTheme.colors.brandPrimary,
+        iconColor: DarkTheme.colors.tabs.button,
+        textColor: DarkTheme.colors.tabs.button,
+        selectedIconColor: DarkTheme.colors.tabs.selectedButton,
+        selectedTextColor: DarkTheme.colors.tabs.selectedButton,
+        fontFamily: 'FiraSans-Regular',
+        fontSize: 10,
+    },
 };
 
 export const article = {
     ...defaults,
 
-    screenBackgroundColor: DarkTheme.colors.bg.lightest,
+    layout: {
+        ...defaults.layout,
+
+        backgroundColor: DarkTheme.colors.bg.lightest,
+
+        // android
+        componentBackgroundColor: DarkTheme.colors.bg.lightest,
+    },
 };
 
 export const search = {
     ...defaults,
 
-    topBarElevationShadowEnabled: false,
+    // topBarElevationShadowEnabled: false,
 };
 
 

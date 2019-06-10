@@ -1,6 +1,7 @@
 import { compose } from 'recompose';
 import { ThemeManager, connectStyle } from '@postillon/react-native-theme';
 import { i18n } from '@postillon/react-native-i18n';
+import { Navigation } from 'react-native-navigation';
 
 import { Themes } from './../../../constants/themes';
 import styles from './styles';
@@ -16,21 +17,17 @@ const MoreScreen = compose(
 
     i18n('more', {
         callback: (locale, t, props) => {
-            const { navigator } = props;
+            const { componentId } = props;
 
-            navigator.setTabButton({
-                tabIndex: 3,
-                label: t('title'),
-            });
+            Navigation.mergeOptions(componentId, MoreScreenView.options(props));
         }
     }),
 
     connectStyle('screen.more', {
         callback: (theme, props) => {
-            const { defaults: style } = ThemeManager.getStyleSheetForComponent('screens', theme);
-            const { navigator } = props;
+            const { componentId } = props;
 
-            navigator.setStyle(style);
+            Navigation.mergeOptions(componentId, MoreScreenView.options(props));
         }
     })
 

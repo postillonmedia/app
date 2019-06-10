@@ -1,18 +1,40 @@
 import ReactNative, { Alert, Platform } from 'react-native';
-import { all, take, takeEvery, put, call, select } from 'redux-saga/effects';
+import { all, call, delay, take, takeEvery, put, select } from 'redux-saga/effects';
+
+import { ThemeManager } from '@postillon/react-native-theme';
+import changeNavigationBarColor from 'react-native-navigation-bar-color';
+
+import { isPersistorBootstrapped } from '../store'
 
 import Firebase from '../../utils/firebase';
 import Config from '../../constants/config';
+import { Themes, DefaultTheme, DarkTheme } from '../../constants/themes';
 
 import {
     setNotification,
 
+    SETTINGS_APP_THEME,
     SETTINGS_APP_ANALYTICS,
     SETTINGS_APP_NOTIFICATIONS,
 } from '../actions/settings/app';
 
-import { getAppNotifications } from '../selectors/settings';
+import { getAppNotifications, getAppTheme } from '../selectors/settings';
 
+
+function* handleThemeChanged(action) {
+    const { theme } = action;
+
+    try {
+        const constants = ThemeManager.getConstantsForTheme(theme);
+
+        const color = constants.colors.tabs.background;
+        const useLightIconColor = theme === Themes.DEFAULT;
+
+        changeNavigationBarColor(color, useLightIconColor);
+    } catch (error) {
+        console.error(error);
+    }
+}
 
 function* handleAnalyticsEnabledChanged(action) {
     const { enabled } = action;
@@ -32,11 +54,9 @@ function* handleNotificationEnabledChanged(action) {
     const { enabled } = action;
 
     const messaging = Firebase.messaging();
-    const iid = Firebase.iid();
 
     if (enabled) {
         // register for messages
-
         const hasPermissions = yield call([messaging, messaging.hasPermission]);
 
         if (!hasPermissions) {
@@ -54,33 +74,65 @@ function* handleNotificationEnabledChanged(action) {
         }
 
         // subscribe for topic
-        yield call([messaging, messaging.subscribeToTopic], Config.notifications.topics.automatic);
+        yield call(setNotificationsEnabled, true);
 
+    } else {
+        // unsubscribe
+        yield call(setNotificationsEnabled, false);
+    }
+}
+
+function* initialize() {
+    try {
+        // wait for redux-persist to restore the persisted state
+        yield isPersistorBootstrapped;
+
+        // setup theme
+        const theme = yield select(getAppTheme);
+        yield call(handleThemeChanged, { theme });
+
+        // setup notifications
+        const messaging = Firebase.messaging();
+
+        const hasPermissions = yield call([messaging, messaging.hasPermission]);
+
+        if (!hasPermissions) {
+            yield put(setNotification(false));
+            yield call(setNotificationsEnabled, false);
+        } else {
+            const receiveNotifications = yield select(getAppNotifications);
+
+            yield call(setNotificationsEnabled, receiveNotifications);
+        }
+    } catch (e) {
+        console.error(e);
+    }
+}
+
+function* setNotificationsEnabled(enabled) {
+    const messaging = Firebase.messaging();
+    const iid = Firebase.iid();
+
+    if (enabled) {
+        yield call([iid, iid.get]);
+        yield call([iid, iid.getToken]);
+
+        // subscribe for topic
+        yield call([messaging, messaging.subscribeToTopic], Config.notifications.topics.automatic);
     } else {
         // unsubscribe
         yield call([messaging, messaging.unsubscribeFromTopic], Config.notifications.topics.automatic);
 
         yield call([iid, iid.deleteToken]);
+        yield call([iid, iid.delete]);
     }
 }
 
-function* initialize() {
-    const messaging = Firebase.messaging();
 
-    const hasPermissions = yield call([messaging, messaging.hasPermission]);
 
-    if (!hasPermissions) {
-        yield put(setNotification(false));
-    } else {
-        const receiveNotifications = yield select(getAppNotifications);
-
-        if (receiveNotifications) {
-            // subscribe for topic
-            yield call([messaging, messaging.subscribeToTopic], Config.notifications.topics.automatic);
-        }
-    }
+function* watchOnThemeChanged() {
+    yield takeEvery(SETTINGS_APP_THEME, handleThemeChanged)
 }
-
 
 function* watchOnAnalyticsEnabledChanged() {
     yield takeEvery(SETTINGS_APP_ANALYTICS, handleAnalyticsEnabledChanged)
@@ -93,6 +145,8 @@ function* watchOnNotificationEnabledChanged() {
 
 export default function* settingsSaga() {
     yield all([
+        watchOnThemeChanged(),
+
         watchOnAnalyticsEnabledChanged(),
 
         watchOnNotificationEnabledChanged(),

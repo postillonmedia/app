@@ -1,20 +1,61 @@
 import React, { PureComponent } from 'react';
 import ReactNative, { ActivityIndicator, FlatList, Text, TouchableOpacity, View } from 'react-native';
+import { Navigation } from 'react-native-navigation';
+
+import merge from 'deepmerge';
 
 import FeatherIcon from 'react-native-vector-icons/Feather';
-import RNPopover from '@postillon/react-native-popover-menu';
+import RNPopover from 'react-native-popover-menu';
 
-import { iconsMap, isIconsMapLoaded } from './../../../app-icons';
+import { Icons } from './../../../App';
 import { getCategoriesByLocale } from '../../../constants/categories';
 import { Periods, NoFilter } from '../../../constants/periods';
 
 import { SmallArticleCard } from './../../../components/card'
-import {ThemeManager} from "@postillon/react-native-theme";
-import {Config} from "../../../constants";
-import {debounce} from "../../../utils/util";
+import { ThemeManager } from "@postillon/react-native-theme";
+import { Config } from "../../../constants";
+import { debounce } from "../../../utils/util";
+import { Themes } from "../../../constants/themes";
 
 
 export class SearchScreen extends PureComponent {
+
+    static options(passProps) {
+        const { theme = Themes.DEFAULT } = passProps;
+        const { search: style } = ThemeManager.getStyleSheetForComponent('screens', theme);
+
+        return merge(style, {
+            topBar: {
+                hideOnScroll: false,
+                elevation: 0,
+                borderHeight: 0,
+
+                backButton: undefined,
+
+                title: {
+                    component: {
+                        name: 'postillon.navbars.Search',
+                        alignment: 'fill',
+                    }
+                },
+
+                leftButtons: [],
+                rightButtons: [
+                    {
+                        id: 'close',
+                        icon: Icons.close,
+
+                        // iOS
+                        systemItem: 'cancel'
+                    }
+                ],
+            },
+            bottomTabs: {
+                visible: false,
+                drawBehind: true,
+            }
+        });
+    }
 
     constructor(props, context) {
         super(props, context);
@@ -22,40 +63,19 @@ export class SearchScreen extends PureComponent {
         // debounce navigation functions
         this.handleArticlePressed = debounce(this.handleArticlePressed, Config.debounce.navigation, this);
 
-        const { constants, navigator, initializeSearch, blogId, initialCategory } = props;
+        const { initializeSearch, blogId, initialCategory } = props;
 
-        navigator.setOnNavigatorEvent(this.onNavigatorEvent);
-
-        isIconsMapLoaded.then(() => {
-            navigator.setButtons({
-                rightButtons: [
-                    {
-                        icon: iconsMap['x'],
-                        id: 'search-close', // id for this button, given in onNavigatorEvent(event) to help understand which button was clicked
-                        testID: 'e2e_rules', // optional, used to locate this view in end-to-end tests
-                        showAsAction: 'always', // optional, Android only. Control how the button is displayed in the Toolbar. Accepted valued: 'ifRoom' (default) - Show this item as a button in an Action Bar if the system decides there is room for it. 'always' - Always show this item as a button in an Action Bar. 'withText' - When this item is in the action bar, always show it with a text label even if it also has an icon specified. 'never' - Never show this item as a button in an Action Bar.
-                        buttonColor: constants.colors.text.primary, // Optional, iOS only. Set color for the button (can also be used in setButtons function to set different button style programatically)
-                        buttonFontSize: 14, // Set font size for the button (can also be used in setButtons function to set different button style programatically)
-                        buttonFontWeight: '600', // Set font weight for the button (can also be used in setButtons function to set different button style programatically)
-                    }
-                ],
-                animated: false,
-            });
-        });
+        Navigation.events().bindComponent(this);
 
         // initialize search
         initializeSearch(blogId, initialCategory);
     }
 
-    onNavigatorEvent = (event) => {
-        if (event.type === 'NavBarButtonPress') { // this is the event type for button presses
-            if (event.id === 'search-close') { // this is the same id field from the static navigatorButtons definition
-                const { navigator } = this.props;
-
-                navigator.pop();
-            }
+    navigationButtonPressed({ buttonId }) {
+        if (buttonId === 'close') {
+            Navigation.pop(this.props.componentId);
         }
-    };
+    }
 
     handlePeriodPressed = () => {
         const { t, constants } = this.props;
@@ -126,15 +146,19 @@ export class SearchScreen extends PureComponent {
     };
 
     handleArticlePressed = (article) => {
-        const { navigator, theme } = this.props;
+        const { componentId, theme, locale } = this.props;
         const { article: style } = ThemeManager.getStyleSheetForComponent('screens', theme);
 
-        navigator.push({
-            screen: 'postillon.Article',
-            navigatorStyle: style,
-            passProps: {
-                articleId: article.id,
-            },
+        Navigation.push(componentId,{
+            component: {
+                name: 'postillon.article.Single',
+                passProps: {
+                    stackId: componentId,
+                    articleId: article.id,
+                    theme,
+                    locale,
+                },
+            }
         });
     };
 

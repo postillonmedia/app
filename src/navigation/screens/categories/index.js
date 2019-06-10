@@ -2,6 +2,7 @@ import { compose } from 'recompose';
 import { connect } from 'react-redux';
 import { ThemeManager, connectStyle } from '@postillon/react-native-theme';
 import { i18n } from '@postillon/react-native-i18n';
+import { Navigation } from 'react-native-navigation';
 
 import { Themes } from '../../../constants/themes';
 import styles from './styles';
@@ -24,25 +25,21 @@ const CategoriesScreen = compose(
 
     i18n('categoriesList', {
         callback: (locale, t, props) => {
-            const { navigator } = props;
+            const { componentId } = props;
 
-            navigator.popToRoot({
-                animated: false,
-            });
-
-            navigator.setTabButton({
-                tabIndex: 1,
-                label: t('title'),
+            Navigation.mergeOptions(componentId, {
+                bottomTab: {
+                    text: t('title'),
+                }
             });
         }
     }),
 
     connectStyle('screen.categories', {
         callback: (theme, props) => {
-            const { defaults: style } = ThemeManager.getStyleSheetForComponent('screens', theme);
-            const { navigator } = props;
+            const { componentId } = props;
 
-            navigator.setStyle(style);
+            Navigation.mergeOptions(componentId, CategoriesScreenView.options(props));
         }
     }),
 

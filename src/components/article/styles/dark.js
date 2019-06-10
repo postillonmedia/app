@@ -4,7 +4,7 @@
 
 import { StyleSheet } from 'react-native';
 
-import { DefaultTheme, DarkTheme } from '../../../constants/themes';
+import { DarkTheme } from '../../../constants/themes';
 
 
 const controls = {
@@ -65,6 +65,10 @@ export const styles = StyleSheet.create({
         marginVertical: 5,
     },
 
+    section: {
+        marginTop: 32,
+    },
+
     line: {
         height: 3,
         width: '20%',
@@ -106,8 +110,75 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
     },
     loadingText: {
-        ...DefaultTheme.styles.text.ui,
+        ...DarkTheme.styles.text.ui,
         fontSize: 20,
+    },
+
+    // comments
+    commentsContainer: {
+        backgroundColor: DarkTheme.colors.bg.lighter,
+
+        marginHorizontal: 16,
+        marginVertical: 16,
+
+        padding: 32,
+    },
+
+    commentsLoadButton: {
+        borderRadius: 5,
+        backgroundColor: DarkTheme.colors.monochrome.dark3,
+
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+
+        marginHorizontal: 16,
+        marginVertical: 8,
+
+        paddingHorizontal: 16,
+        paddingVertical: 8,
+    },
+    commentsLoadButtonText: {
+        ...DarkTheme.styles.text.ui,
+
+        color: DarkTheme.colors.text.negative,
+        fontSize: 16,
+        fontFamily: 'FiraSans-SemiBold',
+
+        marginHorizontal: 5,
+    },
+
+    commentsLoadAlwaysButton: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+
+        marginHorizontal: 32,
+        marginTop: 8,
+
+        paddingHorizontal: 16,
+        paddingTop: 8,
+    },
+    commentsLoadAlwaysButtonText: {
+        ...DarkTheme.styles.text.ui,
+
+        color: DarkTheme.colors.text.secondary,
+        fontSize: 14,
+        textDecorationLine: 'underline',
+    },
+
+    commentsWebViewContainer: {
+        marginHorizontal: 16,
+    },
+    commentsWebView: {
+        flex: 1,
+        marginHorizontal: 0, // important for rendering
+
+        minHeight: 100,
+
+        backgroundColor: DarkTheme.colors.monochrome.white4,
     }
 });
 

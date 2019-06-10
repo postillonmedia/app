@@ -13,18 +13,25 @@ import ReactNative, {
     TouchableWithoutFeedback,
 } from 'react-native';
 
-import Toast from 'react-native-toast-native';
+import merge from 'deepmerge';
+
+import { Navigation } from 'react-native-navigation';
+// TODO: import Toast from 'react-native-toast-native';
 import Firebase from '../../../utils/firebase';
 
 import { ThemeManager } from '@postillon/react-native-theme';
-import { CustomTabs } from 'react-native-custom-tabs';
+import { InAppBrowser } from '@matt-block/react-native-in-app-browser';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 
 import { onPressHandler } from './../../../utils/util';
 import { debounce } from '../../../utils/util';
 import { Config } from '../../../constants';
+import { Themes } from '../../../constants/themes';
+
+import { getLocalizedString, Icons } from '../../../App';
 
 import Steady from '../../../components/steady';
+
 
 
 export class MoreScreen extends Component {
@@ -40,6 +47,25 @@ export class MoreScreen extends Component {
         year: new Date().getFullYear(),
     };
 
+    static options(passProps) {
+        const { theme = Themes.DEFAULT, locale } = passProps;
+        const { defaults: screenStyle } = ThemeManager.getStyleSheetForComponent('screens', theme);
+
+        return merge(screenStyle, {
+            topBar: {
+                visible: false,
+                drawBehind: true,
+                hideOnScroll: false,
+            },
+
+            bottomTab: {
+                text: getLocalizedString(locale,'more'),
+                icon: Icons.more,
+                testID: 'TAB_MORE'
+            }
+        });
+    };
+
     modalSteadyLogin = null;
 
     constructor(props, context) {
@@ -47,35 +73,36 @@ export class MoreScreen extends Component {
 
         // debounce navigation functions
         this.handleBtnSettingsPressed = debounce(this.handleBtnSettingsPressed, Config.debounce.navigation, this);
-
-        const { navigator } = props;
+        this.handleImprintPress = debounce(this.handleImprintPress, Config.debounce.navigation, this);
+        this.handlePrivacyPolicyPress = debounce(this.handlePrivacyPolicyPress, Config.debounce.navigation, this);
+        this.handleAboutPress = debounce(this.handleAboutPress, Config.debounce.navigation, this);
 
         this.state = {
             singleGiftOverviewVisible: false,
             interstitialIsLoading: false,
         };
 
-        navigator.setOnNavigatorEvent(this.onNavigatorEvent);
+        Navigation.events().bindComponent(this);
+    }
+
+    componentDidAppear() {
+        BackHandler.addEventListener('hardwareBackPress', this.onBackPressed);
+    }
+
+    componentDidDisappear() {
+        BackHandler.removeEventListener('hardwareBackPress', this.onBackPressed);
     }
 
     onBackPressed = () => {
-        const { navigator } = this.props;
+        const { componentId } = this.props;
 
-        navigator.switchToTab({
-            tabIndex: 0,
+        Navigation.mergeOptions(componentId, {
+            bottomTabs: {
+                currentTabIndex: 0,
+            }
         });
 
         return true;
-    };
-
-    onNavigatorEvent = (event) => {
-        const { id } = event;
-
-        if (id === 'willAppear') {
-            BackHandler.addEventListener('hardwareBackPress', this.onBackPressed);
-        } else if (id === 'willDisappear') {
-            BackHandler.removeEventListener('hardwareBackPress', this.onBackPressed);
-        }
     };
 
     setSingleGiftOverviewVisibility = (visible) => {
@@ -85,13 +112,24 @@ export class MoreScreen extends Component {
     };
 
     handleBtnSettingsPressed = () => {
-        const { navigator, t, theme } = this.props;
-        const { defaults: style } = ThemeManager.getStyleSheetForComponent('screens', theme);
+        const { componentId, t, locale, theme } = this.props;
 
-        navigator.push({
-            screen: 'postillon.more.Settings',
-            title: t('settings'),
-            navigatorStyle: style,
+        Navigation.push(componentId,{
+            component: {
+                id: 'postillon.more.Settings',
+                name: 'postillon.more.Settings',
+                passProps: {
+                    theme,
+                    locale,
+                },
+                options: {
+                    topBar: {
+                        title: {
+                            text: t('settings')
+                        }
+                    }
+                }
+            }
         });
     };
 
@@ -99,7 +137,9 @@ export class MoreScreen extends Component {
         const { t, constants } = this.props;
 
         Clipboard.setString(t('support_with_single_gift_modal_bankinfo'));
-        Toast.show(t('support_with_single_gift_modal_bankinfo_copied'), Toast.SHORT, Toast.CENTER, constants.styles.toast);
+
+        // TODO
+        // Toast.show(t('support_with_single_gift_modal_bankinfo_copied'), Toast.SHORT, Toast.CENTER, constants.styles.toast);
     };
 
     handlePaymentPaypalPress = () => {
@@ -123,7 +163,7 @@ export class MoreScreen extends Component {
         const { interstitialIsLoading } = this.state;
 
         if (interstitialIsLoading) {
-            return;
+
         } else {
             this.setState({
                 interstitialIsLoading: true,
@@ -142,7 +182,8 @@ export class MoreScreen extends Component {
                 });
 
                 advert.on('onAdFailedToLoad', (e) => {
-                    Toast.show(t('support_watch_ad_failed'), Toast.SHORT, Toast.BOTTOM, constants.styles.toast);
+                    // TODO
+                    // Toast.show(t('support_watch_ad_failed'), Toast.SHORT, Toast.BOTTOM, constants.styles.toast);
 
                     this.setState({
                         interstitialIsLoading: false,
@@ -174,24 +215,46 @@ export class MoreScreen extends Component {
     };
 
     handlePrivacyPolicyPress = () => {
-        const { navigator, t, theme } = this.props;
-        const { defaults: style } = ThemeManager.getStyleSheetForComponent('screens', theme);
+        const { componentId, t, locale, theme } = this.props;
 
-        navigator.push({
-            screen: 'postillon.more.PrivacyPolicy',
-            title: t('privacyPolicy'),
-            navigatorStyle: style,
+        Navigation.push(componentId,{
+            component: {
+                id: 'postillon.more.PrivacyPolicy',
+                name: 'postillon.more.PrivacyPolicy',
+                passProps: {
+                    theme,
+                    locale,
+                },
+                options: {
+                    topBar: {
+                        title: {
+                            text: t('privacyPolicy')
+                        }
+                    }
+                }
+            }
         });
     };
 
     handleImprintPress = () => {
-        const { navigator, t, theme } = this.props;
-        const { defaults: style } = ThemeManager.getStyleSheetForComponent('screens', theme);
+        const { componentId, t, locale, theme } = this.props;
 
-        navigator.push({
-            screen: 'postillon.more.Imprint',
-            title: t('imprint'),
-            navigatorStyle: style,
+        Navigation.push(componentId,{
+            component: {
+                id: 'postillon.more.Imprint',
+                name: 'postillon.more.Imprint',
+                passProps: {
+                    theme,
+                    locale,
+                },
+                options: {
+                    topBar: {
+                        title: {
+                            text: t('imprint')
+                        }
+                    }
+                }
+            }
         });
     };
 
@@ -204,20 +267,31 @@ export class MoreScreen extends Component {
     };
 
     handleAboutPress = () => {
-        const { navigator, t, theme } = this.props;
-        const { defaults: style } = ThemeManager.getStyleSheetForComponent('screens', theme);
+        const { componentId, t, locale, theme } = this.props;
 
-        navigator.push({
-            screen: 'postillon.more.About',
-            title: t('about'),
-            navigatorStyle: style,
+        Navigation.push(componentId,{
+            component: {
+                id: 'postillon.more.About',
+                name: 'postillon.more.About',
+                passProps: {
+                    theme,
+                    locale,
+                },
+                options: {
+                    topBar: {
+                        title: {
+                            text: t('about')
+                        }
+                    }
+                }
+            }
         });
     };
 
     openCustomTab = (url) => {
         const { constants } = this.props;
 
-        CustomTabs.openURL(url, constants.styles.customTabs);
+        InAppBrowser.open(url, constants.styles.customTabs);
     };
 
     render() {

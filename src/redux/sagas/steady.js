@@ -3,6 +3,7 @@ import {all, call, delay, put, putResolve, select, take, takeEvery, takeLatest} 
 
 import qs from 'qs';
 
+import { isPersistorBootstrapped } from '../store';
 import {
     STEADY_AUTHENTICATE,
     STEADY_AUTHENTICATION_RECEIVED,
@@ -209,45 +210,51 @@ function* handleSubscriptionRequest(action) {
 
 
 function* checkLogin() {
-    const accessToken = yield select(getSteadyAccessToken);
+    try {
+        yield isPersistorBootstrapped;
 
-    if (accessToken) {
-        // user is logged in
+        const accessToken = yield select(getSteadyAccessToken);
 
-        const timestamp = Date.now() + 30000; // add 30 sec tolerance
-        const expirationTimestamp = yield select(getSteadyAccessTokenExpirationTimestamp);
+        if (accessToken) {
+            // user is logged in
 
-        let success = false;
-        if (timestamp < expirationTimestamp) {
-            success = yield call(handleSubscriptionRequest);
-        }
+            const timestamp = Date.now() + 30000; // add 30 sec tolerance
+            const expirationTimestamp = yield select(getSteadyAccessTokenExpirationTimestamp);
 
-        if (!success || timestamp >= expirationTimestamp) {
-            const refreshToken = yield select(getSteadyRefreshToken);
+            let success = false;
+            if (timestamp < expirationTimestamp) {
+                success = yield call(handleSubscriptionRequest);
+            }
 
-            if (refreshToken) {
-                let i = 0;
+            if (!success || timestamp >= expirationTimestamp) {
+                const refreshToken = yield select(getSteadyRefreshToken);
 
-                while (!success && i < 3) {
-                    i++;
+                if (refreshToken) {
+                    let i = 0;
 
-                    success = yield call(handleAuthenticate);
+                    while (!success && i < 3) {
+                        i++;
 
-                    if (!success) {
-                        yield delay(30000);
+                        success = yield call(handleAuthenticate);
+
+                        if (!success) {
+                            yield delay(30000);
+                        }
+                    }
+
+                    if (success) {
+                        yield put(SteadyActions.requestSubscriptions())
                     }
                 }
 
-                if (success) {
-                    yield put(SteadyActions.requestSubscriptions())
-                }
             }
 
+            if (!success) {
+                yield put(SteadyActions.authenticateFailed(new Error('Could not validate your Session. A new Login is required.')));
+            }
         }
-
-        if (!success) {
-            yield put(SteadyActions.authenticateFailed(new Error('Could not validate your Session. A new Login is required.')));
-        }
+    } catch (e) {
+        console.error(e);
     }
 }
 
