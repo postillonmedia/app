@@ -168,6 +168,7 @@ export class CommentsView extends PureComponent {
                         <AutoHeightWebView
                             style={[styles.commentsWebView, { width: width - 32 }]}
                             androidHardwareAccelerationDisabled={!Config.webview.hardwareAccelerated}
+                            allowsFullscreenVideo={true}
                             mediaPlaybackRequiresUserAction={false}
                             baseUrl={article.url}
                             source={{ html, baseUrl: article.url }}

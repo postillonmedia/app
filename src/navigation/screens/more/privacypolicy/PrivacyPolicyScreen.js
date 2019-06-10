@@ -1,8 +1,25 @@
 import React, { PureComponent } from 'react';
 import ReactNative, { CheckBox, ScrollView, View, Text } from 'react-native';
+import merge from 'deepmerge';
+
+import { ThemeManager } from '@postillon/react-native-theme';
+import { Themes } from '../../../../constants/themes';
 
 
 export class PrivacyPolicyScreen extends PureComponent {
+
+    static options(passProps) {
+        const { theme = Themes.DEFAULT } = passProps;
+        const { defaults: screenStyle } = ThemeManager.getStyleSheetForComponent('screens', theme);
+
+        return merge(screenStyle, {
+            topBar: {
+                visible: true,
+                drawBehind: false,
+                hideOnScroll: false,
+            },
+        });
+    }
 
     constructor(props, context) {
         super(props, context);

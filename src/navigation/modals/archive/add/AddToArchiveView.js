@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import ReactNative, { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 
-import Toast from 'react-native-toast-native';
+// import Toast from 'react-native-toast-native';
 
 import Feather from 'react-native-vector-icons/Feather';
 
@@ -20,7 +20,8 @@ export class AddToArchiveView extends PureComponent {
 
             stateManager.close();
         } else {
-            Toast.show(t('noConnection'), Toast.SHORT, Toast.CENTER, constants.styles.toast);
+            // TODO
+            // Toast.show(t('noConnection'), Toast.SHORT, Toast.CENTER, constants.styles.toast);
         }
     };
 

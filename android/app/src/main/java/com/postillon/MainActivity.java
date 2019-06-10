@@ -1,28 +1,14 @@
 package com.postillon;
 
 import android.graphics.Color;
-import android.util.TypedValue;
-import android.view.Gravity;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
-import com.reactnativenavigation.controllers.SplashActivity;
+import com.reactnativenavigation.NavigationActivity;
 
-public class MainActivity extends SplashActivity {
-
-    /**
-     * Returns the name of the main component registered from JavaScript.
-     * This is used to schedule rendering of the component.
-     */
-    protected String getMainComponentName() {
-        return "postillon";
-    }
-
+public class MainActivity extends NavigationActivity {
     @Override
-    public RelativeLayout createSplashLayout() {
+    protected void addDefaultSplashLayout() {
         RelativeLayout view = new RelativeLayout(this);
 
         view.setBackgroundColor(Color.parseColor("#ffffff"));
@@ -42,6 +28,7 @@ public class MainActivity extends SplashActivity {
         imageView.setLayoutParams(layoutParams);
 
         view.addView(imageView);
-        return view;
+
+        this.setContentView(view);
     }
 }

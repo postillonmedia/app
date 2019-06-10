@@ -54,6 +54,7 @@ export default function (props = {}) {
 
         return (
             <Carousel
+                key={keyProperty}
                 data={gallery}
                 renderItem={({item}) => (
                     <View style={{flex: 1}}>

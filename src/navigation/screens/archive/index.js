@@ -2,6 +2,7 @@ import { compose } from 'recompose';
 import { connect } from 'react-redux';
 import { ThemeManager, connectStyle } from '@postillon/react-native-theme';
 import { i18n } from '@postillon/react-native-i18n';
+import { Navigation } from 'react-native-navigation';
 
 import { gestureHandlerRootHOC } from "react-native-gesture-handler";
 
@@ -26,11 +27,12 @@ const ArchiveScreen = compose(
 
     i18n('archive', {
         callback: (locale, t, props) => {
-            const { navigator } = props;
+            const { componentId } = props;
 
-            navigator.setTabButton({
-                tabIndex: 2,
-                label: t('title'),
+            Navigation.mergeOptions(componentId, {
+                bottomTab: {
+                    text: t('title'),
+                }
             });
         }
     }),
@@ -38,9 +40,9 @@ const ArchiveScreen = compose(
     connectStyle('screen.archive', {
         callback: (theme, props) => {
             const { defaults: style } = ThemeManager.getStyleSheetForComponent('screens', theme);
-            const { navigator } = props;
+            const { componentId } = props;
 
-            navigator.setStyle(style);
+            Navigation.mergeOptions(componentId, ArchiveScreenView.options(props));
         }
     }),
 

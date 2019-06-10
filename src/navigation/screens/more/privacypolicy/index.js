@@ -2,6 +2,7 @@ import { compose } from 'recompose';
 import { connect } from 'react-redux';
 import { ThemeManager, connectStyle } from '@postillon/react-native-theme';
 import { i18n } from '@postillon/react-native-i18n';
+import { Navigation } from 'react-native-navigation';
 
 import { Themes } from '../../../../constants/themes';
 import styles from './styles';
@@ -27,22 +28,13 @@ const mapDispatchToProps = dispatch => ({
 
 const PrivacyPolicyScreen = compose(
 
-    i18n('privacyPolicy', {
-        callback: (locale, t, props) => {
-            const { navigator } = props;
-
-            navigator.setTitle({
-                title: t('title'),
-            });
-        }
-    }),
+    i18n('privacyPolicy'),
 
     connectStyle('screen.more.privacypolicy', {
         callback: (theme, props) => {
-            const { defaults: style } = ThemeManager.getStyleSheetForComponent('screens', theme);
-            const { navigator } = props;
+            const { componentId } = props;
 
-            navigator.setStyle(style);
+            Navigation.mergeOptions(componentId, PrivacyPolicyScreenView.options(props));
         }
     }),
 

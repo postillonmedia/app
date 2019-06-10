@@ -1,7 +1,12 @@
 import React, { PureComponent } from 'react';
 import ReactNative, { Linking, ScrollView, View, Text } from 'react-native';
 
+import merge from 'deepmerge';
+
+import { ThemeManager } from '@postillon/react-native-theme';
 import { InAppBrowser } from '@matt-block/react-native-in-app-browser';
+
+import { Themes } from '../../../../constants/themes';
 
 import Firebase from '../../../../utils/firebase';
 
@@ -9,6 +14,19 @@ import Package from '../../../../../package.json';
 
 
 export class AboutScreen extends PureComponent {
+
+    static options(passProps) {
+        const { theme = Themes.DEFAULT } = passProps;
+        const { defaults: screenStyle } = ThemeManager.getStyleSheetForComponent('screens', theme);
+
+        return merge(screenStyle, {
+            topBar: {
+                visible: true,
+                drawBehind: false,
+                hideOnScroll: false,
+            },
+        });
+    }
 
     constructor(props, context) {
         super(props, context);

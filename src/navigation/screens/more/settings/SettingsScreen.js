@@ -1,16 +1,36 @@
 import React, { PureComponent } from 'react';
 import ReactNative, { ScrollView, View, Text, TouchableOpacity, Switch } from 'react-native';
+import { Navigation } from 'react-native-navigation';
+
+import merge from 'deepmerge';
 
 import Slider from '@react-native-community/slider';
 import RNPopover from 'react-native-popover-menu';
-
-import { Themes } from '../../../../constants/themes/index';
-import { LANGUAGE_DE, LANGUAGE_EN } from '../../../../constants/languages';
 import FeatherIcon from 'react-native-vector-icons/Feather';
-import {Config} from "../../../../constants/config";
+
+import { ThemeManager } from '@postillon/react-native-theme';
+
+import { Themes } from '../../../../constants/themes';
+import { Config } from '../../../../constants/config';
+import { LANGUAGE_DE, LANGUAGE_EN } from '../../../../constants/languages';
+
+import { Stacks } from '../../../../App';
 
 
 export class SettingsScreen extends PureComponent {
+
+    static options(passProps) {
+        const { theme = Themes.DEFAULT } = passProps;
+        const { defaults: screenStyle } = ThemeManager.getStyleSheetForComponent('screens', theme);
+
+        return merge(screenStyle, {
+            topBar: {
+                visible: true,
+                drawBehind: false,
+                hideOnScroll: false,
+            },
+        });
+    }
 
     handleLocalePress = () => {
         const { t, constants } = this.props;
@@ -49,6 +69,11 @@ export class SettingsScreen extends PureComponent {
         } else if (menuIndex === 1 || (!menuIndex && index === 1)) {
             setLocale(LANGUAGE_EN);
         }
+
+        // pop the stacks
+        Navigation.popToRoot(Stacks.articles);
+        Navigation.popToRoot(Stacks.categories);
+        Navigation.popToRoot(Stacks.archive);
     };
 
     handleThemeChange = (enabled) => {

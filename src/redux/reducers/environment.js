@@ -1,7 +1,8 @@
 // import action constants
 import {
     ENVIRONMENT_DIMENSIONS_CHANGE,
-    ENVIRONMENT_NETWORK_CONNECTED_CHANGE, ENVIRONMENT_NETWORK_CONNECTIVITY_CHANGE
+    ENVIRONMENT_NETWORK_CONNECTED_CHANGE, ENVIRONMENT_NETWORK_CONNECTIVITY_CHANGE,
+    ENVIRONMENT_NAVIGATION_CONSTANTS_CHANGE
 } from './../actions/environment';
 
 import { Dimensions, PixelRatio } from 'react-native';
@@ -32,7 +33,12 @@ const initialState = {
         isConnected: null,
         connectionType: null,
         connectionEffectiveType: null,
-    }
+    },
+    navigation: {
+        statusBarHeight: 0,
+        topBarHeight: 0,
+        bottomTabsHeight: 0,
+    },
 };
 
 // export reducer
@@ -62,6 +68,12 @@ export default function (state = initialState, action) {
                     connectionType: action.connectionType,
                     connectionEffectiveType: action.effectiveType,
                 }
+            });
+        }
+
+        case ENVIRONMENT_NAVIGATION_CONSTANTS_CHANGE: {
+            return Object.assign({}, state, {
+                navigation: action.constants,
             });
         }
 

@@ -34,6 +34,7 @@ export default function (props = {}) {
                 key={keyProperty + '-webview'}
                 style={[styles.iframe, { width: width - 32, height: 200 }]}
                 androidHardwareAccelerationDisabled={!Config.webview.hardwareAccelerated}
+                allowsFullscreenVideo={true}
                 mediaPlaybackRequiresUserAction={false}
                 baseUrl={uri}
                 source={{ uri, baseUrl: uri }}

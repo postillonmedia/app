@@ -6,11 +6,10 @@ import groovy.json.JsonSlurper
 buildscript {
     ext {
         buildToolsVersion = "28.0.3"
-        minSdkVersion = 21
+        minSdkVersion = 19
         compileSdkVersion = 28
         targetSdkVersion = 28
         supportLibVersion = "28.0.0"
-        kotlin_version = '1.3.0'
     }
     repositories {
         google()
@@ -22,7 +21,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.1'
+        classpath 'com.android.tools.build:gradle:3.3.2'
         classpath 'com.google.gms:google-services:4.2.0'
         classpath 'com.google.firebase:firebase-plugins:1.1.5'
         classpath 'io.fabric.tools:gradle:1.25.4'
@@ -31,27 +30,18 @@ buildscript {
 
 allprojects {
     repositories {
-        google()
-        mavenCentral()
         mavenLocal()
+        mavenCentral()
+        google()
         jcenter()
         maven {
             // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
             url "$rootDir/../node_modules/react-native/android"
         }
         maven {
-            // Local Maven repo containing AARs with JSC library built for Android
-            url "$rootDir/../node_modules/jsc-android/dist"
-        }
-        maven {
             url 'https://jitpack.io'
         }
     }
-}
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '4.10.2'
-    distributionUrl = distributionUrl.replace("bin", "all")
 }
 
 subprojects { subproject ->
@@ -63,10 +53,17 @@ subprojects { subproject ->
     }
 
     afterEvaluate {
-        project -> if ((subproject.plugins.hasPlugin('android') || subproject.plugins.hasPlugin('android-library'))) {
+        if ((subproject.plugins.hasPlugin('android') || subproject.plugins.hasPlugin('android-library'))) {
             android {
                 compileSdkVersion rootProject.ext.compileSdkVersion
                 buildToolsVersion rootProject.ext.buildToolsVersion
+
+                variantFilter { variant ->
+                    def names = variant.flavors*.name
+                    if (names.contains("reactNative51") || names.contains("reactNative55") || names.contains("reactNative56") || names.contains("reactNative57")) {
+                        setIgnore(true)
+                    }
+                }
             }
         }
     }

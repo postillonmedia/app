@@ -1,7 +1,11 @@
 import React, { PureComponent } from 'react';
-import ReactNative, { Animated, LayoutAnimation, View, Text, TouchableOpacity, FlatList } from 'react-native';
+import ReactNative, { LayoutAnimation, View, Text, TouchableOpacity, FlatList } from 'react-native';
+import Animated, { Easing } from 'react-native-reanimated';
 
-import PropTypes from 'prop-types';
+const {
+    Extrapolate,
+    interpolate,
+} = Animated;
 
 
 export class OnlineArchiveControlView extends PureComponent {
@@ -108,11 +112,17 @@ export class OnlineArchiveControlView extends PureComponent {
         const { position, navigationState, styles, t, selector, year, month } = this.props;
         const { years } = this.state;
 
-        const translateY = position.interpolate({
+        this.translateY = interpolate(position, {
             inputRange: [0, navigationState.routes.length - 1],
             outputRange: [100, 0],
-            extrapolate: 'clamp',
+            extrapolate: Extrapolate.CLAMP,
         });
+
+        // const translateY = position.interpolate({
+        //     inputRange: [0, navigationState.routes.length - 1],
+        //     outputRange: [100, 0],
+        //     extrapolate: 'clamp',
+        // });
 
         const content = [];
 
@@ -151,7 +161,7 @@ export class OnlineArchiveControlView extends PureComponent {
         }
 
         return (
-            <Animated.View style={[styles.container, { transform: [{ translateY }] }]}>
+            <Animated.View style={[styles.container, { transform: [{ translateY: this.translateY }] }]}>
                 {content}
             </Animated.View>
         );

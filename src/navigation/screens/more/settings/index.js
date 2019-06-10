@@ -2,6 +2,7 @@ import { compose } from 'recompose';
 import { connect } from 'react-redux';
 import { ThemeManager, connectStyle } from '@postillon/react-native-theme';
 import { i18n } from '@postillon/react-native-i18n';
+import { Navigation } from 'react-native-navigation';
 
 import { Themes } from '../../../../constants/themes';
 import styles from './styles';
@@ -55,20 +56,23 @@ const SettingsScreen = compose(
 
     i18n('settings', {
         callback: (locale, t, props) => {
-            const { navigator } = props;
+            const { componentId } = props;
 
-            navigator.setTitle({
-                title: t('title'),
+            Navigation.mergeOptions(componentId, {
+                topBar: {
+                    title: {
+                        text: t('title'),
+                    }
+                }
             });
         }
     }),
 
     connectStyle('screen.more.settings', {
         callback: (theme, props) => {
-            const { defaults: style } = ThemeManager.getStyleSheetForComponent('screens', theme);
-            const { navigator } = props;
+            const { componentId } = props;
 
-            navigator.setStyle(style);
+            Navigation.mergeOptions(componentId, SettingsScreenView.options(props));
         }
     }),
 

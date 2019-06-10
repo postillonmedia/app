@@ -1,5 +1,5 @@
 import NetInfo from "@react-native-community/netinfo";
-
+import { Navigation } from 'react-native-navigation';
 
 import { all, take, put, call, select } from 'redux-saga/effects';
 
@@ -7,7 +7,7 @@ import { connectedChangeEmitter } from './emitters/connected';
 import { connectivityChangeEmitter } from './emitters/connectivity';
 import { dimensionChangeEmitter } from './emitters/dimensions';
 
-import { dimensionChange, networkConnectedChange, networkConnectivityChange } from './../actions/environment';
+import { dimensionChange, networkConnectedChange, networkConnectivityChange, navigationConstantsChange } from './../actions/environment';
 import { getScreenEnvironment, getWindowEnvironment } from '../selectors/environment';
 
 
@@ -28,6 +28,15 @@ function* initializeConnected() {
     try {
         const isConnected = yield call([NetInfo.isConnected, NetInfo.isConnected.fetch]);
         yield put(networkConnectedChange(isConnected));
+    } catch (e) {
+        console.error(e);
+    }
+}
+
+function* initializeNavigationConstants() {
+    try {
+        const constants = yield call([Navigation, Navigation.constants]);
+        yield put(navigationConstantsChange(constants));
     } catch (e) {
         console.error(e);
     }
@@ -90,5 +99,6 @@ export default function* environmentSaga() {
         // execute once
         initializeConnected(),
         initializeConnectivity(),
+        initializeNavigationConstants(),
     ]);
 }

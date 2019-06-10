@@ -25,15 +25,16 @@ export default function (props = {}) {
 
     return (
         <OtherMediaContainer
+            key={keyProperty}
             renderOfflineComponent={() => <OtherOfflineIndicator />}
         >
             <AutoHeightWebView
-                key={keyProperty}
                 style={[styles.iframe, { width: width - 32, backgroundColor: constants.colors.monochrome.white4}]}
                 androidHardwareAccelerationDisabled={!Config.webview.hardwareAccelerated}
                 baseUrl={baseUrl}
                 source={{ html, baseUrl }}
                 useWebKit={true}
+                allowsFullscreenVideo={true}
                 javaScriptEnabled={true}
                 domStorageEnabled={true}
                 originWhitelist={['*']}

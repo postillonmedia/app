@@ -1,12 +1,17 @@
 import React, { PureComponent } from 'react';
 import ReactNative, { BackHandler, View } from 'react-native';
-import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
+import { Navigation } from 'react-native-navigation';
+import { TabView, TabBar, SceneMap, } from 'react-native-tab-view';
+import Animated, { Easing } from 'react-native-reanimated';
+import { ThemeManager } from '@postillon/react-native-theme';
 
-import * as GestureHandler from 'react-native-gesture-handler';
 
 import FeatherIcon from 'react-native-vector-icons/Feather';
 
-import Pager from './Pager';
+import merge from "deepmerge";
+
+import { Themes } from '../../../constants/themes';
+import { getLocalizedString, Icons } from '../../../App';
 
 import OfflineArchive from './tabs/offline';
 import OnlineArchive from './tabs/online';
@@ -14,6 +19,27 @@ import OnlineArchiveControl from './tabs/online/control';
 
 
 export class ArchiveScreen extends PureComponent {
+
+    static options(passProps) {
+        const { theme = Themes.DEFAULT, locale } = passProps;
+        const { defaults: screenStyle } = ThemeManager.getStyleSheetForComponent('screens', theme);
+
+        return merge(screenStyle, {
+            topBar: {
+                visible: false,
+                drawBehind: true,
+                hideOnScroll: false,
+            },
+
+            bottomTab: {
+                text: getLocalizedString(locale,'archive'),
+                icon: Icons.bookmark,
+                testID: 'TAB_ARCHIVE'
+            }
+        });
+    };
+
+    position = new Animated.Value(0);
 
     constructor(props, context) {
         super(props, context);
@@ -39,27 +65,27 @@ export class ArchiveScreen extends PureComponent {
             ],
         };
 
-        navigator.setOnNavigatorEvent(this.onNavigatorEvent);
+        Navigation.events().bindComponent(this);
+    }
+
+    componentDidAppear() {
+        BackHandler.addEventListener('hardwareBackPress', this.onBackPressed);
+    }
+
+    componentDidDisappear() {
+        BackHandler.removeEventListener('hardwareBackPress', this.onBackPressed);
     }
 
     onBackPressed = () => {
-        const { navigator } = this.props;
+        const { componentId } = this.props;
 
-        navigator.switchToTab({
-            tabIndex: 0,
+        Navigation.mergeOptions(componentId, {
+            bottomTabs: {
+                currentTabIndex: 0,
+            }
         });
 
         return true;
-    };
-
-    onNavigatorEvent = (event) => {
-        const { id } = event;
-
-        if (id === 'willAppear') {
-            BackHandler.addEventListener('hardwareBackPress', this.onBackPressed);
-        } else if (id === 'willDisappear') {
-            BackHandler.removeEventListener('hardwareBackPress', this.onBackPressed);
-        }
     };
 
     _handleIndexChange = index => this.setState({
@@ -83,42 +109,36 @@ export class ArchiveScreen extends PureComponent {
     };
 
     _renderScene = ({ route }) => {
-        const { navigator } = this.props;
+        const { componentId } = this.props;
 
         switch (route.key) {
             case 'offline':
-                return <OfflineArchive navigator={navigator} />;
+                return <OfflineArchive componentId={componentId} />;
             case 'online':
-                return <OnlineArchive navigator={navigator} />;
+                return <OnlineArchive componentId={componentId} />;
             default:
                 return null;
         }
-    };
-
-    _renderPager = props => {
-        return (
-            <View style={{ flex: 1}}>
-                <Pager {...props} GestureHandler={GestureHandler} swipeMinDeltaX={30} />
-
-                <OnlineArchiveControl {...props} />
-            </View>
-        )
     };
 
     render() {
         const { styles } = this.props;
 
         return (
-            <TabView
-                style={styles.tabs}
-                navigationState={this.state}
-                renderScene={this._renderScene}
-                renderTabBar={this._renderHeader}
-                renderPager={this._renderPager}
-                onIndexChange={this._handleIndexChange}
-                initialLayout={this.initialLayout}
-                useNativeDriver={true}
-            />
+            <View style={{ flex: 1}}>
+                <TabView
+                    style={styles.tabs}
+                    navigationState={this.state}
+                    renderScene={this._renderScene}
+                    renderTabBar={this._renderHeader}
+
+                    position={this.position}
+                    onIndexChange={this._handleIndexChange}
+                    initialLayout={this.initialLayout}
+                />
+
+                <OnlineArchiveControl navigationState={this.state} position={this.position} />
+            </View>
         );
     }
 

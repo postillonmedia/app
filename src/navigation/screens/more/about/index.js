@@ -1,6 +1,7 @@
 import { compose } from 'recompose';
 import { ThemeManager, connectStyle } from '@postillon/react-native-theme';
 import { i18n } from '@postillon/react-native-i18n';
+import { Navigation } from 'react-native-navigation';
 
 import { Themes } from '../../../../constants/themes';
 import styles from './styles';
@@ -15,22 +16,13 @@ ThemeManager.addStyleSheet(styles.defaultStyles, 'screen.more.abaout', Themes.DE
 
 const AboutScreen = compose(
 
-    i18n('about', {
-        callback: (locale, t, props) => {
-            const { navigator } = props;
-
-            navigator.setTitle({
-                title: t('title'),
-            });
-        }
-    }),
+    i18n('about'),
 
     connectStyle('screen.more.abaout', {
         callback: (theme, props) => {
-            const { defaults: style } = ThemeManager.getStyleSheetForComponent('screens', theme);
-            const { navigator } = props;
+            const { componentId } = props;
 
-            navigator.setStyle(style);
+            Navigation.mergeOptions(componentId, AboutScreenView.options(props));
         }
     }),
 
