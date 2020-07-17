@@ -5,7 +5,7 @@ import ReactNative, {
     FlatList,
     RefreshControl,
     Share,
-    View
+    View,
 } from 'react-native';
 
 import { Navigation } from 'react-native-navigation';
@@ -15,7 +15,7 @@ import LinearGradient from 'react-native-linear-gradient';
 
 import { debounce } from '../../../utils/util';
 import { Config } from '../../../constants';
-import { Stacks } from "../../../App";
+import { Stacks } from '../../../App';
 
 import Article from '../../../realm/schemas/article';
 
@@ -28,9 +28,7 @@ import ModalArchiveAdd from '../../../navigation/modals/archive/add';
 import ModalArchiveRemove from '../../../navigation/modals/archive/remove';
 import ModalStateContainer from '../../../components/modalstatecontainer';
 
-
 export class ListScreen extends Component {
-
     static propTypes = {
         blogId: PropTypes.string.isRequired,
         category: PropTypes.string,
@@ -50,8 +48,6 @@ export class ListScreen extends Component {
         styles: PropTypes.object.isRequired,
     };
 
-
-
     modalArchiveAdd = null;
     modalArchiveRemove = null;
 
@@ -59,13 +55,23 @@ export class ListScreen extends Component {
         super(props, context);
 
         // debounce navigation functions
-        this.handleSearchPressed = debounce(this.handleSearchPressed, Config.debounce.navigation, this);
-        this.handleArticlePressed = debounce(this.handleArticlePressed, Config.debounce.navigation, this);
+        this.handleSearchPressed = debounce(
+            this.handleSearchPressed,
+            Config.debounce.navigation,
+            this,
+        );
+        this.handleArticlePressed = debounce(
+            this.handleArticlePressed,
+            Config.debounce.navigation,
+            this,
+        );
 
-        const { width } = props;
+        const { initializeCategory, blogId, category, width } = props;
 
         Navigation.events().bindComponent(this);
-        Navigation.events().registerBottomTabSelectedListener(this.bottomTabSelected.bind(this));
+        Navigation.events().registerBottomTabSelectedListener(
+            this.bottomTabSelected.bind(this),
+        );
 
         this.state = {
             numColumns: this.getNumColumns(width),
@@ -74,10 +80,6 @@ export class ListScreen extends Component {
             isModalArchiveAddVisible: false,
             isModalArchiveRemoveVisible: false,
         };
-    }
-
-    componentWillMount() {
-        const { initializeCategory, blogId, category } = this.props;
 
         initializeCategory(blogId, category);
     }
@@ -89,9 +91,8 @@ export class ListScreen extends Component {
         const nextWidth = nextProps.width;
 
         if (width !== nextWidth) {
-            partialState['numColumns'] = this.getNumColumns(nextWidth);
+            partialState.numColumns = this.getNumColumns(nextWidth);
         }
-
 
         const page = this.props.page;
         const nextPage = nextProps.page;
@@ -100,14 +101,16 @@ export class ListScreen extends Component {
             if (nextPage.pageNumber) {
                 const length = nextPage.pageNumber * 10;
 
-                partialState['articles'] = this.getArticleSource().slice(0, length);
+                partialState.articles = this.getArticleSource().slice(
+                    0,
+                    length,
+                );
             }
         } else if (!nextPage) {
             const { initializeCategory, blogId, category } = nextProps;
 
             initializeCategory(blogId, category);
         }
-
 
         const locale = this.props.locale;
         const nextLocale = nextProps.locale;
@@ -118,7 +121,6 @@ export class ListScreen extends Component {
             initializeCategory(blogId, category);
         }
 
-
         // set state if the above code has something in the state
         if (partialState.numColumns || partialState.articles) {
             this.setState(partialState);
@@ -126,19 +128,23 @@ export class ListScreen extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-
         // state
         const { articles: nextData, numColumns: nextNumColumns } = nextState;
-        const { articles: currentData, numColumns: currentNumColumns } = this.state;
+        const {
+            articles: currentData,
+            numColumns: currentNumColumns,
+        } = this.state;
 
-        if (((nextData && nextData.length) || 0) > ((currentData && currentData.length) || 0)) {
+        if (
+            ((nextData && nextData.length) || 0) >
+            ((currentData && currentData.length) || 0)
+        ) {
             return true;
         }
 
         if (nextNumColumns !== currentNumColumns) {
             return true;
         }
-
 
         // props
         const { locale: nextLocale, page: nextPage = {} } = nextProps;
@@ -147,7 +153,6 @@ export class ListScreen extends Component {
         if (nextLocale !== currentLocale) {
             return true;
         }
-
 
         const {
             isReloading: nextIsReloading = false,
@@ -162,15 +167,19 @@ export class ListScreen extends Component {
             isLoading = false,
             isFetching = false,
 
-            lastArticleProcessing = 0
+            lastArticleProcessing = 0,
         } = currentPage;
 
-        if (nextIsReloading !== isReloading || nextIsLoading !== isLoading || nextIsFetching !== isFetching || nextLastArticleProcessing > lastArticleProcessing) {
+        if (
+            nextIsReloading !== isReloading ||
+            nextIsLoading !== isLoading ||
+            nextIsFetching !== isFetching ||
+            nextLastArticleProcessing > lastArticleProcessing
+        ) {
             return true;
         }
 
         return false;
-
     }
 
     navigationButtonPressed({ buttonId }) {
@@ -190,12 +199,12 @@ export class ListScreen extends Component {
         }
     }
 
-    getNumColumns = (width) => ~~(width / 275) || 1;
+    getNumColumns = width => ~~(width / 275) || 1;
 
     getArticleSource = () => {
         const { page } = this.props;
 
-        return page && page.articles || [];
+        return (page && page.articles) || [];
     };
 
     handleSearchPressed = () => {
@@ -210,17 +219,17 @@ export class ListScreen extends Component {
                     blogId,
                     theme,
                     locale,
-                }
-            }
+                },
+            },
         });
     };
 
-    handleArticlePressed = (article) => {
+    handleArticlePressed = article => {
         const { componentId, theme, locale, category, blogId } = this.props;
 
         Navigation.push(componentId, {
             component: {
-                name: 'postillon.article.Single',
+                name: 'postillon.article.Series',
                 passProps: {
                     blogId,
                     category,
@@ -229,19 +238,20 @@ export class ListScreen extends Component {
                     theme,
                     locale,
                 },
-            }
+            },
         });
     };
 
-    handleArticleLongPressed = (article) => {
-        article && Share.share({
-            message: article.url,
-            url: article.url,
-            title: article.title,
-        });
+    handleArticleLongPressed = article => {
+        article &&
+            Share.share({
+                message: article.url,
+                url: article.url,
+                title: article.title,
+            });
     };
 
-    handleArticleArchivePressed = (article) => {
+    handleArticleArchivePressed = article => {
         if (Article.isArchivated(article)) {
             this.modalArchiveRemove.open({
                 id: article.id,
@@ -254,15 +264,16 @@ export class ListScreen extends Component {
     };
 
     handleRefresh = () => {
-        const { reloadCategory, blogId, category, navigator } = this.props;
+        const { reloadCategory, blogId, category, componentId } = this.props;
 
         reloadCategory(blogId, category);
 
-        // TODO: reset badge of the Home screen on it's refresh
-        // !category && navigator.setTabBadge({
-        //     tabIndex: 0,
-        //     badge: null,
-        // });
+        // reset badge of the Home screen on it's refresh
+        Navigation.mergeOptions(componentId, {
+            bottomTab: {
+                badge: null,
+            },
+        });
     };
 
     handleFetchNext = () => {
@@ -271,17 +282,15 @@ export class ListScreen extends Component {
         endReached(blogId, category);
     };
 
-
-
     /******************************************************************************/
     /******************************* LIST  - Rendering ****************************/
     /******************************************************************************/
 
-    refList = (ref) => this.list = ref;
+    refList = ref => (this.list = ref);
 
     keyExtractor = (items, index) => items.id || index;
 
-    renderItem = ({item}) => (
+    renderItem = ({ item }) => (
         <ArticleCard
             article={item}
             onPress={this.handleArticlePressed}
@@ -293,12 +302,15 @@ export class ListScreen extends Component {
     renderEmptyListComponent = () => {
         const { page, styles, t } = this.props;
 
-        const isFetchingData = (page && (page.isFetching || page.isReloading)) || false;
+        const isFetchingData =
+            (page && (page.isFetching || page.isReloading)) || false;
 
         if (!isFetchingData) {
             return (
                 <View style={styles.emptyListContainer}>
-                    <Text style={[styles.text, styles.heading]}>¯\_(ツ)_/¯</Text>
+                    <Text style={[styles.text, styles.heading]}>
+                        ¯\_(ツ)_/¯
+                    </Text>
                     <Text style={styles.text}>{t('emptySubtext')}</Text>
                 </View>
             );
@@ -306,7 +318,6 @@ export class ListScreen extends Component {
             return null;
         }
     };
-
 
     renderListFooter = () => {
         const { page, isConnected, styles, constants, t } = this.props;
@@ -316,16 +327,30 @@ export class ListScreen extends Component {
         if (!isConnected) {
             return (
                 <View style={styles.listFooter}>
-                    <LinearGradient colors={constants.colors.gradient.highlighted} style={styles.listFooterNotConnected}>
-                        <Text style={styles.listFooterNotConnectedText}>{t('listFooterNotConnected')}</Text>
-                        <Feather size={26} color={constants.colors.text.negative} name={'wifi-off'} style={styles.listFooterNotConnectedIcon} />
+                    <LinearGradient
+                        colors={constants.colors.gradient.highlighted}
+                        style={styles.listFooterNotConnected}
+                    >
+                        <Text style={styles.listFooterNotConnectedText}>
+                            {t('listFooterNotConnected')}
+                        </Text>
+                        <Feather
+                            size={26}
+                            color={constants.colors.text.negative}
+                            name={'wifi-off'}
+                            style={styles.listFooterNotConnectedIcon}
+                        />
                     </LinearGradient>
                 </View>
             );
         } else if (isLoadingData) {
             return (
                 <View style={styles.listFooter}>
-                    <ActivityIndicator animating={true} size={'large'} color={constants.colors.activityIndicator} />
+                    <ActivityIndicator
+                        animating={true}
+                        size={'large'}
+                        color={constants.colors.activityIndicator}
+                    />
                 </View>
             );
         } else {
@@ -343,12 +368,12 @@ export class ListScreen extends Component {
                 onRefresh={this.handleRefresh}
                 tintColor={constants.colors.refreshControl.tintColor}
                 colors={constants.colors.refreshControl.colors}
-                progressBackgroundColor={constants.colors.refreshControl.background}
+                progressBackgroundColor={
+                    constants.colors.refreshControl.background
+                }
             />
         );
     };
-
-
 
     /******************************************************************************/
     /******************************* RENDERING ************************************/
@@ -363,22 +388,16 @@ export class ListScreen extends Component {
                 <View style={styles.container}>
                     <FlatList
                         key={blogId + category + numColumns}
-
                         data={articles}
                         renderItem={this.renderItem}
-
                         keyExtractor={this.keyExtractor}
-
                         numColumns={numColumns}
                         windowSize={5}
                         maxToRenderPerBatch={5}
                         removeClippedSubviews={true}
-
                         refreshControl={this.renderRefreshControl()}
-
                         ListEmptyComponent={this.renderEmptyListComponent}
                         ListFooterComponent={this.renderListFooter}
-
                         ListHeaderComponent={<View />}
                         ListHeaderComponentStyle={{ height: topBarHeight }}
                         onEndReached={this.handleFetchNext}
@@ -386,8 +405,14 @@ export class ListScreen extends Component {
 
                     <InfoBar error={page && page.error} />
 
-                    <ModalStateContainer ref={modal => (this.modalArchiveAdd = modal)} modal={<ModalArchiveAdd />} />
-                    <ModalStateContainer ref={modal => (this.modalArchiveRemove = modal)} modal={<ModalArchiveRemove />} />
+                    <ModalStateContainer
+                        ref={modal => (this.modalArchiveAdd = modal)}
+                        modal={<ModalArchiveAdd />}
+                    />
+                    <ModalStateContainer
+                        ref={modal => (this.modalArchiveRemove = modal)}
+                        modal={<ModalArchiveRemove />}
+                    />
                 </View>
             );
         } else {
@@ -400,7 +425,6 @@ export class ListScreen extends Component {
             );
         }
     }
-
 }
 
 export default ListScreen;

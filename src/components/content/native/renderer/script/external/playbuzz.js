@@ -1,10 +1,10 @@
 import React from 'react';
-import ReactNative, { ActivityIndicator } from 'react-native';
+import ReactNative, { ActivityIndicator, Platform } from 'react-native';
 
 import { DomUtils } from 'htmlparser2';
 
 import AutoHeightWebView from 'react-native-autoheight-webview';
-import { InAppBrowser } from '@matt-block/react-native-in-app-browser';
+import { InAppBrowser } from '../../../../../../utils/util';
 
 import { Config } from '../../../../../../constants';
 
@@ -28,7 +28,23 @@ export default function (props = {}, context) {
         const html = '<!DOCTYPE html><html lang="de"><head><title>PlayBuzz-Wrapper</title></head><body>' + divHtml + '<script type="text/javascript" src="' + src + '"></script></body></html>';
 
         const handleShouldStartLoadWithRequest = request => {
-            InAppBrowser.open(request.url, constants.styles.customTabs);
+            if (request.url === 'about:blank') {
+                return true;
+            }
+
+            if (request.url === baseUrl) {
+                // On iOS the loading of the article request must be allowed.
+                return Platform.OS === 'ios';
+            } else {
+                // if the url is not the article, open the url in the in-app-browser
+                console.warn(request.url);
+
+                if (request.url.indexOf('cookie') >= 0) {
+                    return false;
+                }
+
+                InAppBrowser.open(request.url);
+            }
 
             return false;
         };
@@ -41,6 +57,8 @@ export default function (props = {}, context) {
                 <AutoHeightWebView
                     style={[styles.iframe, { width: width - 32, backgroundColor: constants.colors.monochrome.white4 }]}
                     androidHardwareAccelerationDisabled={!Config.webview.hardwareAccelerated}
+                    bounces={false}
+                    scrollEnabled={false}
                     baseUrl={baseUrl}
                     source={{ html, baseUrl }}
                     useWebKit={true}

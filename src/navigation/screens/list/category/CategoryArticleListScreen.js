@@ -1,3 +1,4 @@
+import { Platform } from 'react-native';
 import { ThemeManager } from '@postillon/react-native-theme';
 
 import merge from 'deepmerge';
@@ -5,8 +6,7 @@ import merge from 'deepmerge';
 import { Icons } from '../../../../App';
 import { Themes } from '../../../../constants/themes';
 
-import ListScreen from "../ListScreen";
-
+import ListScreen from '../ListScreen';
 
 export class CategoryArticleListScreen extends ListScreen {
 
@@ -19,7 +19,7 @@ export class CategoryArticleListScreen extends ListScreen {
                 visible: true,
                 animate: true,
                 hideOnScroll: true,
-                drawBehind: true,
+                drawBehind: Platform.OS !== 'ios',
 
                 backButton: {
                     visible: true,
@@ -32,10 +32,10 @@ export class CategoryArticleListScreen extends ListScreen {
                         icon: Icons.search,
 
                         // iOS
-                        systemItem: 'search'
-                    }
+                        systemItem: 'search',
+                    },
                 ],
-            }
+            },
         });
     }
 

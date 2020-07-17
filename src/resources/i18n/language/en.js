@@ -73,6 +73,7 @@ export default {
         settings: 'Article settings',
         loading: 'Article is loading',
         more: 'More articles',
+        ad: 'Advertisment',
         comments: 'Comments',
         commentsLoad: 'Load comments',
         commentsLoadAlways: 'Always load automatically',
@@ -97,12 +98,6 @@ export default {
 
         shopillon: 'Shopillon',
         support_with_monthly_subscription: 'Monthly subscription via Steady',
-        support_with_single_gift: 'Single payment',
-        support_with_single_gift_modal_intro: 'You can donate to The Postillon with the following bank details:',
-        support_with_single_gift_modal_bankinfo: 'Der Postillon\nAccount Number: 40444028\nBank Code: 762 500 00 (Sparkasse Fürth)\nIBAN: DE90762500000040444028\nBIC: BYLADEM1SFU\nSubject: Spende Postillon',
-        support_with_single_gift_modal_bankinfo_copied: 'Bank details copied to clipboard.',
-        support_with_single_gift_modal_paypal: 'or simply online with PayPal:',
-        support_with_single_gift_modal_paypal_spend: 'Donate with PayPal',
         support_with_ad: 'Ads on the Postillon',
         support_watch_ad: 'Watch Ad',
         support_watch_ad_failed: 'Sorry, we can not show you any ads right now.',
@@ -263,6 +258,7 @@ export default {
         state: 'State',
         plan: 'Plan',
         costs: 'Cost',
+        costsPerMonth: '%s € / month',
 
         btnClose: 'Close',
         btnLogout: 'Log out',

@@ -2,7 +2,7 @@
  * Created by Kptn-Seb on 7.02.2018.
  */
 
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 
 import { DarkTheme } from '../../../constants/themes';
 
@@ -10,7 +10,10 @@ import { DarkTheme } from '../../../constants/themes';
 const controls = {
     height: 50,
 
-    margin: 16,
+    margin: Platform.select({
+        ios: 0,
+        android: 16,
+    }),
 };
 
 export const styles = StyleSheet.create({
@@ -28,6 +31,11 @@ export const styles = StyleSheet.create({
         alignSelf: 'center',
 
         ...controls,
+
+        marginBottom: Platform.select({
+            ios: 32,
+            android: 16,
+        }),
 
         backgroundColor: DarkTheme.colors.bg.lighter,
         borderRadius: controls.height / 2,
@@ -93,10 +101,15 @@ export const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-
-    recommendationsContainer: {
-        marginTop: 32,
+    adIndicator: {
+        ...DarkTheme.styles.text.ui,
+        color: DarkTheme.colors.text.secondary,
+        fontSize: 10,
+        marginTop: 3,
     },
+
+    // recommendations
+    // no styles
 
     // settings
     settingsModal: {

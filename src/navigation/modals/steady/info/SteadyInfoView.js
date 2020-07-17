@@ -38,13 +38,11 @@ export class SteadyInfoView extends PureComponent {
                     </View>
                     <View style={styles.detail}>
                         <Text style={styles.text}>{t('plan')}:</Text>
-                    </View>
-                    <View style={[styles.detail, styles.planDescription]}>
                         <Text style={styles.text} numberOfLines={4}>{subscription.planName}</Text>
                     </View>
                     <View style={styles.detail}>
                         <Text style={styles.text}>{t('costs')}:</Text>
-                        <Text style={styles.text} numberOfLines={1}>{costs} € / Monat</Text>
+                        <Text style={styles.text} numberOfLines={1}>{t('costsPerMonth', [costs])}</Text>
                     </View>
                 </View>
             );
@@ -79,20 +77,20 @@ export class SteadyInfoView extends PureComponent {
                     <Text style={[styles.text, styles.section]}>{t('subscription')}</Text>
                     {this.renderSubscription()}
                 </ScrollView>
-                
+
                 <View style={styles.buttons}>
-                    
+
                     <TouchableOpacity onPress={this.handleCancelPress} style={styles.button}>
                         <Text style={styles.buttonText}>{t('btnClose')}</Text>
                     </TouchableOpacity>
-                    
+
                     <TouchableOpacity onPress={this.handleLogoutPress} style={[styles.button, styles.buttonEmphasized]}>
                         <Feather style={styles.buttonIconPrimary} name={'log-out'} /><Text style={styles.buttonTextPrimary}>{t('btnLogout')}</Text>
                     </TouchableOpacity>
-                    
+
                 </View>
 
-                
+
             </View>
         );
     }

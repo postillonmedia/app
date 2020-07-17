@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import ReactNative, { ActivityIndicator, FlatList, Text, TouchableOpacity, View } from 'react-native';
+import ReactNative, { ActivityIndicator, FlatList, Platform, Text, TouchableOpacity, View } from 'react-native';
 import { Navigation } from 'react-native-navigation';
 
 import merge from 'deepmerge';
@@ -11,32 +11,41 @@ import { Icons } from './../../../App';
 import { getCategoriesByLocale } from '../../../constants/categories';
 import { Periods, NoFilter } from '../../../constants/periods';
 
-import { SmallArticleCard } from './../../../components/card'
-import { ThemeManager } from "@postillon/react-native-theme";
-import { Config } from "../../../constants";
-import { debounce } from "../../../utils/util";
-import { Themes } from "../../../constants/themes";
-
+import { SmallArticleCard } from './../../../components/card';
+import { ThemeManager } from '@postillon/react-native-theme';
+import { Config } from '../../../constants';
+import { debounce } from '../../../utils/util';
+import { Themes } from '../../../constants/themes';
 
 export class SearchScreen extends PureComponent {
 
     static options(passProps) {
         const { theme = Themes.DEFAULT } = passProps;
-        const { search: style } = ThemeManager.getStyleSheetForComponent('screens', theme);
+        const { search: style } = ThemeManager.getStyleSheetForComponent(
+            'screens',
+            theme,
+        );
 
         return merge(style, {
             topBar: {
                 hideOnScroll: false,
+
+                noBorder: true,
                 elevation: 0,
                 borderHeight: 0,
 
-                backButton: undefined,
+                backButton: Platform.select({
+                    android: undefined,
+                    ios: {
+                        visible: false,
+                    },
+                }),
 
                 title: {
                     component: {
                         name: 'postillon.navbars.Search',
                         alignment: 'fill',
-                    }
+                    },
                 },
 
                 leftButtons: [],
@@ -46,14 +55,14 @@ export class SearchScreen extends PureComponent {
                         icon: Icons.close,
 
                         // iOS
-                        systemItem: 'cancel'
-                    }
+                        systemItem: 'cancel',
+                    },
                 ],
             },
             bottomTabs: {
                 visible: false,
                 drawBehind: true,
-            }
+            },
         });
     }
 

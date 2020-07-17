@@ -3,11 +3,10 @@ import PropTypes from 'prop-types';
 import ReactNative, {
     ActivityIndicator,
     BackHandler,
-    Clipboard,
     View,
     Text,
-    Image,
     Modal,
+    Platform,
     ScrollView,
     TouchableOpacity,
     TouchableWithoutFeedback,
@@ -16,15 +15,14 @@ import ReactNative, {
 import merge from 'deepmerge';
 
 import { Navigation } from 'react-native-navigation';
-// TODO: import Toast from 'react-native-toast-native';
 import Firebase from '../../../utils/firebase';
 
 import { ThemeManager } from '@postillon/react-native-theme';
-import { InAppBrowser } from '@matt-block/react-native-in-app-browser';
+import { InAppBrowser } from '../../../utils/util';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 
 import { onPressHandler } from './../../../utils/util';
-import { debounce } from '../../../utils/util';
+import { debounce, showMessage } from '../../../utils/util';
 import { Config } from '../../../constants';
 import { Themes } from '../../../constants/themes';
 
@@ -59,10 +57,10 @@ export class MoreScreen extends Component {
             },
 
             bottomTab: {
-                text: getLocalizedString(locale,'more'),
+                text: getLocalizedString(locale, 'more'),
                 icon: Icons.more,
-                testID: 'TAB_MORE'
-            }
+                testID: 'TAB_MORE',
+            },
         });
     };
 
@@ -78,7 +76,6 @@ export class MoreScreen extends Component {
         this.handleAboutPress = debounce(this.handleAboutPress, Config.debounce.navigation, this);
 
         this.state = {
-            singleGiftOverviewVisible: false,
             interstitialIsLoading: false,
         };
 
@@ -99,16 +96,10 @@ export class MoreScreen extends Component {
         Navigation.mergeOptions(componentId, {
             bottomTabs: {
                 currentTabIndex: 0,
-            }
+            },
         });
 
         return true;
-    };
-
-    setSingleGiftOverviewVisibility = (visible) => {
-        this.setState({
-            singleGiftOverviewVisible: visible,
-        });
     };
 
     handleBtnSettingsPressed = () => {
@@ -125,25 +116,12 @@ export class MoreScreen extends Component {
                 options: {
                     topBar: {
                         title: {
-                            text: t('settings')
-                        }
-                    }
-                }
-            }
+                            text: t('settings'),
+                        },
+                    },
+                },
+            },
         });
-    };
-
-    handlePaymentInfoLongPress = () => {
-        const { t, constants } = this.props;
-
-        Clipboard.setString(t('support_with_single_gift_modal_bankinfo'));
-
-        // TODO
-        // Toast.show(t('support_with_single_gift_modal_bankinfo_copied'), Toast.SHORT, Toast.CENTER, constants.styles.toast);
-    };
-
-    handlePaymentPaypalPress = () => {
-        this.openCustomTab('https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QJHR9T4Y5NJF6');
     };
 
     handleShopillon = () => {
@@ -151,7 +129,11 @@ export class MoreScreen extends Component {
     };
 
     handleRateAppPress = () => {
-        onPressHandler('market://details?id=com.postillon', this.openCustomTab('https://play.google.com/store/apps/details?id=com.postillon'));
+        if (Platform.OS === 'ios') {
+            onPressHandler('itms-apps://itunes.apple.com/us/app/id1463677419?mt=8', this.openCustomTab('https://apps.apple.com/us/app/der-postillon/id1463677419?ls=1'));
+        } else {
+            onPressHandler('market://details?id=com.postillon', this.openCustomTab('https://play.google.com/store/apps/details?id=com.postillon'));
+        }
     };
 
     handleSupportWithAdPress = () => {
@@ -182,8 +164,7 @@ export class MoreScreen extends Component {
                 });
 
                 advert.on('onAdFailedToLoad', (e) => {
-                    // TODO
-                    // Toast.show(t('support_watch_ad_failed'), Toast.SHORT, Toast.BOTTOM, constants.styles.toast);
+                    showMessage(t('support_watch_ad_failed'));
 
                     this.setState({
                         interstitialIsLoading: false,
@@ -289,9 +270,7 @@ export class MoreScreen extends Component {
     };
 
     openCustomTab = (url) => {
-        const { constants } = this.props;
-
-        InAppBrowser.open(url, constants.styles.customTabs);
+        InAppBrowser.open(url);
     };
 
     render() {
@@ -300,39 +279,7 @@ export class MoreScreen extends Component {
 
         return (
             <ScrollView>
-                <Modal
-                    transparent={true}
-                    animationType={'fade'}
-                    hardwareAccelerated={true}
-                    visible={singleGiftOverviewVisible}
-                    onRequestClose={() => this.setSingleGiftOverviewVisibility(false)}
-                >
-                    <TouchableWithoutFeedback onPress={() => this.setSingleGiftOverviewVisibility(false)}>
-                        <View style={styles.singleGiftContainer}>
-                            <TouchableWithoutFeedback>
-                                <View style={styles.singleGiftInnerContainer}>
-                                    <Text style={styles.text}>{t('support_with_single_gift_modal_intro')}</Text>
-                                    <Text
-                                        style={[styles.text, styles.singleGiftBankInfo]}
-                                        onLongPress={this.handlePaymentInfoLongPress}>
-                                        {t('support_with_single_gift_modal_bankinfo')}
-                                    </Text>
-                                    <Text style={styles.text}>{t('support_with_single_gift_modal_paypal')}</Text>
-                                    <Text
-                                        style={[styles.text, styles.singleGiftPaypal]}
-                                        onPress={this.handlePaymentPaypalPress}
-                                    >
-                                        {t('support_with_single_gift_modal_paypal_spend')}
-                                    </Text>
-                                </View>
-                            </TouchableWithoutFeedback>
-                        </View>
-                    </TouchableWithoutFeedback>
-                </Modal>
-
-
                 <Steady />
-
 
                 <View style={styles.group}>
                     <TouchableOpacity onPress={this.handleBtnSettingsPressed} style={[styles.button, styles.iconContainerInside, styles.settingsButton]}>
@@ -354,10 +301,6 @@ export class MoreScreen extends Component {
                     <TouchableOpacity style={styles.button} onPress={this.handleRateAppPress}>
                         <FeatherIcon style={styles.buttonText} name={'thumbs-up'} size={20} />
                         <Text style={styles.buttonText} numberOfLines={1}>{t('rate')}</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.button} onPress={() => this.setSingleGiftOverviewVisibility(true)}>
-                        <FeatherIcon style={styles.buttonText} name={'gift'} size={20} />
-                        <Text style={styles.buttonText} numberOfLines={1}>{t('support_with_single_gift')}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.button} onPress={this.handleSupportWithAdPress}>
                         <FeatherIcon style={styles.buttonText} name={'crosshair'} size={20} />

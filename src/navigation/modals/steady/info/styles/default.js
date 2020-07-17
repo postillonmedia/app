@@ -86,15 +86,20 @@ export const styles = StyleSheet.create({
     },
 
     buttonText: {
+        ...DefaultTheme.styles.text.modal,
+
         color: DefaultTheme.colors.text.light,
-        fontFamily: 'PTSans-Italic',
     },
     buttonTextSecondary: {
+        ...DefaultTheme.styles.text.modal,
+
         color: DefaultTheme.colors.text.highlighted,
     },
     buttonTextPrimary: {
+        ...DefaultTheme.styles.text.modal,
+
         color: DefaultTheme.colors.text.negative,
-        //  paddingHorizontal: 14,
+        fontFamily: 'FiraSans-Medium',
     },
     buttonIconSecondary: {
         fontSize: 14,

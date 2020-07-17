@@ -11,6 +11,9 @@ import Feather from 'react-native-vector-icons/Feather';
 import Text from '../../../text';
 import { ImageContainer } from '../../../mediacontainer';
 import { getImageUrl } from '../../../../utils/blogger';
+import {Image} from 'react-native-svg';
+
+const defaultImage = require('../../../../resources/images/imageNotFound.png');
 
 export class SmallArticleCardView extends PureComponent {
 
@@ -50,7 +53,7 @@ export class SmallArticleCardView extends PureComponent {
         onDeletePress && onDeletePress(article);
     };
 
-    renderNotOnline = (props) => null;
+    renderNotOnline = (props) => <Image source={defaultImage} />;
 
     renderArchiveButton = () => {
         const { showArchiveButton ,styles, constants } = this.props;
@@ -76,6 +79,7 @@ export class SmallArticleCardView extends PureComponent {
                 <ImageContainer
                     style={styles.image}
                     source={{uri: thumbnail}}
+                    defaultSource={defaultImage}
 
                     renderNotOnlineComponent={this.renderNotOnline}
                 />

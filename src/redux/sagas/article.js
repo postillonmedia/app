@@ -1,7 +1,7 @@
 import { all, call, delay, fork, take, takeEvery, takeLatest, put, race } from 'redux-saga/effects';
 
 import { Parser, DomHandler, DomUtils } from 'htmlparser2';
-import entities from 'entities';
+import * as entities from 'entities';
 import parse from 'url-parse';
 
 import RNFetchBlob from 'rn-fetch-blob';

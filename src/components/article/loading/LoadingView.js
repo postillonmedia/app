@@ -3,7 +3,6 @@ import React, { PureComponent } from 'react';
 import ReactNative, {ActivityIndicator, Text, View} from 'react-native';
 
 
-
 export class ControlsView extends PureComponent {
 
     render() {

@@ -1,20 +1,22 @@
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
-import ReactNative, { ActivityIndicator, Text, TouchableOpacity, View } from 'react-native';
+import ReactNative, { Platform, ActivityIndicator, Text, TouchableOpacity, View } from 'react-native';
+import { Navigation } from 'react-native-navigation';
 
-import { Navigation } from '@postillon/react-native-navigation';
-
-import FeatherIcon from 'react-native-vector-icons/Feather';
 import parse from 'url-parse';
 
 import OtherMediaContainer from '../../mediacontainer/other';
 import OtherOfflineIndicator from '../../offlineIndicator/other';
 import { getBlogByHostname } from '../../../constants/blogs';
 import { Config } from '../../../constants';
+import { Stacks } from '../../../App';
+
+import { InAppBrowser } from '../../../utils/util';
 
 import AutoHeightWebView from 'react-native-autoheight-webview';
-import { InAppBrowser } from '@matt-block/react-native-in-app-browser';
 
+
+const ABOUT_BLANK = 'about:blank';
 
 export class CommentsView extends PureComponent {
 
@@ -38,7 +40,7 @@ export class CommentsView extends PureComponent {
 
         this.state = {
             displayComments: displayCommentsAlways || false,
-        }
+        };
     }
 
     handleLoadCommentsPressed = event => {
@@ -58,53 +60,65 @@ export class CommentsView extends PureComponent {
     };
 
     handleShouldStartLoadWithRequest = request => {
-        const { constants } = this.props;
+        const { articleState } = this.props;
+        const { article } = articleState;
 
+        const parsedArticleUrl = parse(article.url);
         const parsedUrl = parse(request.url);
 
         const hostname = parsedUrl.hostname;
         const path = parsedUrl.pathname;
 
         const blogId = getBlogByHostname(hostname || '');
+        const articleBlogId = getBlogByHostname(parsedArticleUrl.hostname || '');
 
         if (blogId && path.length > 0) {
+            if (blogId === articleBlogId && path === parsedArticleUrl.pathname) {
+                // The current article was matched.
+                // On iOS the loading of this request must be allowed.
+                return Platform.OS === 'ios';
+            }
+
             if (hostname && blogId && path && path !== '/' && !(path[0] === '/' && path[1] === 'p' && path[2] === '/')) {
                 // an article of the Postillon was pressed
 
-                Navigation.handleDeepLink({
-                    link: 'postillon/article',
-                    payload: {
-                        url: request.url,
-                        parsedUrl,
-                        hostname,
-                        path,
-                        blogId,
-                    },
-                });
+                // TODO: point to the right screen
+                // Navigation.handleDeepLink({
+                //     link: 'postillon/article',
+                //     payload: {
+                //         url: request.url,
+                //         parsedUrl,
+                //         hostname,
+                //         path,
+                //         blogId,
+                //     },
+                // });
 
+                // TODO: replace this with a call to Navigation: Need current componentId
+                InAppBrowser.open(request.url);
             } else {
-                InAppBrowser.open(request.url, constants.styles.customTabs);
+                InAppBrowser.open(request.url);
             }
 
             return false;
+        } else if (request.url === ABOUT_BLANK) {
+            return true;
         } else if (hostname === 'disqus.com') {
             if (path.startsWith('/by/') || path.startsWith('/home/')) {
-                InAppBrowser.open(request.url, constants.styles.customTabs);
+                InAppBrowser.open(request.url);
 
                 return false;
             } else {
                 return true;
             }
-        } else if (hostname.endsWith('facebook.com') && (path.startsWith('/dialog/oauth') || path.startsWith('/login'))) {
-            return true;
+        } else if (hostname.endsWith('facebook.com')) {
+            return (path.startsWith('/dialog/oauth') || path.startsWith('/login'));
         } else if (hostname.endsWith('accounts.google.com') && path.includes('/oauth')) {
             return true;
         } else if (hostname === 'api.twitter.com' && path.startsWith('/oauth')) {
             return true;
         } else {
-            const { constants } = this.props;
-
-            InAppBrowser.open(request.url, constants.styles.customTabs);
+            InAppBrowser.open(request.url);
 
             return false;
         }
@@ -169,6 +183,8 @@ export class CommentsView extends PureComponent {
                             style={[styles.commentsWebView, { width: width - 32 }]}
                             androidHardwareAccelerationDisabled={!Config.webview.hardwareAccelerated}
                             allowsFullscreenVideo={true}
+                            bounces={false}
+                            scrollEnabled={false}
                             mediaPlaybackRequiresUserAction={false}
                             baseUrl={article.url}
                             source={{ html, baseUrl: article.url }}

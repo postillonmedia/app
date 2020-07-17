@@ -16,7 +16,7 @@ import AboutScreen from './screens/more/about';
 import ImprintScreen from './screens/more/imprint';
 import PrivacyPolicyScreen from './screens/more/privacypolicy';
 import SingleArticleScreen from './screens/article/single';
-// import SeriesArticleScreen from './screens/article/series';
+import SeriesArticleScreen from './screens/article/series';
 import SearchScreen from './screens/search';
 
 import SearchNavbar from './navbars/search';
@@ -48,7 +48,7 @@ export function registerNavigationComponents(store, Provider) {
     Navigation.registerComponent('postillon.more.Imprint', componentProvider(ImprintScreen), () => ImprintScreen);
     Navigation.registerComponent('postillon.more.PrivacyPolicy', componentProvider(PrivacyPolicyScreen), () => PrivacyPolicyScreen);
     Navigation.registerComponent('postillon.article.Single', componentProvider(SingleArticleScreen), () => SingleArticleScreen);
-    // Navigation.registerComponent('postillon.article.Series', componentProvider(SeriesArticleScreen), () => SeriesArticleScreen);
+    Navigation.registerComponent('postillon.article.Series', componentProvider(SeriesArticleScreen), () => SeriesArticleScreen);
     Navigation.registerComponent('postillon.Search', componentProvider(SearchScreen), () => SearchScreen);
 
     // register navbars

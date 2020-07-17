@@ -5,8 +5,7 @@
 import { StyleSheet } from 'react-native';
 
 import { DarkTheme } from '../../../../constants/themes';
-import { STEP_NUMBER_RADIUS } from "@okgrow/react-native-copilot/src/components/style";
-
+import { STEP_NUMBER_RADIUS } from 'react-native-copilot/src/components/style';
 
 export const styles = StyleSheet.create({
     stepNumber: {

@@ -37,7 +37,7 @@ export class OfflineArchiveView extends PureComponent {
         };
     }
 
-    componentWillMount() {
+    componentDidMount() {
         Articles.ArchivatedArticles.addListener(this.handleArchiveCollectionUpdate);
     }
 

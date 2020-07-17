@@ -19,6 +19,9 @@ import com.android.build.OutputFile
  *   // the entry file for bundle generation
  *   entryFile: "index.android.js",
  *
+ *   // https://facebook.github.io/react-native/docs/performance#enable-the-ram-format
+ *   bundleCommand: "ram-bundle",
+ *
  *   // whether to bundle JS and assets in debug mode
  *   bundleInDebug: false,
  *
@@ -74,13 +77,14 @@ import com.android.build.OutputFile
  */
 
 project.ext.react = [
-    entryFile: "index.js"
+    entryFile: "index.js",
+    enableHermes: false,  // clean and rebuild if changing
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
 
 project.ext.vectoricons = [
-    iconFontNames: [ 'Feather.ttf' ]
+        iconFontNames: [ 'Feather.ttf' ]
 ]
 
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
@@ -100,13 +104,30 @@ def enableSeparateBuildPerCPUArchitecture = true
  */
 def enableProguardInReleaseBuilds = false
 
+/**
+ * The preferred build flavor of JavaScriptCore.
+ *
+ * For example, to use the international variant, you can use:
+ * `def jscFlavor = 'org.webkit:android-jsc-intl:+'`
+ *
+ * The international variant includes ICU i18n library and necessary data
+ * allowing to use e.g. `Date.toLocaleString` and `String.localeCompare` that
+ * give correct results when using with locales other than en-US.  Note that
+ * this variant is about 6MiB larger per architecture than default.
+ */
+def jscFlavor = 'org.webkit:android-jsc:+'
+
+/**
+ * Whether to enable the Hermes VM.
+ *
+ * This should be set on project.ext.react and mirrored here.  If it is not set
+ * on project.ext.react, JavaScript will not be compiled to Hermes Bytecode
+ * and the benefits of using Hermes will therefore be sharply reduced.
+ */
+def enableHermes = project.ext.react.get("enableHermes", false);
+
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
-
-    dexOptions {
-        jumboMode = true
-    }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -123,7 +144,11 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
 
-        missingDimensionStrategy "RNN.reactNativeVersion", "reactNative57_5"
+        missingDimensionStrategy "RNN.reactNativeVersion", "reactNative60"
+    }
+
+    dexOptions {
+        javaMaxHeapSize "3g"
     }
 
     splits {
@@ -134,25 +159,46 @@ android {
             include "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
         }
     }
-
-    buildTypes {
+    signingConfigs {
+        debug {
+            storeFile file('debug.keystore')
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+        }
         release {
+            if (project.hasProperty('POSTILLON_STORE_FILE') && project.hasProperty('POSTILLON_PASSWORD')) {
+                storeFile file(POSTILLON_STORE_FILE)
+                storePassword POSTILLON_PASSWORD
+                keyAlias POSTILLON_KEY_ALIAS
+                keyPassword POSTILLON_PASSWORD
+            }
+        }
+    }
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+        }
+        release {
+            // Caution! In production, you need to generate your own keystore file.
+            // see https://facebook.github.io/react-native/docs/signed-apk-android.
+            signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
-
     // applicationVariants are e.g. debug, release
     applicationVariants.all { variant ->
         variant.outputs.each { output ->
             // For each separate APK per architecture, set a unique version code as described here:
-            // http://tools.android.com/tech-docs/new-build-system/user-guide/apk-splits
-            def versionCodes = ["armeabi-v7a":1, "x86":2, "arm64-v8a": 3, "x86_64": 4 ]
+            // https://developer.android.com/studio/build/configure-apk-splits.html
+            def versionCodes = ["armeabi-v7a": 1, "x86": 2, "arm64-v8a": 3, "x86_64": 4]
             def abi = output.getFilter(OutputFile.ABI)
             if (abi != null) {  // null for the universal-debug, universal-release variants
                 output.versionCodeOverride =
                         versionCodes.get(abi) * 1048576 + defaultConfig.versionCode
             }
+
         }
     }
 }
@@ -160,37 +206,53 @@ android {
 configurations.all {
     resolutionStrategy.eachDependency { DependencyResolveDetails details ->
         def requested = details.requested
-        if (requested.group == 'com.android.support' && !requested.name.startsWith('multidex')) {
+        if (requested.group == 'com.android.support' && requested.name != 'multidex') {
             details.useVersion "${rootProject.ext.supportLibVersion}"
         }
     }
 }
 
 dependencies {
+    /* -------------------------
+     *      ANDROID
+     * ------------------------- */
+
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.0.0'
+
+
+    /* -------------------------
+     *      FACEBOOK
+     * ------------------------- */
+
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation "com.android.support:design:${rootProject.ext.supportLibVersion}"
-    implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
     implementation "com.facebook.react:react-native:+"  // From node_modules
+
+    // AsyncStorage
+    implementation project(':@react-native-community_async-storage')
 
     // Animated GIF support
     implementation "com.facebook.fresco:animated-gif:1.10.0"
     implementation "com.facebook.fresco:webpsupport:1.10.0"
 
-    // Zoomy
-    implementation 'com.ablanco.zoomy:zoomy:1.1.0'
 
-    // Firebase
+    /* -------------------------
+     *      GOOGLE
+     * ------------------------- */
+
+    implementation "com.google.android.gms:play-services-base:16.1.0"
+
+
+    /* -------------------------
+     *      FIREBASE
+     * ------------------------- */
+
     implementation project(":react-native-firebase")
 
     implementation "com.google.firebase:firebase-core:16.0.9"
-    implementation "com.google.android.gms:play-services-base:16.1.0"
-
-    /* -------------------------
-    *   OPTIONAL FIREBASE SDKS
-    * ------------------------- */
 
     // Ads
-    implementation('com.google.firebase:firebase-ads:15.0.1') {
+    implementation('com.google.firebase:firebase-ads:17.2.1') {
         // exclude `customtabs` as the support lib version is out of date
         // we manually add it as a dependency below with a custom version
         exclude group: 'com.android.support', module: 'customtabs'
@@ -203,27 +265,24 @@ dependencies {
     implementation "com.google.firebase:firebase-messaging:18.0.0"
 
     // Crashlytics
-    implementation('com.crashlytics.sdk.android:crashlytics:2.9.5@aar') {
+    implementation('com.crashlytics.sdk.android:crashlytics:2.9.9@aar') {
         transitive = true
     }
 
-    /* --------------------------------
-    *  OPTIONAL SUPPORT LIBS
-    * -------------------------------- */
 
-    // For Firebase Ads
-    implementation "com.android.support:customtabs:27.1.1"
-
-    // For React Native Firebase Notifications
-    implementation 'me.leolin:ShortcutBadger:1.1.21@aar'
+    /* -------------------------
+     *      OTHER
+     * ------------------------- */
 
     // Navigation
     implementation project(':react-native-navigation')
 
+    // Zoomy
+    implementation 'com.ablanco.zoomy:zoomy:1.1.0'
+
     // other NPM packages
     implementation project(":realm")
     implementation project(":rn-fetch-blob")
-    implementation project(":react-native-device-info")
     implementation project(":react-native-svg")
     implementation project(":react-native-linear-gradient")
     implementation project(":react-native-gesture-handler")
@@ -231,10 +290,15 @@ dependencies {
     implementation project(":react-native-vector-icons")
     implementation project(":react-native-popover-menu")
     implementation project(":react-native-webview")
-    implementation project(":@matt-block_react-native-in-app-browser")
-    implementation project(":react-native-navigation-bar-color")
-    implementation project(":react-native-community-slider")
-    implementation project(":react-native-community-netinfo")
+    implementation project(':react-native-inappbrowser-reborn')
+
+    if (enableHermes) {
+        def hermesPath = "../../node_modules/hermes-engine/android/";
+        debugImplementation files(hermesPath + "hermes-debug.aar")
+        releaseImplementation files(hermesPath + "hermes-release.aar")
+    } else {
+        implementation jscFlavor
+    }
 }
 
 // Run this once to be able to run the application with BUCK
@@ -245,3 +309,4 @@ task copyDownloadableDepsToLibs(type: Copy) {
 }
 
 apply plugin: 'com.google.gms.google-services'
+apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)

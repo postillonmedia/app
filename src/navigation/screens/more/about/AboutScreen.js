@@ -4,7 +4,7 @@ import ReactNative, { Linking, ScrollView, View, Text } from 'react-native';
 import merge from 'deepmerge';
 
 import { ThemeManager } from '@postillon/react-native-theme';
-import { InAppBrowser } from '@matt-block/react-native-in-app-browser';
+import { InAppBrowser } from '../../../../utils/util';
 
 import { Themes } from '../../../../constants/themes';
 
@@ -68,9 +68,7 @@ export class AboutScreen extends PureComponent {
     };
 
     openCustomTab = (url) => {
-        const { constants } = this.props;
-
-        InAppBrowser.open(url, constants.styles.customTabs);
+        InAppBrowser.open(url);
     };
 
     renderAppInfo = () => {

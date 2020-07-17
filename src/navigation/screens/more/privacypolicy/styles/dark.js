@@ -6,7 +6,6 @@ import { StyleSheet } from 'react-native';
 
 import { DarkTheme } from '../../../../../constants/themes';
 
-
 export const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -22,7 +21,7 @@ export const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         flexDirection: 'row',
-        justifyContent: 'flex-start',
+        justifyContent: 'space-between',
 
         borderRadius: 5,
         backgroundColor: DarkTheme.colors.bg.lighter,
@@ -37,7 +36,7 @@ export const styles = StyleSheet.create({
     },
 
     linetext: {
-        flex: .8,
+        flex: 0.8,
 
         ...DarkTheme.styles.text.ui,
         color: DarkTheme.colors.text.secondary,
@@ -45,7 +44,7 @@ export const styles = StyleSheet.create({
     },
 
     content: {
-        margin: 16
+        margin: 16,
     },
 
     heading: {

@@ -1,26 +1,12 @@
 /**
  * @format
  */
-import { Navigation } from 'react-native-navigation';
-import { App } from './src/App';
 
+// Fixes crash issues: https://github.com/kmagiera/react-native-gesture-handler/issues/783
+import 'react-native-gesture-handler';
+
+import { App } from './src/App';
 
 const app = App.getInstance();
 
-
 app.start();
-
-
-// import App from "./App";
-//
-// Navigation.registerComponent(`navigation.playground.WelcomeScreen`, () => App);
-//
-// Navigation.events().registerAppLaunchedListener(() => {
-//     Navigation.setRoot({
-//         root: {
-//             component: {
-//                 name: "navigation.playground.WelcomeScreen"
-//             }
-//         }
-//     });
-// });

@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import ReactNative, { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import ReactNative, { Alert, View, Platform, StyleSheet, Text, ToastAndroid, TouchableOpacity } from 'react-native';
 
 // import Toast from 'react-native-toast-native';
 
@@ -13,22 +13,33 @@ export class AddToArchiveView extends PureComponent {
     }
 
     handleArticleToArchiveWithPicturesPress = () => {
-        const { stateManager, id, addArticleToArchiveWithPictures, isConnected, constants, t } = this.props;
+        const { stateManager, id, onAddArticleToArchiveWithPicturesPress, addArticleToArchiveWithPictures, isConnected, constants, t } = this.props;
 
         if (isConnected) {
-            addArticleToArchiveWithPictures(id);
+            if (typeof onAddArticleToArchiveWithPicturesPress === 'function') {
+                onAddArticleToArchiveWithPicturesPress();
+            } else {
+                addArticleToArchiveWithPictures(id);
+            }
 
             stateManager.close();
         } else {
-            // TODO
-            // Toast.show(t('noConnection'), Toast.SHORT, Toast.CENTER, constants.styles.toast);
+            if (Platform.OS === 'android') {
+                ToastAndroid.showWithGravity(t('noConnection'), ToastAndroid.SHORT, ToastAndroid.BOTTOM);
+            } else {
+                Alert.alert(null, t('noConnection'));
+            }
         }
     };
 
     handleArticleToArchiveWithoutPicturesPress = () => {
-        const { stateManager, id, addArticleToArchiveWithoutPictures } = this.props;
+        const { stateManager, id, onAddArticleToArchiveWithoutPicturesPress, addArticleToArchiveWithoutPictures } = this.props;
 
-        addArticleToArchiveWithoutPictures(id);
+        if (typeof onAddArticleToArchiveWithoutPicturesPress === 'function') {
+            onAddArticleToArchiveWithoutPicturesPress();
+        } else {
+            addArticleToArchiveWithoutPictures(id);
+        }
 
         stateManager.close();
     };
@@ -44,15 +55,15 @@ export class AddToArchiveView extends PureComponent {
                 </View>
 
                 <View style={styles.buttons}>
-                    
+
                     <TouchableOpacity onPress={this.handleArticleToArchiveWithoutPicturesPress} style={styles.button}>
                         <Text style={styles.buttonText}>{t('btnDownloadWithoutPictures')}</Text>
                     </TouchableOpacity>
-                    
+
                     <TouchableOpacity onPress={this.handleArticleToArchiveWithPicturesPress} style={[styles.button, isConnected ? styles.buttonEmphasized : styles.buttonDisabled]}>
                         <Feather style={[styles.buttonTextPrimary, styles.buttonIcon]} name={'download'} /><Text style={[styles.buttonText, styles.buttonTextPrimary]}>{t('btnDownloadWithPictures')}</Text>
                     </TouchableOpacity>
-                    
+
                 </View>
             </View>
         );

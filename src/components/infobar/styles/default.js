@@ -9,7 +9,7 @@ import {DarkTheme, DefaultTheme} from '../../../constants/themes';
 export const styles = StyleSheet.create({
     informationIndicator: {
         position: 'absolute',
-        top: 0,
+        bottom: 0,
         left: 0,
         right: 0,
         elevation: 1,
@@ -18,7 +18,6 @@ export const styles = StyleSheet.create({
     informationNotConnected: {
         backgroundColor: DefaultTheme.colors.notifier.info,
         alignItems: 'center',
-
     },
     informationNotConnectedText: {
         color: DefaultTheme.colors.text.negative,

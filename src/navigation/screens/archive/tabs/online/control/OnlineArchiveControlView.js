@@ -99,6 +99,7 @@ export class OnlineArchiveControlView extends PureComponent {
                 style={styles.list}
                 horizontal={true}
                 initialScrollIndex={selected}
+                onScrollToIndexFailed={() => {}}
                 showsHorizontalScrollIndicator={false}
 
                 data={list}
@@ -117,12 +118,6 @@ export class OnlineArchiveControlView extends PureComponent {
             outputRange: [100, 0],
             extrapolate: Extrapolate.CLAMP,
         });
-
-        // const translateY = position.interpolate({
-        //     inputRange: [0, navigationState.routes.length - 1],
-        //     outputRange: [100, 0],
-        //     extrapolate: 'clamp',
-        // });
 
         const content = [];
 

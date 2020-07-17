@@ -4,7 +4,7 @@
 
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import ReactNative, { Image, ImageStore, Platform, Text, View } from 'react-native';
+import ReactNative, { Image, Platform, Text, View } from 'react-native';
 import ImageSourcePropType from 'react-native/Libraries/DeprecatedPropTypes/DeprecatedImageSourcePropType';
 import Thumbnail from './../../thumbnail';
 
@@ -69,21 +69,16 @@ export class ImageContainerView extends PureComponent {
                 if (imagePath) {
                     imagePath = 'file://' + imagePath;
                 }
-
-                // query Android image cache
-                this.queryAndroidImageCache(source.uri);
-            } else {
-                // query iOS image cache
-                this.queryIosImageCache(source.uri);
             }
+
+            // query image cache
+            this.queryImageCache(source.uri);
 
             state = {
                 compatible: isCompatible,
                 cached: null,
                 path: (image.offline && imagePath) || null,
             };
-
-
         } else {
             state = {
                 compatible: isCompatible,
@@ -100,21 +95,13 @@ export class ImageContainerView extends PureComponent {
         }
     };
 
-    queryAndroidImageCache = (uri) => {
+    queryImageCache = (uri) => {
         Image.queryCache([uri])
             .then((cached) => {
                 cached[uri] && this.setState({
                     cached: cached[uri],
                 });
             });
-    };
-
-    queryIosImageCache = (uri) => {
-        ImageStore.hasImageForTag(uri, (cached) => {
-            debugger;
-
-            console.log(cached);
-        })
     };
 
     renderImage = (props) => {
@@ -149,7 +136,7 @@ export class ImageContainerView extends PureComponent {
         const renderImage = renderImageComponent || this.renderImage;
         const renderNotOnline = renderNotOnlineComponent || this.renderNotOnline;
 
-        const imageProps = {
+        let imageProps = {
             ...props,
             source,
 
@@ -162,7 +149,11 @@ export class ImageContainerView extends PureComponent {
                 // app is offline
 
                 if (path) {
-                    imageProps['source']['uri'] = path;
+                    imageProps.source = {
+                        ...imageProps.source,
+
+                        uri: path,
+                    };
 
                     return renderImage(imageProps);
                 } else if (cached) {
@@ -170,25 +161,24 @@ export class ImageContainerView extends PureComponent {
                 } else {
                     return renderNotOnline(imageProps);
                 }
-
             } else {
                 // app is online
 
                 if (path) {
-                    imageProps['source']['uri'] = path;
+                    imageProps.source = {
+                        ...imageProps.source,
+
+                        uri: path,
+                    };
 
                     return renderImage(imageProps);
                 } else {
                     return renderImage(imageProps);
                 }
-
             }
         }
 
-
-
         return renderImage(imageProps);
-
     }
 }
 

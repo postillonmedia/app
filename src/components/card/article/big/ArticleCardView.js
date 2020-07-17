@@ -18,8 +18,6 @@ import Article from '../../../../realm/schemas/article';
 import Thumbnail from '../../../thumbnail';
 
 import { getImageUrl } from '../../../../utils/blogger'
-import * as HTMLRenderer from "../../../content/native/renderer";
-import {IGNORED_TAGS} from "../../../content/native/HTMLUtils";
 
 
 export class ArticleCardView extends PureComponent {
@@ -94,12 +92,16 @@ export class ArticleCardView extends PureComponent {
 
     renderImageComponent = ({source, ...props}) => {
         if (typeof source === 'object' && typeof source.uri === 'string' && source.uri.startsWith('http')) {
-            source.uri = getImageUrl(source.uri, 400);
+            source = {
+                ...source,
+
+                uri: getImageUrl(source.uri, 400),
+            };
         }
 
         return (
             <Image source={source} {...props} />
-        )
+        );
     };
 
     renderArticleImage = () => {

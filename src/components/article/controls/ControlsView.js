@@ -1,14 +1,14 @@
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
-import ReactNative, {ActivityIndicator, Platform, TouchableOpacity, View} from 'react-native';
+import ReactNative, { ActivityIndicator, Platform, TouchableOpacity, View } from 'react-native';
 
-import { walkthroughable, CopilotStep } from '@okgrow/react-native-copilot';
+import { walkthroughable, CopilotStep } from 'react-native-copilot';
 
 import FeatherIcon from 'react-native-vector-icons/Feather';
 
-import Article from "../../../realm/schemas/article";
+import Article from '../../../realm/schemas/article';
 
-const CopilotTouchableOpacity = walkthroughable(TouchableOpacity);
+const CopilotTouchableOpacity = Platform.OS === 'ios' ? TouchableOpacity : walkthroughable(TouchableOpacity);
 
 
 export class ControlsView extends PureComponent {

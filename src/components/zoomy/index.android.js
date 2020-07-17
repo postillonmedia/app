@@ -1,14 +1,11 @@
-import PropTypes from "prop-types";
-import { requireNativeComponent, ViewPropTypes } from "react-native";
+import PropTypes from 'prop-types';
+import { requireNativeComponent, ViewPropTypes } from 'react-native';
 
 const zoomy = {
-    name: "Zoomy",
+    name: 'Zoomy',
     propTypes: {
-        ...ViewPropTypes
-    }
+        ...ViewPropTypes,
+    },
 };
 
-export const Zoomy = requireNativeComponent(
-    "RCTZoomy",
-    zoomy
-);
+export const Zoomy = requireNativeComponent('RCTZoomy', zoomy);

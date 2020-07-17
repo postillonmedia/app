@@ -2,7 +2,7 @@
  * Created by DanielL on 06.04.2017.
  */
 
-import DeviceInfo from 'react-native-device-info';
+import * as RNLocalize from 'react-native-localize';
 
 export const LANGUAGE_DE = 'de';
 export const LANGUAGE_EN = 'en';
@@ -13,8 +13,12 @@ const languages = {
 };
 export const LANGUAGES = languages;
 
-const deviceLocale = DeviceInfo.getDeviceLocale();
-export const LANGUAGE_DEVICE = deviceLocale.slice(0, deviceLocale.indexOf('-'));
+const deviceLocales = RNLocalize.getLocales();
+export const LANGUAGE_DEVICE =
+  deviceLocales &&
+  deviceLocales.length &&
+  deviceLocales.length > 0 &&
+  deviceLocales[0].languageCode;
 
 export const LANGUAGE_DEVICE_APP_COMPATIBLE = (typeof languages[LANGUAGE_DEVICE] !== 'undefined' ? languages[LANGUAGE_DEVICE] : LANGUAGE_DE);
 

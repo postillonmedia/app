@@ -30,7 +30,7 @@ export const styles = StyleSheet.create({
 
         color: DarkTheme.colors.text.negative,
         fontSize: 18,
-    }
+    },
 
 });
 

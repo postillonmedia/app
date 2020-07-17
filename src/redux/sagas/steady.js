@@ -100,7 +100,7 @@ function* handleAuthenticationReceived(action) {
     }
 }
 
-function* handleAuthenticate(action) {
+function* handleAuthenticate(action = {}) {
     const { code } = action;
 
     const body = {
@@ -243,7 +243,7 @@ function* checkLogin() {
                     }
 
                     if (success) {
-                        yield put(SteadyActions.requestSubscriptions())
+                        yield put(SteadyActions.requestSubscriptions());
                     }
                 }
 

@@ -7,9 +7,7 @@ import PropTypes from 'prop-types';
 import ReactNative, {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
-import { Navigation } from '@postillon/react-native-navigation';
-
-import { InAppBrowser } from '@matt-block/react-native-in-app-browser';
+import { InAppBrowser } from '../../../utils/util';
 
 import AutoHeightWebView from 'react-native-autoheight-webview';
 import parse from 'url-parse';
@@ -74,31 +72,30 @@ export class ContentView extends PureComponent {
             return false;
 
         } else if (blogId && path !== parsedBaseUrl.pathname) {
-            if (hostname && blogId && path && path !== '/' && !(path[0] === '/' && path[1] === 'p' && path[2] === '/')) {
-                // an article of the Postillon was pressed
+            // if (hostname && blogId && path && path !== '/' && !(path[0] === '/' && path[1] === 'p' && path[2] === '/')) {
+            //     // an article of the Postillon was pressed
+            //
+            //     // TODO: point to right screen
+            //     Navigation.handleDeepLink({
+            //         link: 'postillon/article',
+            //         payload: {
+            //             url: request.url,
+            //             parsedUrl,
+            //             hostname,
+            //             path,
+            //             blogId,
+            //         },
+            //     });
+            //
+            // } else {
+            //     const { constants } = this.props;
 
-                Navigation.handleDeepLink({
-                    link: 'postillon/article',
-                    payload: {
-                        url: request.url,
-                        parsedUrl,
-                        hostname,
-                        path,
-                        blogId,
-                    },
-                });
-
-            } else {
-                const { constants } = this.props;
-
-                InAppBrowser.open(request.url, constants.styles.customTabs);
-            }
+                InAppBrowser.open(request.url);
+            // }
 
             return false;
         } else {
-            const { constants } = this.props;
-
-            InAppBrowser.open(request.url, constants.styles.customTabs);
+            InAppBrowser.open(request.url);
 
             return false;
         }

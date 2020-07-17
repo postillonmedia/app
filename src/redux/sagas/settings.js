@@ -1,14 +1,10 @@
-import ReactNative, { Alert, Platform } from 'react-native';
-import { all, call, delay, take, takeEvery, put, select } from 'redux-saga/effects';
+import ReactNative, { Alert } from 'react-native';
+import { all, call, takeEvery, put, select } from 'redux-saga/effects';
 
-import { ThemeManager } from '@postillon/react-native-theme';
-import changeNavigationBarColor from 'react-native-navigation-bar-color';
-
-import { isPersistorBootstrapped } from '../store'
+import { isPersistorBootstrapped } from '../store';
 
 import Firebase from '../../utils/firebase';
 import Config from '../../constants/config';
-import { Themes, DefaultTheme, DarkTheme } from '../../constants/themes';
 
 import {
     setNotification,
@@ -18,23 +14,8 @@ import {
     SETTINGS_APP_NOTIFICATIONS,
 } from '../actions/settings/app';
 
-import { getAppNotifications, getAppTheme } from '../selectors/settings';
+import { getAppNotifications } from '../selectors/settings';
 
-
-function* handleThemeChanged(action) {
-    const { theme } = action;
-
-    try {
-        const constants = ThemeManager.getConstantsForTheme(theme);
-
-        const color = constants.colors.tabs.background;
-        const useLightIconColor = theme === Themes.DEFAULT;
-
-        changeNavigationBarColor(color, useLightIconColor);
-    } catch (error) {
-        console.error(error);
-    }
-}
 
 function* handleAnalyticsEnabledChanged(action) {
     const { enabled } = action;
@@ -87,21 +68,26 @@ function* initialize() {
         // wait for redux-persist to restore the persisted state
         yield isPersistorBootstrapped;
 
-        // setup theme
-        const theme = yield select(getAppTheme);
-        yield call(handleThemeChanged, { theme });
-
         // setup notifications
         const messaging = Firebase.messaging();
 
-        const hasPermissions = yield call([messaging, messaging.hasPermission]);
+        let hasPermissions = yield call([messaging, messaging.hasPermission]);
 
-        if (!hasPermissions) {
+        const receiveNotifications = yield select(getAppNotifications);
+
+        if (!hasPermissions && receiveNotifications) {
+            try {
+                yield call([messaging, messaging.requestPermission]);
+            } catch (error) {
+                console.error(error);
+
+                yield put(setNotification(false));
+                yield call(setNotificationsEnabled, false);
+            }
+        } else if (!hasPermissions) {
             yield put(setNotification(false));
             yield call(setNotificationsEnabled, false);
         } else {
-            const receiveNotifications = yield select(getAppNotifications);
-
             yield call(setNotificationsEnabled, receiveNotifications);
         }
     } catch (e) {
@@ -145,7 +131,7 @@ function* watchOnNotificationEnabledChanged() {
 
 export default function* settingsSaga() {
     yield all([
-        watchOnThemeChanged(),
+        // watchOnThemeChanged(),
 
         watchOnAnalyticsEnabledChanged(),
 

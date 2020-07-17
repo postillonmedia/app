@@ -5,7 +5,7 @@ import ReactNative, { ActivityIndicator, Text, View } from 'react-native';
 import firebase from 'react-native-firebase';
 import FlexImage from 'react-native-flex-image';
 
-import { walkthroughable, CopilotStep } from '@okgrow/react-native-copilot';
+import { walkthroughable, CopilotStep } from 'react-native-copilot';
 
 import { LocalizedDate } from '@postillon/react-native-timeago';
 
@@ -114,6 +114,7 @@ export class ControlsView extends Component {
                             unitId={Config.keys.admob.banner}
                             request={request.build()}
                         />
+                        <Text style={styles.adIndicator}>{t('ad').toUpperCase()}</Text>
                     </View>
                 </OtherMediaContainer>
             );
@@ -132,7 +133,7 @@ export class ControlsView extends Component {
                         <Zoomy>
                             <ImageContainer
                                 source={{ uri: article.image }}
-                                style={styles.articleImage}
+                                style={[styles.articleImage, {}]}
 
                                 ImageComponent={FlexImage}
 
@@ -159,7 +160,7 @@ export class ControlsView extends Component {
 
         return (
             <View style={styles.container}>
-                <ControlsScrollView onControlsVisibilityChange={onControlsVisibilityChange} initial={initialControlVisibility}>
+                <ControlsScrollView onControlsVisibilityChange={onControlsVisibilityChange} initial={initialControlVisibility} scrollIndicatorInsets={{ right: 1 }}>
 
                     {this.renderArticleImage(article)}
 

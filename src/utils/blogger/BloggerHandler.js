@@ -69,7 +69,7 @@ export class BloggerHandler extends DomHandler {
                                 links[item.attribs.rel] = item.attribs.href;
                             }
 
-                            return links;
+                                return links;
                         }, {});
                     }
 
@@ -89,9 +89,7 @@ export class BloggerHandler extends DomHandler {
         }
 
         this.dom = feed;
-        DomHandler.prototype._handleCallback.call(
-            this, feedRoot ? null : Error('couldn\'t find root of feed')
-        );
+        this.handleCallback(feedRoot ? null : Error('couldn\'t find root of feed'));
     };
 
 }

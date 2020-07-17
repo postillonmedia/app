@@ -1,5 +1,3 @@
-import { Alert, Platform } from 'react-native';
-
 // i18n
 import { getString } from '@postillon/react-native-i18n/src/helpers';
 import dictionary from './resources/i18n/dictionary';
@@ -19,7 +17,7 @@ import { Navigation } from 'react-native-navigation';
 import { registerNavigationComponents } from './navigation';
 
 // deeplinks
-import { InAppBrowser } from '@matt-block/react-native-in-app-browser';
+import { InAppBrowser } from './utils/util';
 import { DeepLinkManager } from './utils/notifications';
 import { getBlogByHostname } from './constants/blogs';
 import parse from 'url-parse';
@@ -28,22 +26,50 @@ import parse from 'url-parse';
 import Config from './constants/config';
 import Firebase from './utils/firebase';
 
-
-import HomeArticleListScreen from "./navigation/screens/list/article/HomeArticleListScreen";
-
+import HomeArticleListScreen from './navigation/screens/list/article/HomeArticleListScreen';
 
 export const Icons = {
-    home: require('./resources/images/feather/home.png'),
-    grid: require('./resources/images/feather/grid.png'),
-    bookmark: require('./resources/images/feather/bookmark.png'),
-    more: require('./resources/images/feather/more-horizontal.png'),
+    // home: require('./resources/images/feather/home.png'),
+    // grid: require('./resources/images/feather/grid.png'),
+    // bookmark: require('./resources/images/feather/bookmark.png'),
+    // more: require('./resources/images/feather/more-horizontal.png'),
+    //
+    // postillon: require('./resources/images/postillon.png'),
+    // search: require('./resources/images/feather/search.png'),
+    // close: require('./resources/images/feather/x.png'),
 
-    postillon: require('./resources/images/postillon.png'),
-    search: require('./resources/images/feather/search.png'),
-    close: require('./resources/images/feather/x.png'),
+    postillon: {
+        uri: 'postillon',
+        scale: 3,
+    },
+    home: {
+        uri: 'home',
+        scale: 3,
+    },
+    grid: {
+        uri: 'grid',
+        scale: 3,
+    },
+    bookmark: {
+        uri: 'bookmark',
+        scale: 2,
+    },
+    more: {
+        uri: 'more',
+        scale: 3,
+    },
+    search: {
+        uri: 'search',
+        scale: 3,
+    },
+    close: {
+        uri: 'close',
+        scale: 3,
+    },
 };
 
-export const getLocalizedString = (locale, screen, option = 'title') => getString(dictionary)(locale)(screen)(option);
+export const getLocalizedString = (locale, screen, option = 'title') =>
+    getString(dictionary)(locale)(screen)(option);
 
 export const Stacks = {
     articles: 'postillon.stack.articles',
@@ -62,8 +88,6 @@ export class App {
 
         return App._instance;
     }
-
-
 
     initialized: Promise<boolean>;
     started: Promise<boolean>;
@@ -88,44 +112,41 @@ export class App {
             isAppLaunched,
         ]);
 
-
         // add Theme-Constants
         ThemeManager.addConstants(DefaultTheme, Themes.DEFAULT);
         ThemeManager.addConstants(DarkTheme, Themes.DARK);
 
-
         // register App-Screens
         registerNavigationComponents(store, AppStateProvider);
-
 
         // notification manager
         this.deepLinkManager = new DeepLinkManager();
         this.registerDeepLinkSchemas();
 
-        // check for initial deep link
-        this.deepLinkManager.checkForInitialDeepLink();
-
-        
         // add launched listener to app
         Navigation.events().registerAppLaunchedListener(() => {
-            _resolveIsAppLaunched(true);
-        });
+            if (typeof _resolveIsAppLaunched === 'function') {
+                _resolveIsAppLaunched(true);
+                _resolveIsAppLaunched = null;
+            } else {
+                this.start();
+            }
 
+            // check for initial deep link
+            this.deepLinkManager.checkForInitialDeepLink();
+        });
 
         // fetch remote config
         this.fetchRemoteConfiguration();
 
-
         // messaging
         const notifications = Firebase.notifications();
 
-
         notifications.onNotification((notification: Notification) => {
             // Process your notification as required
-            if (notification && notification.data &&  notification.data.url) {
+            if (notification && notification.data && notification.data.url) {
                 const { title } = notification;
                 const { url } = notification.data;
-
 
                 if (url && typeof url === 'string') {
                     const parsed = parse(url);
@@ -135,33 +156,6 @@ export class App {
 
                     const blogId = getBlogByHostname(hostname || '');
 
-                    // TODO
-                    // Navigation.handleDeepLink({
-                    //     link: 'postillon/notification/article',
-                    //     payload: {
-                    //         title,
-                    //         url,
-                    //         parsedUrl: parsed,
-                    //         hostname,
-                    //         path,
-                    //         blogId,
-                    //     },
-                    // });
-                }
-            }
-        });
-        notifications.onNotificationOpened((notificationOpen: NotificationOpen) => {
-            // Get the action triggered by the notification being opened
-            const action = notificationOpen.action;
-            // Get information about the notification that was opened
-            const notification: Notification = notificationOpen.notification;
-
-            if (notification && notification.data &&  notification.data.url) {
-                const { url } = notification.data;
-
-                if (url && typeof url === 'string') {
-                    const parsed = parse(url);
-
                     this.onArticleUrlMatched({
                         url,
                         parsedUrl: parsed,
@@ -169,16 +163,48 @@ export class App {
                 }
             }
         });
-        notifications.getInitialNotification()
+        notifications.onNotificationOpened(
+            (notificationOpen: NotificationOpen) => {
+                // Get the action triggered by the notification being opened
+                const action = notificationOpen.action;
+                // Get information about the notification that was opened
+                const notification: Notification =
+                    notificationOpen.notification;
+
+                if (
+                    notification &&
+                    notification.data &&
+                    notification.data.url
+                ) {
+                    const { url } = notification.data;
+
+                    if (url && typeof url === 'string') {
+                        const parsed = parse(url);
+
+                        this.onArticleUrlMatched({
+                            url,
+                            parsedUrl: parsed,
+                        });
+                    }
+                }
+            },
+        );
+        notifications
+            .getInitialNotification()
             .then((notificationOpen: NotificationOpen) => {
                 if (notificationOpen) {
                     // App was opened by a notification
                     // Get the action triggered by the notification being opened
                     const action = notificationOpen.action;
                     // Get information about the notification that was opened
-                    const notification: Notification = notificationOpen.notification;
+                    const notification: Notification =
+                        notificationOpen.notification;
 
-                    if (notification && notification.data &&  notification.data.url) {
+                    if (
+                        notification &&
+                        notification.data &&
+                        notification.data.url
+                    ) {
                         const { url } = notification.data;
 
                         if (url && typeof url === 'string') {
@@ -192,7 +218,6 @@ export class App {
                     }
                 }
             });
-
     }
 
     start() {
@@ -200,8 +225,11 @@ export class App {
             .then(() => {
                 const { locale, theme } = getAppSettings(store.getState());
 
-                const { defaults: style } = ThemeManager.getStyleSheetForComponent('screens', theme);
-                const getLocalizedString = (screen, option = 'title') => getString(dictionary)(locale)(screen)(option);
+                const {
+                    defaults: style,
+                } = ThemeManager.getStyleSheetForComponent('screens', theme);
+                const getLocalizedString = (screen, option = 'title') =>
+                    getString(dictionary)(locale)(screen)(option);
 
                 return {
                     locale,
@@ -210,7 +238,7 @@ export class App {
                     getLocalizedString,
                 };
             })
-            .then(({locale, theme, style, getLocalizedString}) => {
+            .then(({ locale, theme, style, getLocalizedString }) => {
                 Navigation.setDefaultOptions({
                     animations: {
                         pop: {
@@ -227,7 +255,7 @@ export class App {
                         },
                         dismissModal: {
                             enabled: false,
-                        }
+                        },
                     },
 
                     bottomTabs: style.bottomTabs,
@@ -249,9 +277,14 @@ export class App {
                                                         theme,
                                                         locale,
                                                     },
-                                                    options: HomeArticleListScreen.options({theme, locale}),
-                                                }
-                                            }
+                                                    options: HomeArticleListScreen.options(
+                                                        {
+                                                            theme,
+                                                            locale,
+                                                        },
+                                                    ),
+                                                },
+                                            },
                                         ],
                                         options: {
                                             bottomTabs: style.bottomTabs,
@@ -259,12 +292,14 @@ export class App {
                                             bottomTab: {
                                                 ...style.bottomTab,
 
-                                                text: getLocalizedString('articlesList'),
+                                                text: getLocalizedString(
+                                                    'articlesList',
+                                                ),
                                                 icon: Icons.home,
-                                                testID: 'TAB_ARTICLES'
-                                            }
-                                        }
-                                    }
+                                                testID: 'TAB_ARTICLES',
+                                            },
+                                        },
+                                    },
                                 },
                                 {
                                     stack: {
@@ -272,13 +307,14 @@ export class App {
                                         children: [
                                             {
                                                 component: {
-                                                    name: 'postillon.Categories',
+                                                    name:
+                                                        'postillon.Categories',
                                                     passProps: {
                                                         theme,
                                                         locale,
                                                     },
-                                                }
-                                            }
+                                                },
+                                            },
                                         ],
                                         options: {
                                             bottomTabs: style.bottomTabs,
@@ -286,11 +322,13 @@ export class App {
                                             bottomTab: {
                                                 ...style.bottomTab,
 
-                                                text: getLocalizedString('categoriesList'),
+                                                text: getLocalizedString(
+                                                    'categoriesList',
+                                                ),
                                                 icon: Icons.grid,
-                                                testID: 'TAB_CATEGORIES'
-                                            }
-                                        }
+                                                testID: 'TAB_CATEGORIES',
+                                            },
+                                        },
                                     },
                                 },
                                 {
@@ -304,8 +342,8 @@ export class App {
                                                         theme,
                                                         locale,
                                                     },
-                                                }
-                                            }
+                                                },
+                                            },
                                         ],
                                         options: {
                                             bottomTabs: style.bottomTabs,
@@ -313,12 +351,14 @@ export class App {
                                             bottomTab: {
                                                 ...style.bottomTab,
 
-                                                text: getLocalizedString('archive'),
+                                                text: getLocalizedString(
+                                                    'archive',
+                                                ),
                                                 icon: Icons.bookmark,
-                                                testID: 'TAB_ARCHIVE'
-                                            }
-                                        }
-                                    }
+                                                testID: 'TAB_ARCHIVE',
+                                            },
+                                        },
+                                    },
                                 },
                                 {
                                     stack: {
@@ -331,8 +371,8 @@ export class App {
                                                         theme,
                                                         locale,
                                                     },
-                                                }
-                                            }
+                                                },
+                                            },
                                         ],
                                         options: {
                                             bottomTabs: style.bottomTabs,
@@ -340,89 +380,108 @@ export class App {
                                             bottomTab: {
                                                 ...style.bottomTab,
 
-                                                text: getLocalizedString('more'),
+                                                text: getLocalizedString(
+                                                    'more',
+                                                ),
                                                 icon: Icons.more,
-                                                testID: 'TAB_MORE'
-                                            }
-                                        }
-                                    }
-
+                                                testID: 'TAB_MORE',
+                                            },
+                                        },
+                                    },
                                 },
                             ],
-                        }
-                    }
+                        },
+                    },
                 });
             })
-            .then(() => this._resolveStarted && this._resolveStarted(true))
+            .then(() => this._resolveStarted && this._resolveStarted(true));
     }
 
     fetchRemoteConfiguration() {
-        if (Config.DEV) {
-            Firebase.config().enableDeveloperMode();
+        try {
+            if (Config.DEV) {
+                Firebase.config().enableDeveloperMode();
+            }
+        } catch (e) {
+            console.error('Could not enable developer mode for Firebase RemoteConfig');
         }
 
-        return Firebase.config().fetch()
-            .then(() => {
-                return Firebase.config().activateFetched();
-            })
-            .then(() => Firebase.config().getKeysByPrefix('app_'))
-            .then((arr) => Firebase.config().getValues(arr))
-            .then((entries) => {
-                for (let key in entries) {
-                    if (!entries.hasOwnProperty(key)) {
-                        continue;
+        try {
+            return Firebase.config()
+                .fetch()
+                .then(() => {
+                    return Firebase.config().activateFetched();
+                })
+                .then(() => Firebase.config().getKeysByPrefix('app_'))
+                .then(arr => Firebase.config().getValues(arr))
+                .then(entries => {
+                    for (let key in entries) {
+                        if (!entries.hasOwnProperty(key)) {
+                            continue;
+                        }
+
+                        const value = entries[key].val();
+
+                        Config.setConfigByUnderscoreSeparatedKey(key, value);
                     }
 
-                    const value = entries[key].val();
+                    console.log('Updated Application-Config by firebase');
+                })
+                .catch(console.error);
+        } catch (e) {
+            console.error('Unable to fetch the Firebase RemoteConfig', e);
 
-                    Config.setConfigByUnderscoreSeparatedKey(key, value);
-                }
-
-                console.log('Updated Application-Config by firebase');
-            })
-            .catch(console.error);
+            return Promise.reject(e);
+        }
     }
 
     registerDeepLinkSchemas() {
-        this.deepLinkManager.registerSchema('steady',
+        this.deepLinkManager.registerSchema(
+            'steady',
             {
                 origin: 'postillon://steady-auth',
             },
-            (event) => {
+            event => {
                 // match steady auth request
                 store.dispatch(authenticationReceived(event.parsedUrl));
-            }
+            },
         );
 
-        this.deepLinkManager.registerSchema('article',
+        this.deepLinkManager.registerSchema(
+            'article',
             {
                 origin: 'postillon://article',
             },
-            (event) => {
+            event => {
                 // match article link
                 const { parsedUrl } = event;
 
-                const url = parsedUrl && parsedUrl.pathname && typeof parsedUrl.pathname === 'string' && parsedUrl.pathname.substring(1);
+                const url =
+                    parsedUrl &&
+                    parsedUrl.pathname &&
+                    typeof parsedUrl.pathname === 'string' &&
+                    parsedUrl.pathname.substring(1);
 
-
-                url && this.onArticleUrlMatched({
-                    ...event,
-                    url,
-                    parsedUrl: parsed,
-                });
-            }
+                url &&
+                    this.onArticleUrlMatched({
+                        ...event,
+                        url,
+                        parsedUrl: parsed,
+                    });
+            },
         );
 
-        this.deepLinkManager.registerSchema('web',
+        this.deepLinkManager.registerSchema(
+            'web',
             {
-                protocol: (protocol) => protocol === 'http:' || protocol === 'https:',
+                protocol: protocol =>
+                    protocol === 'http:' || protocol === 'https:',
             },
-            (event) => {
+            event => {
                 // match http website
                 this.onArticleUrlMatched(event);
-            }
+            },
         );
-
 
         this.deepLinkManager.register();
     }
@@ -441,22 +500,24 @@ export class App {
         const blogId = getBlogByHostname(hostname || '');
 
         if (hostname && path && blogId) {
-            this.started.then((started) => {
+            this.started.then(started => {
                 const { theme, locale } = getAppSettings(store.getState());
 
                 if (path === '/') {
                     // currently nothing to do.
                     // But we can use the hostname to determinate the startup language of the app.
-                } else if (path[0] === '/' && path[1] === 'p' && path[2] === '/') {
+                } else if (
+                    path[0] === '/' &&
+                    path[1] === 'p' &&
+                    path[2] === '/'
+                ) {
                     // app was started with a link to a static page of blogger
-                    const constants = ThemeManager.getConstantsForTheme(theme);
-
-                    InAppBrowser.open(url, constants.styles.customTabs);
+                    InAppBrowser.open(url);
                 } else {
                     Navigation.mergeOptions('postillon.BottomTabs', {
                         bottomTabs: {
                             currentTabIndex: 0,
-                        }
+                        },
                     });
 
                     // app was started with a link to an article
@@ -469,13 +530,12 @@ export class App {
                                 stackId: Stacks.articles,
                                 articleId: blogId + path,
                             },
-                        }
+                        },
                     });
                 }
             });
         }
     }
 }
-
 
 export default App;

@@ -1,14 +1,13 @@
 import React, { PureComponent } from 'react';
-import ReactNative, { BackHandler, View } from 'react-native';
+import ReactNative, { BackHandler, SafeAreaView, View } from 'react-native';
 import { Navigation } from 'react-native-navigation';
-import { TabView, TabBar, SceneMap, } from 'react-native-tab-view';
+import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 import Animated, { Easing } from 'react-native-reanimated';
 import { ThemeManager } from '@postillon/react-native-theme';
 
-
 import FeatherIcon from 'react-native-vector-icons/Feather';
 
-import merge from "deepmerge";
+import merge from 'deepmerge';
 
 import { Themes } from '../../../constants/themes';
 import { getLocalizedString, Icons } from '../../../App';
@@ -32,10 +31,10 @@ export class ArchiveScreen extends PureComponent {
             },
 
             bottomTab: {
-                text: getLocalizedString(locale,'archive'),
+                text: getLocalizedString(locale, 'archive'),
                 icon: Icons.bookmark,
-                testID: 'TAB_ARCHIVE'
-            }
+                testID: 'TAB_ARCHIVE',
+            },
         });
     };
 
@@ -124,8 +123,8 @@ export class ArchiveScreen extends PureComponent {
     render() {
         const { styles } = this.props;
 
-        return (
-            <View style={{ flex: 1}}>
+        return [
+            <SafeAreaView key={'archive-tabs'} style={styles.tabs}>
                 <TabView
                     style={styles.tabs}
                     navigationState={this.state}
@@ -136,10 +135,10 @@ export class ArchiveScreen extends PureComponent {
                     onIndexChange={this._handleIndexChange}
                     initialLayout={this.initialLayout}
                 />
+            </SafeAreaView>,
 
-                <OnlineArchiveControl navigationState={this.state} position={this.position} />
-            </View>
-        );
+            <OnlineArchiveControl key={'archive-control'} navigationState={this.state} position={this.position} />
+        ];
     }
 
 }

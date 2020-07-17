@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 
-import type { Step } from '@okgrow/react-native-copilot/src/types';
+import type { Step } from 'react-native-copilot/src/types';
 
 type Props = {
     isFirstStep: boolean,

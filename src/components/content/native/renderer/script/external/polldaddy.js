@@ -2,7 +2,7 @@ import React from 'react';
 import ReactNative, { ActivityIndicator } from 'react-native';
 
 import AutoHeightWebView from 'react-native-autoheight-webview';
-import { InAppBrowser } from '@matt-block/react-native-in-app-browser';
+import { InAppBrowser } from '../../../../../../utils/util';
 
 import { Config } from '../../../../../../constants';
 
@@ -18,7 +18,13 @@ export default function (props = {}) {
     const html = '<!DOCTYPE html><html lang="de"><head><title>Polldady-Wrapper</title></head><body><script type="application/javascript" src="' + src + '"></script></body></html>';
 
     const handleShouldStartLoadWithRequest = request => {
-        InAppBrowser.open(request.url, constants.styles.customTabs);
+        if (request.url.indexOf('platform.twitter.com/widgets/') >= 0 || request.url.indexOf('facebook.com/plugins/') >= 0) {
+            // if the requests contains an url to the Facebook or Twitter button allow the loading
+            return true;
+        } else if (request.url !== baseUrl) {
+            // if the url is not the article, open the url in the in-app-browser
+            InAppBrowser.open(request.url);
+        }
 
         return false;
     };

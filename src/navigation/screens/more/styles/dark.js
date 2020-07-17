@@ -34,7 +34,7 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
         flexDirection: 'row',
         justifyContent: 'flex-start',
-        
+
         marginHorizontal: 16,
         marginBottom: 8,
         borderRadius: 5,
@@ -70,32 +70,7 @@ export const styles = StyleSheet.create({
 
     iconContainer: {
         flexDirection: 'row',
-        alignItems: 'center'
-    },
-
-    singleGiftContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        padding: 20,
-        backgroundColor: 'rgba(0, 0, 0, 0.7)',
-    },
-    singleGiftInnerContainer: {
-        borderRadius: 10,
         alignItems: 'center',
-        backgroundColor: DarkTheme.colors.bg.lightest,
-        padding: 20,
-    },
-    singleGiftBankInfo: {
-        margin: 15,
-    },
-    singleGiftPaypal: {
-        color: DarkTheme.colors.text.negative,
-        backgroundColor: '#0052a3',
-        fontWeight: 'bold',
-        fontStyle: 'italic',
-        borderRadius: 15,
-        margin: 15,
-        padding: 7,
     },
 });
 

@@ -2,13 +2,14 @@ import React from 'react';
 import ReactNative, { ActivityIndicator } from 'react-native';
 
 import AutoHeightWebView from 'react-native-autoheight-webview';
-import { InAppBrowser } from '@matt-block/react-native-in-app-browser';
+import { InAppBrowser } from '../../../../../utils/util';
 
 import { Config } from '../../../../../constants';
 
 import OtherMediaContainer from '../../../../mediacontainer/other';
 import OtherOfflineIndicator from '../../../../offlineIndicator/other';
 
+const ABOUT_BLANK = 'about:blank';
 
 export default function (props = {}) {
 
@@ -19,11 +20,14 @@ export default function (props = {}) {
         return false;
     }
 
-
     const handleShouldStartLoadWithRequest = request => {
-        InAppBrowser.open(request.url, constants.styles.customTabs);
+        if (request.url === ABOUT_BLANK || request.url === uri) {
+            return true;
+        } else {
+            InAppBrowser.open(request.url);
 
-        return false;
+            return false;
+        }
     };
 
     return (

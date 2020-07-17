@@ -1,5 +1,7 @@
 /* global __DEV__ */
 
+import { Platform } from 'react-native';
+
 class ConfigContainer {
     // Build Configuration - eg. Debug or Release?
     DEV = __DEV__ || false;
@@ -10,12 +12,20 @@ class ConfigContainer {
 
     // API keys
     keys = {
-        admob: {
-            app: 'ca-app-pub-7093365481881392~4863961535',
+        admob: Platform.select({
+            ios: {
+                app: 'ca-app-pub-7093365481881392~6097326648',
 
-            banner: 'ca-app-pub-7093365481881392/6641200015',
-            interstitial: 'ca-app-pub-7093365481881392/9269989518',
-        },
+                banner: 'ca-app-pub-7093365481881392/7536910132',
+                interstitial: 'ca-app-pub-7093365481881392/7536910132',
+            },
+            android: {
+                app: 'ca-app-pub-7093365481881392~4863961535',
+
+                banner: 'ca-app-pub-7093365481881392/6641200015',
+                interstitial: 'ca-app-pub-7093365481881392/9269989518',
+            },
+        }),
     };
 
     // Steady

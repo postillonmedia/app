@@ -33,7 +33,7 @@ export class CategoriesScreen extends PureComponent {
             },
 
             bottomTab: {
-                text: getLocalizedString(locale,'categoriesList'),
+                text: getLocalizedString(locale, 'categoriesList'),
                 icon: Icons.grid,
                 testID: 'TAB_CATEGORIES'
             }

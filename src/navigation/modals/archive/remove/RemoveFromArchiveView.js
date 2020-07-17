@@ -11,9 +11,13 @@ export class RemoveFromArchiveView extends PureComponent {
     }
 
     handleRemoveArticlePress = () => {
-        const { stateManager, id, removeArticleFromArchive } = this.props;
+        const { stateManager, id, onRemoveArticleFromArchivePress, removeArticleFromArchive } = this.props;
 
-        removeArticleFromArchive(id);
+        if (typeof onRemoveArticleFromArchivePress === 'function') {
+            onRemoveArticleFromArchivePress();
+        } else {
+            removeArticleFromArchive(id);
+        }
 
         stateManager.close();
     };

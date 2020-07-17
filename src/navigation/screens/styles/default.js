@@ -43,6 +43,10 @@ export const defaults = {
         }
     },
 
+    navigationBar: {
+        backgroundColor: DefaultTheme.colors.tabs.background,
+    },
+
     bottomTabs: {
         animate: true,
         drawBehind: false,
